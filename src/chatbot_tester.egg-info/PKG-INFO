@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: chatbot-tester
-Version: 0.1.0
+Version: 0.2.0
 Summary: Chatbot testing framework: dataset generator, runner, evaluator
 Author: chatbot-tester
 Keywords: chatbot,testing,evaluation,dataset,runner,evaluator
