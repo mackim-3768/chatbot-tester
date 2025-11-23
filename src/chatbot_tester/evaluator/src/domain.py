@@ -136,6 +136,12 @@ class EvaluationReport:
     llm_judge_details: List[LLMJudgeDetail]
 
 
+@dataclass(slots=True)
+class EvaluationResult:
+    scores: List[EvalScore]
+    report: EvaluationReport
+
+
 def compute_stats(values: Sequence[float]) -> Tuple[float, float]:
     if not values:
         return 0.0, 0.0
@@ -155,6 +161,7 @@ __all__ = [
     "RunRecord",
     "TestSampleRecord",
     "ErrorCase",
+    "EvaluationResult",
     "compute_stats",
     "infer_length_bucket",
     "dataset_metadata_from_dict",
