@@ -1,0 +1,15 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+venv/
+.venv/
+
+# Environment variable files
+.env
+.env.*
+
+# Tooling
+.mypy_cache/
+.pytest_cache/
