@@ -1,0 +1,43 @@
+site_name: chatbot-tester
+site_description: "Chatbot test & evaluation framework (Generator → Runner → Evaluator)"
+site_url: "https://mackim-3768.github.io/chatbot-tester/"
+repo_url: "https://github.com/mackim-3768/chatbot-tester"
+repo_name: "mackim-3768/chatbot-tester"
+
+theme:
+  name: "material"
+
+nav:
+  - Home: index.md
+  - Usage:
+      - Overview: usage/overview.md
+      - Generator: usage/generator.md
+      - Runner: usage/runner.md
+      - Evaluator: usage/evaluator.md
+      - Quick Start E2E: usage/quickstart-e2e.md
+  - Reference:
+      - CLI: reference/cli.md
+      - API: reference/api.md
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_style: google
+            show_root_full_path: false
+            show_source: false
+
+markdown_extensions:
+  - admonition
+  - codehilite
+  - footnotes
+  - toc:
+      permalink: true
+  - tables
+  - attr_list
+
+# Optionally watch source code for API docs refresh
+watch:
+  - src
