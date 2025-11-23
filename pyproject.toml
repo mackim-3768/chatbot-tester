@@ -15,6 +15,10 @@ classifiers = [
   "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
 ]
+dependencies = [
+  "PyYAML>=6.0",
+  "openai>=1.35.0",
+]
 
 # 이 루트 프로젝트는 주로 개발/문서/예제용 메타 패키지 역할을 하며,
 # 실제 파이썬 패키지는 각 서브 디렉터리(src/chatbot_tester/generator, runner, evaluator)에 정의된다.
