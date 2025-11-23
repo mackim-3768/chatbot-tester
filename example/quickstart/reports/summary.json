@@ -1,0 +1,279 @@
+{
+  "experiment": {
+    "dataset": {
+      "dataset_id": "toy_support_qa",
+      "version": "v1",
+      "name": "Toy Support QA",
+      "source": null,
+      "created_at": "2025-11-23T13:20:53Z",
+      "generator_commit": "3dfdc62a437b603798624bb2f04f46a1fee416da",
+      "filters": {},
+      "sampling": {
+        "sample_size": 3,
+        "sample_random": true
+      },
+      "counts": {
+        "sample_count": 3
+      },
+      "languages": {
+        "ko": 2,
+        "en": 1
+      },
+      "tags": {
+        "toy": 3,
+        "support": 3,
+        "account": 1,
+        "ko": 2,
+        "billing": 1,
+        "faq": 1,
+        "export": 1,
+        "en": 1
+      },
+      "extra": {
+        "generator_version": "0.1.0"
+      }
+    },
+    "run_config": {
+      "backend": "openai",
+      "model": "gpt-4o-mini"
+    },
+    "evaluator_config": {
+      "run_config": {
+        "backend": "openai",
+        "model": "gpt-4o-mini"
+      },
+      "metrics": [
+        {
+          "type": "exact_match",
+          "name": "exact_match",
+          "parameters": {
+            "normalize_whitespace": true,
+            "case_sensitive": false
+          },
+          "sample_rate": 1.0
+        },
+        {
+          "type": "keyword_coverage",
+          "name": "keyword_coverage",
+          "parameters": {
+            "keywords": [
+              "비밀번호",
+              "요금제",
+              "export"
+            ],
+            "case_sensitive": false
+          },
+          "sample_rate": 1.0
+        }
+      ],
+      "breakdown": {
+        "dimensions": [
+          "tag",
+          "language",
+          "length"
+        ]
+      },
+      "report": {
+        "formats": [
+          "json",
+          "markdown"
+        ]
+      },
+      "min_samples": 1
+    }
+  },
+  "overall_metrics": [
+    {
+      "metric": "exact_match",
+      "mean": 0.0,
+      "std": 0.0,
+      "sample_count": 3
+    },
+    {
+      "metric": "keyword_coverage",
+      "mean": 0.3333333333333333,
+      "std": 0.0,
+      "sample_count": 3
+    }
+  ],
+  "breakdown": [
+    {
+      "metric": "exact_match",
+      "dimension": "tag",
+      "bucket": "toy",
+      "mean": 0.0,
+      "std": 0.0,
+      "sample_count": 3
+    },
+    {
+      "metric": "exact_match",
+      "dimension": "tag",
+      "bucket": "support",
+      "mean": 0.0,
+      "std": 0.0,
+      "sample_count": 3
+    },
+    {
+      "metric": "exact_match",
+      "dimension": "tag",
+      "bucket": "account",
+      "mean": 0.0,
+      "std": 0.0,
+      "sample_count": 1
+    },
+    {
+      "metric": "exact_match",
+      "dimension": "tag",
+      "bucket": "ko",
+      "mean": 0.0,
+      "std": 0.0,
+      "sample_count": 2
+    },
+    {
+      "metric": "exact_match",
+      "dimension": "tag",
+      "bucket": "billing",
+      "mean": 0.0,
+      "std": 0.0,
+      "sample_count": 1
+    },
+    {
+      "metric": "exact_match",
+      "dimension": "tag",
+      "bucket": "faq",
+      "mean": 0.0,
+      "std": 0.0,
+      "sample_count": 1
+    },
+    {
+      "metric": "exact_match",
+      "dimension": "tag",
+      "bucket": "export",
+      "mean": 0.0,
+      "std": 0.0,
+      "sample_count": 1
+    },
+    {
+      "metric": "exact_match",
+      "dimension": "tag",
+      "bucket": "en",
+      "mean": 0.0,
+      "std": 0.0,
+      "sample_count": 1
+    },
+    {
+      "metric": "exact_match",
+      "dimension": "language",
+      "bucket": "ko",
+      "mean": 0.0,
+      "std": 0.0,
+      "sample_count": 2
+    },
+    {
+      "metric": "exact_match",
+      "dimension": "language",
+      "bucket": "en",
+      "mean": 0.0,
+      "std": 0.0,
+      "sample_count": 1
+    },
+    {
+      "metric": "exact_match",
+      "dimension": "length",
+      "bucket": "short",
+      "mean": 0.0,
+      "std": 0.0,
+      "sample_count": 3
+    },
+    {
+      "metric": "keyword_coverage",
+      "dimension": "tag",
+      "bucket": "toy",
+      "mean": 0.3333333333333333,
+      "std": 0.0,
+      "sample_count": 3
+    },
+    {
+      "metric": "keyword_coverage",
+      "dimension": "tag",
+      "bucket": "support",
+      "mean": 0.3333333333333333,
+      "std": 0.0,
+      "sample_count": 3
+    },
+    {
+      "metric": "keyword_coverage",
+      "dimension": "tag",
+      "bucket": "account",
+      "mean": 0.3333333333333333,
+      "std": 0.0,
+      "sample_count": 1
+    },
+    {
+      "metric": "keyword_coverage",
+      "dimension": "tag",
+      "bucket": "ko",
+      "mean": 0.3333333333333333,
+      "std": 0.0,
+      "sample_count": 2
+    },
+    {
+      "metric": "keyword_coverage",
+      "dimension": "tag",
+      "bucket": "billing",
+      "mean": 0.3333333333333333,
+      "std": 0.0,
+      "sample_count": 1
+    },
+    {
+      "metric": "keyword_coverage",
+      "dimension": "tag",
+      "bucket": "faq",
+      "mean": 0.3333333333333333,
+      "std": 0.0,
+      "sample_count": 1
+    },
+    {
+      "metric": "keyword_coverage",
+      "dimension": "tag",
+      "bucket": "export",
+      "mean": 0.3333333333333333,
+      "std": 0.0,
+      "sample_count": 1
+    },
+    {
+      "metric": "keyword_coverage",
+      "dimension": "tag",
+      "bucket": "en",
+      "mean": 0.3333333333333333,
+      "std": 0.0,
+      "sample_count": 1
+    },
+    {
+      "metric": "keyword_coverage",
+      "dimension": "language",
+      "bucket": "ko",
+      "mean": 0.3333333333333333,
+      "std": 0.0,
+      "sample_count": 2
+    },
+    {
+      "metric": "keyword_coverage",
+      "dimension": "language",
+      "bucket": "en",
+      "mean": 0.3333333333333333,
+      "std": 0.0,
+      "sample_count": 1
+    },
+    {
+      "metric": "keyword_coverage",
+      "dimension": "length",
+      "bucket": "short",
+      "mean": 0.3333333333333333,
+      "std": 0.0,
+      "sample_count": 3
+    }
+  ],
+  "error_cases": [],
+  "llm_judge_details": []
+}
