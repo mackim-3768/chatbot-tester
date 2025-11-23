@@ -29,6 +29,19 @@ jobs:
           python -m pip install build
         shell: bash
 
+      - name: Run Quick Start E2E smoke test (Linux only)
+        if: runner.os == 'Linux'
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          QUICKSTART_MODEL: ${{ secrets.QUICKSTART_MODEL }}
+        run: |
+          if [ -z "${OPENAI_API_KEY:-}" ]; then
+            echo "OPENAI_API_KEY is not set; skipping Quick Start smoke test."
+            exit 0
+          fi
+          bash example/quickstart/run_quickstart.sh
+        shell: bash
+
       - name: Build package
         run: python -m build
 
