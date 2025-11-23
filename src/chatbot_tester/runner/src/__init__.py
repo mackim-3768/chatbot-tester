@@ -1,6 +1,23 @@
-__version__ = "0.0.1"
+"""Chatbot runner package.
 
-"""Placeholder package for Chat Test Runner.
-
-실제 Runner 구현은 추후 추가되며, 현재는 패키지 네임스페이스만 예약한다.
+Provides dataset loading helpers, runner orchestration utilities, and backend adapters
+for executing chatbot evaluation datasets against heterogeneous targets (API, ADB,
+etc.).
 """
+
+from .runner_core import RunnerOptions, run_async_job, run_job
+from .dataset import load_dataset
+from .backends.base import backend_registry, ChatBackend, register_backend
+from . import backends as _backends  # noqa: F401  # ensure built-in backends register
+
+__all__ = [
+    "RunnerOptions",
+    "run_job",
+    "run_async_job",
+    "load_dataset",
+    "backend_registry",
+    "ChatBackend",
+    "register_backend",
+]
+
+__version__ = "0.1.0"

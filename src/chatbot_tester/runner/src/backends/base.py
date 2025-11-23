@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import abc
-from typing import Any, Mapping
+from typing import Any
 
 from ..runner_context import RunnerContext
 from ..models import ChatResponse, RunRequest
@@ -14,6 +14,7 @@ class ChatBackend(abc.ABC):
 
     def __init__(self, context: RunnerContext | None = None) -> None:
         self.context = context or RunnerContext()
+        self.backend_options: dict[str, Any] = {}
 
     @abc.abstractmethod
     async def send(self, request: RunRequest) -> ChatResponse:
@@ -21,7 +22,7 @@ class ChatBackend(abc.ABC):
 
     def configure(self, **options: Any) -> None:
         if options:
-            self.context.options.update(options)
+            self.backend_options.update(options)
 
 
 class BackendRegistry:

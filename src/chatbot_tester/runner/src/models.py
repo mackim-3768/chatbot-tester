@@ -116,6 +116,7 @@ class RunConfig:
     backend: str
     model: Optional[str] = None
     parameters: Dict[str, Any] = field(default_factory=dict)
+    backend_options: Dict[str, Any] = field(default_factory=dict)
     metadata: Optional[Dict[str, Any]] = None
 
     def to_dict(self) -> Dict[str, Any]:
@@ -124,6 +125,8 @@ class RunConfig:
             payload["model"] = self.model
         if self.parameters:
             payload["parameters"] = self.parameters
+        if self.backend_options:
+            payload["backend_options"] = self.backend_options
         if self.metadata is not None:
             payload["metadata"] = self.metadata
         return payload
