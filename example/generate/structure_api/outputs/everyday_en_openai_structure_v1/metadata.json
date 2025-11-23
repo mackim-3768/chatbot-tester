@@ -1,0 +1,57 @@
+{
+  "dataset_id": "everyday_en_openai_structure",
+  "name": "Everyday Life English Conversations (OpenAI Structure)",
+  "version": "v1",
+  "created_at": "2025-11-23T11:28:30Z",
+  "source": {
+    "type": "synthetic",
+    "provider": "openai",
+    "method": "chat_completions_json",
+    "topic_prompt": "Create everyday life chatbot test queries in English. Cover situations such as shopping, commuting, dining out, healthcare, personal finance, scheduling, and casual conversations.",
+    "language_code": "en",
+    "structure_spec": {
+      "id": "everyday_conversation_basic",
+      "turns": 1,
+      "include_system": true,
+      "include_expected": true,
+      "min_user_len": 10,
+      "max_user_len": 200,
+      "min_expected_len": 20,
+      "max_expected_len": 400
+    },
+    "quality_profile": "everyday_en_default"
+  },
+  "generator_version": "0.1.0",
+  "generator_code_commit": "9e7bfaa4ca5845c6d1c1951391723ca5f8f731e6",
+  "sample_count": 50,
+  "filters": {
+    "language": "en",
+    "min_user_len": 10,
+    "max_user_len": 200,
+    "min_expected_len": 20,
+    "max_expected_len": 400
+  },
+  "sampling": {
+    "sample_count_requested": 50,
+    "sample_count_actual": 50,
+    "batch_size": 20,
+    "model": "gpt-4o-mini",
+    "temperature": 0.7,
+    "seed": null,
+    "cache_strategy": "default"
+  },
+  "tag_stats": {
+    "everyday_life": 50,
+    "scheduling": 5,
+    "en": 50,
+    "commute": 7,
+    "health": 10,
+    "shopping": 8,
+    "casual": 6,
+    "finance": 7,
+    "dining": 7
+  },
+  "language_stats": {
+    "en": 50
+  }
+}

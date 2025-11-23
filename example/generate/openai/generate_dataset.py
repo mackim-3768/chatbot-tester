@@ -110,7 +110,7 @@ def main() -> None:
         samples=records,
         filters={},
         sampling={"strategy": "manual_prompts", "count": len(records)},
-        repo_dir=here.parents[3],
+        repo_dir=here.parents[2],
     )
     write_metadata(meta, out_root / "metadata.json")
 
