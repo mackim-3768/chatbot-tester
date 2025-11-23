@@ -1,0 +1,4 @@
+id,system,user,expected,tags,lang
+toy-001,"You are a helpful support agent.","제 계정 비밀번호를 잊어버렸어요.","비밀번호 재설정을 위해 등록된 이메일을 확인하세요.","toy|support|account|ko",ko
+toy-002,"You are a helpful support agent.","서비스 요금제를 어떻게 변경하나요?","설정 > 요금제 메뉴에서 변경 가능합니다.","toy|support|billing|faq|ko",ko
+toy-003,"You are a helpful support agent.","Can I export my chat history?","You can export your chat history from Settings > Data > Export.","toy|support|export|en",en

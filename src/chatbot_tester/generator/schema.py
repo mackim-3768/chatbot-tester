@@ -53,6 +53,7 @@ def dataset_metadata_schema() -> Dict[str, Any]:
             "created_at": {"type": "string"},
             "source": {"type": ["string", "object", "null"]},
             "generator_version": {"type": "string"},
+            "generator_commit": {"type": ["string", "null"]},
             "generator_code_commit": {"type": ["string", "null"]},
             "sample_count": {"type": "integer"},
             "filters": {"type": "object"},

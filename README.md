@@ -50,3 +50,39 @@
 ## 아키텍처 상세 문서화 계획
 
 이 README는 **컨셉/역할 정의**에 집중하고, 모듈 간 구체적인 의존 관계, 디렉터리 구조, 빌드 파이프라인 등의 상세 아키텍처는 별도의 문서(`docs/` 또는 개별 `.md` 파일)에 정리할 예정이다.
+
+## Quick Start: 5분 안에 첫 리포트 만들기
+
+아래 순서를 따르면, 작은 toy 데이터셋을 가지고 **Generator → Runner → Evaluator** 전체 플로우를 한 번에 실행해 첫 Evaluation Report(JSON/Markdown)를 만들어볼 수 있다.
+
+1. 의존성 설치
+   ```bash
+   python -m pip install -r requirements.txt
+   ```
+
+2. OpenAI API 키 설정 (예시)
+   ```bash
+   export OPENAI_API_KEY="sk-..."  # GitHub Actions 에서는 repo secrets 사용
+   ```
+
+3. Quick Start 스크립트 실행
+   ```bash
+   bash example/quickstart/run_quickstart.sh
+   ```
+
+4. 생성된 산출물 확인
+   - Dataset (canonical `TestSample` JSONL)
+     - `example/quickstart/dataset/toy_support_qa_v1/test.jsonl`
+     - `example/quickstart/dataset/toy_support_qa_v1/metadata.json`
+   - Runner 결과(`RunResult` 레코드)
+     - `example/quickstart/runs/openai_gpt4-mini/run_results.jsonl`
+   - Evaluator 리포트(`EvaluationReport`)
+     - `example/quickstart/reports/` 아래 JSON/Markdown 파일
+
+리포트에는 다음 정보가 포함된다.
+- Experiment metadata (dataset, backend/run_config, evaluator_config 요약)
+- Overall metrics summary (예: `exact_match`, `keyword_coverage`의 mean/std/sample_count)
+- Breakdown (tag / language / length 기준)
+- Error cases / LLM Judge 세부 정보(구성된 경우)
+
+이를 기반으로 보다 복잡한 데이터셋/백엔드/메트릭 구성을 확장해 나갈 수 있다.

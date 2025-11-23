@@ -1,0 +1,32 @@
+run_config:
+  backend: openai
+  model: gpt-4o-mini
+
+metrics:
+  - type: exact_match
+    name: exact_match
+    parameters:
+      normalize_whitespace: true
+      case_sensitive: false
+
+  - type: keyword_coverage
+    name: keyword_coverage
+    parameters:
+      keywords:
+        - "비밀번호"
+        - "요금제"
+        - "export"
+      case_sensitive: false
+
+breakdown:
+  dimensions:
+    - tag
+    - language
+    - length
+
+report:
+  formats:
+    - json
+    - markdown
+
+min_samples: 1
