@@ -1,0 +1,21 @@
+{
+  "run_config": {
+    "backend": "adb-cli",
+    "model": "llm_executable"
+  },
+  "metrics": [
+    {
+      "type": "keyword_coverage",
+      "name": "keyword_coverage_simple",
+      "parameters": {
+        "keywords": ["test"]
+      }
+    }
+  ],
+  "breakdown": {
+    "dimensions": ["language", "tag"]
+  },
+  "report": {
+    "formats": ["json", "markdown"]
+  }
+}
