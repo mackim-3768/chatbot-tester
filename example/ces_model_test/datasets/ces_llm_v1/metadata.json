@@ -1,0 +1,37 @@
+{
+  "dataset_id": "ces_llm",
+  "name": "CES topic-based multilingual dataset",
+  "version": "v1",
+  "created_at": "2025-11-23T13:58:21Z",
+  "source": {
+    "type": "ces_topics",
+    "topics": [
+      "번역",
+      "문체 변환",
+      "요약"
+    ]
+  },
+  "generator_version": "0.1.0",
+  "generator_code_commit": "dedb24c9d242db8ba480d4de103eb5abd2243470",
+  "sample_count": 54,
+  "filters": {},
+  "sampling": {
+    "strategy": "all",
+    "count": 54
+  },
+  "tag_stats": {
+    "번역": 16,
+    "lang:ko": 15,
+    "lang:zh": 13,
+    "lang:ja": 13,
+    "lang:en": 13,
+    "문체 변환": 20,
+    "요약": 18
+  },
+  "language_stats": {
+    "ko": 15,
+    "zh": 13,
+    "ja": 13,
+    "en": 13
+  }
+}
