@@ -2,7 +2,7 @@
   "dataset_id": "ces_llm",
   "name": "CES topic-based multilingual dataset",
   "version": "v1",
-  "created_at": "2025-11-23T13:58:21Z",
+  "created_at": "2025-11-23T14:16:07Z",
   "source": {
     "type": "ces_topics",
     "topics": [
@@ -12,26 +12,28 @@
     ]
   },
   "generator_version": "0.1.0",
-  "generator_code_commit": "dedb24c9d242db8ba480d4de103eb5abd2243470",
-  "sample_count": 54,
+  "generator_code_commit": "358c0c69e71e09fa6fa2b7a7b5ee29c5789c0177",
+  "sample_count": 60,
   "filters": {},
   "sampling": {
     "strategy": "all",
-    "count": 54
+    "count": 60
   },
   "tag_stats": {
-    "번역": 16,
+    "번역": 20,
     "lang:ko": 15,
-    "lang:zh": 13,
-    "lang:ja": 13,
-    "lang:en": 13,
+    "scenario:everyday_life": 36,
+    "scenario:business": 24,
+    "lang:zh": 15,
+    "lang:ja": 15,
+    "lang:en": 15,
     "문체 변환": 20,
-    "요약": 18
+    "요약": 20
   },
   "language_stats": {
     "ko": 15,
-    "zh": 13,
-    "ja": 13,
-    "en": 13
+    "zh": 15,
+    "ja": 15,
+    "en": 15
   }
 }

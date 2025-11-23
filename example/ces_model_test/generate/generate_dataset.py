@@ -83,64 +83,117 @@ def _build_question_generation_prompt(topic: str, lang_code: str, base_prompt: s
         return (
             f"[토픽: {topic}]\n{text}\n\n"
             f"위 문장은 이 토픽의 기본 프롬프트 예시입니다. "
-            f"이 프롬프트와 같은 목적을 가진 한국어 사용자 질문 예시를 {count}개 만들어 주세요. "
+            f"이 프롬프트와 같은 목적을 가진 한국어 사용자 질문 예시를 최소 {count}개 이상 만들어 주세요. "
             "각 질문은 서로 다른 상황과 맥락을 갖도록 해 주세요. "
-            "출력은 반드시 문자열들의 JSON 배열 형식으로만 응답해 주세요. 예: [\"질문1\", \"질문2\", ...]"
+            "특히 'everyday_life'(일상 생활), 'business'(비즈니스)와 같은 시나리오를 고르게 포함해 주세요. "
+            "출력은 반드시 JSON 배열 형식으로만 응답해 주세요. "
+            "각 원소는 {\"scenario\": \"everyday_life\" 또는 \"business\", \"question\": \"질문 텍스트\"} 형태여야 합니다. "
+            "예: [{\"scenario\": \"everyday_life\", \"question\": \"...\"}, {\"scenario\": \"business\", \"question\": \"...\"}]"
         )
     if lang_code == "zh":
         return (
             f"[主题: {topic}]\n{text}\n\n"
-            f"上面这句话是该主题的基础提示示例。请基于这个提示，用中文生成 {count} 个用户提问示例，"
+            f"上面这句话是该主题的基础提示示例。请基于这个提示，用中文生成不少于 {count} 个用户提问示例，"
             "这些问题都在要求模型执行相同的任务，并且尽量覆盖不同的场景。"
-            "请严格以 JSON 数组形式输出结果，例如：[\"问题1\", \"问题2\", ...]。"
+            "特别是要均衡覆盖 'everyday_life'(日常生活) 和 'business'(商务场景) 这两类情境。"
+            "请严格以 JSON 数组形式输出结果，每个元素必须是 {\"scenario\": \"everyday_life\" 或 \"business\", \"question\": \"问题文本\"} 形式的对象。"
+            "例如: [{\"scenario\": \"everyday_life\", \"question\": \"...\"}, {\"scenario\": \"business\", \"question\": \"...\"}]。"
         )
     if lang_code == "ja":
         return (
             f"[トピック: {topic}]\n{text}\n\n"
-            f"上の文はこのトピックの基本プロンプト例です。このプロンプトと同じ目的を持つ日本語のユーザー質問例を{count}個作成してください。"
+            f"上の文はこのトピックの基本プロンプト例です。このプロンプトと同じ目的を持つ日本語のユーザー質問例を少なくとも{count}個作成してください。"
             "それぞれ異なる状況や文脈になるようにしてください。"
-            "出力は必ず文字列のJSON配列として返してください。例: [\"質問1\", \"質問2\", ...]"
+            "特に 'everyday_life'(日常生活) と 'business'(ビジネス) のシナリオをバランスよく含めてください。"
+            "出力は必ずJSON配列として返してください。各要素は {\"scenario\": \"everyday_life\" または \"business\", \"question\": \"質問テキスト\"} 形式のオブジェクトにしてください。"
+            "例: [{\"scenario\": \"everyday_life\", \"question\": \"...\"}, {\"scenario\": \"business\", \"question\": \"...\"}]"
         )
 
     # default: English
     return (
         f"[Topic: {topic}]\n{text}\n\n"
-        f"The sentence above is a base prompt example for this topic. Based on it, generate {count} different English "
+        f"The sentence above is a base prompt example for this topic. Based on it, generate at least {count} different English "
         "user questions that ask the model to perform the same kind of task, covering diverse situations. "
-        "Respond strictly as a JSON array of strings, e.g. [\"Question 1\", \"Question 2\", ...]."
+        "Make sure to cover scenarios such as 'everyday_life' and 'business' in a balanced way. "
+        "Respond strictly as a JSON array where each element is an object of the form {\"scenario\": \"everyday_life\" or \"business\", \"question\": \"question text\"}. "
+        "Example: [{\"scenario\": \"everyday_life\", \"question\": \"...\"}, {\"scenario\": \"business\", \"question\": \"...\"}]."
     )
 
 
-def _parse_questions(text: str, expected_count: int) -> List[str]:
+def _parse_questions(text: str, expected_count: int) -> List[Dict[str, Any]]:
     text = (text or "").strip()
     if not text:
         return []
 
-    # 1) JSON 배열 파싱 시도
-    try:
-        data = json.loads(text)
-        if isinstance(data, list):
-            questions = [str(q).strip() for q in data if str(q).strip()]
-            return questions[:expected_count]
-    except Exception:
-        pass
+    def _strip_code_fences(t: str) -> str:
+        if not t.startswith("```"):
+            return t
+        lines = t.splitlines()
+        if lines and lines[0].startswith("```"):
+            lines = lines[1:]
+        if lines and lines[-1].strip().startswith("```"):
+            lines = lines[:-1]
+        return "\n".join(lines).strip()
 
-    # 2) 실패 시, 줄 단위로 파싱하면서 번호/불릿 제거
-    lines = [ln.strip() for ln in text.splitlines() if ln.strip()]
-    questions: List[str] = []
+    cleaned = _strip_code_fences(text)
+
+    for candidate in (cleaned, text):
+        try:
+            data = json.loads(candidate)
+            if isinstance(data, list):
+                results: List[Dict[str, Any]] = []
+                for item in data:
+                    if isinstance(item, dict):
+                        q_text = str(item.get("question", "")).strip()
+                        if not q_text:
+                            continue
+                        scenario = item.get("scenario")
+                        scenario_str = str(scenario).strip() if scenario is not None else None
+                        results.append({"question": q_text, "scenario": scenario_str})
+                    else:
+                        q_text = str(item).strip()
+                        if not q_text:
+                            continue
+                        results.append({"question": q_text, "scenario": None})
+                return results[:expected_count]
+        except Exception:
+            continue
+
+    lines = [ln.strip() for ln in cleaned.splitlines() if ln.strip()]
+    results: List[Dict[str, Any]] = []
     for ln in lines:
-        # 불릿/숫자 목록 제거 (예: "1. ...", "- ...")
-        if ln[0] in "-•*":
+        if ln.startswith("``"):
+            continue
+        if ln in ("[", "]", ","):
+            continue
+
+        json_candidate = ln.rstrip().rstrip(",").strip()
+        if json_candidate.startswith("{") and "question" in json_candidate:
+            try:
+                obj = json.loads(json_candidate)
+                q_text = str(obj.get("question", "")).strip()
+                if not q_text:
+                    continue
+                scenario = obj.get("scenario")
+                scenario_str = str(scenario).strip() if scenario is not None else None
+                results.append({"question": q_text, "scenario": scenario_str})
+                if len(results) >= expected_count:
+                    break
+                continue
+            except Exception:
+                pass
+
+        if ln and ln[0] in "-•*":
             ln = ln[1:].strip()
         i = 0
         while i < len(ln) and (ln[i].isdigit() or ln[i] in ".)】］]"):
             i += 1
         ln = ln[i:].strip()
         if ln:
-            questions.append(ln)
-        if len(questions) >= expected_count:
+            results.append({"question": ln, "scenario": None})
+        if len(results) >= expected_count:
             break
-    return questions[:expected_count]
+    return results[:expected_count]
 
 
 def _build_eval_system_prompt(topic: str, lang_code: str, base_prompt: str) -> str:
@@ -161,7 +214,7 @@ def _generate_questions_for_topic(
     lang_code: str,
     base_prompt: str,
     count: int,
-) -> List[str]:
+) -> List[Dict[str, Any]]:
     gen_prompt = _build_question_generation_prompt(topic, lang_code, base_prompt, count)
     if not gen_prompt:
         return []
@@ -206,10 +259,13 @@ def _build_topic_samples() -> List[TestSample]:
 
             system_prompt = _build_eval_system_prompt(topic, lang_code, base_prompt)
 
-            for q in questions:
-                q_text = str(q).strip()
+            for item in questions:
+                q_text = str(item.get("question", "")).strip()
                 if not q_text:
                     continue
+
+                scenario = item.get("scenario")
+                scenario_str = str(scenario).strip() if scenario is not None else None
 
                 messages = [
                     Message(role="system", content=system_prompt),
@@ -221,7 +277,13 @@ def _build_topic_samples() -> List[TestSample]:
                     "source": "ces_topics_generated",
                     "base_prompt": base_prompt,
                 }
+                if scenario_str:
+                    metadata["scenario"] = scenario_str
+
                 tags = [topic, f"lang:{lang_code}"]
+                if scenario_str:
+                    tags.append(f"scenario:{scenario_str}")
+
                 sample = TestSample(
                     id=str(idx),
                     messages=messages,
