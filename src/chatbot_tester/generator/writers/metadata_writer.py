@@ -39,6 +39,7 @@ def build_metadata(
     sampling: Optional[Dict[str, Any]] = None,
     repo_dir: Optional[Path] = None,
 ) -> Dict[str, Any]:
+    commit = get_git_commit(repo_dir)
     return {
         "dataset_id": dataset_id,
         "name": name,
@@ -46,7 +47,8 @@ def build_metadata(
         "created_at": now_iso(),
         "source": source,
         "generator_version": get_pkg_version(),
-        "generator_code_commit": get_git_commit(repo_dir),
+        "generator_commit": commit,
+        "generator_code_commit": commit,
         "sample_count": len(samples),
         "filters": filters or {},
         "sampling": sampling or {},

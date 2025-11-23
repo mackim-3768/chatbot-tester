@@ -176,31 +176,46 @@ def dataset_metadata_from_dict(data: Mapping[str, Any]) -> DatasetMetadata:
     if not dataset_id or not version:
         raise ValueError("dataset metadata must include dataset_id and version")
 
+    generator_commit = data.get("generator_commit") or data.get("generator_code_commit")
+
+    counts = data.get("counts")
+    if counts is None and data.get("sample_count") is not None:
+        counts = {"sample_count": data.get("sample_count")}
+
+    languages = data.get("languages") or data.get("language_stats")
+    tags = data.get("tags") or data.get("tag_stats")
+
+    known_keys = {
+        "dataset_id",
+        "version",
+        "name",
+        "source",
+        "created_at",
+        "generator_commit",
+        "generator_code_commit",
+        "filters",
+        "sampling",
+        "counts",
+        "languages",
+        "tags",
+        "sample_count",
+        "tag_stats",
+        "language_stats",
+    }
+
     return DatasetMetadata(
         dataset_id=dataset_id,
         version=version,
         name=data.get("name"),
         source=data.get("source"),
         created_at=data.get("created_at"),
-        generator_commit=data.get("generator_commit"),
+        generator_commit=generator_commit,
         filters=data.get("filters"),
         sampling=data.get("sampling"),
-        counts=data.get("counts"),
-        languages=data.get("languages"),
-        tags=data.get("tags"),
-        extra={k: v for k, v in data.items() if k not in {
-            "dataset_id",
-            "version",
-            "name",
-            "source",
-            "created_at",
-            "generator_commit",
-            "filters",
-            "sampling",
-            "counts",
-            "languages",
-            "tags",
-        }},
+        counts=counts,
+        languages=languages,
+        tags=tags,
+        extra={k: v for k, v in data.items() if k not in known_keys},
     )
 
 
