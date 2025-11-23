@@ -15,6 +15,10 @@ nav:
       - Runner: usage/runner.md
       - Evaluator: usage/evaluator.md
       - Quick Start E2E: usage/quickstart-e2e.md
+      - Extending Metrics: usage/extending-metrics.md
+      - Extending Backends: usage/extending-backends.md
+      - Report Schema: usage/report-schema.md
+      - Test Design: usage/test-design.md
   - Reference:
       - CLI: reference/cli.md
       - API: reference/api.md
