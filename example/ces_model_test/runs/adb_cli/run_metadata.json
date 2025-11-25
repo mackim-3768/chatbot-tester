@@ -1,0 +1,91 @@
+{
+  "generated_at": "2025-11-25T13:26:17.518210+00:00",
+  "dataset": {
+    "dataset_id": "ces_llm",
+    "name": "CES topic-based multilingual dataset",
+    "version": "v1",
+    "source": {
+      "type": "ces_topics",
+      "topics": [
+        "번역",
+        "문체 변환",
+        "요약"
+      ]
+    },
+    "metadata": {
+      "dataset_id": "ces_llm",
+      "name": "CES topic-based multilingual dataset",
+      "version": "v1",
+      "created_at": "2025-11-24T01:47:59Z",
+      "source": {
+        "type": "ces_topics",
+        "topics": [
+          "번역",
+          "문체 변환",
+          "요약"
+        ]
+      },
+      "generator_version": "0.1.0",
+      "generator_commit": "ecf036d8d8ebc2a54b4a194efbb75d05621e2910",
+      "generator_code_commit": "ecf036d8d8ebc2a54b4a194efbb75d05621e2910",
+      "sample_count": 60,
+      "filters": {},
+      "sampling": {
+        "strategy": "all",
+        "count": 60
+      },
+      "tag_stats": {
+        "번역": 20,
+        "lang:ko": 15,
+        "scenario:everyday_life": 36,
+        "scenario:business": 24,
+        "lang:zh": 15,
+        "lang:ja": 15,
+        "lang:en": 15,
+        "문체 변환": 20,
+        "요약": 20
+      },
+      "language_stats": {
+        "ko": 15,
+        "zh": 15,
+        "ja": 15,
+        "en": 15
+      }
+    }
+  },
+  "run_config": {
+    "backend": "adb-cli-llama-freeform",
+    "model": "llm_executable",
+    "backend_options": {
+      "adb_path": "adb",
+      "device_id": "00000a750d8747d3",
+      "binary": "export LD_LIBRARY_PATH=/data/local/tmp/CPU_GPU_LLAMA && /data/local/tmp/CPU_GPU_LLAMA/llama-cli",
+      "binary_args": "-m /data/local/tmp/CPU_GPU_LLAMA/llama-1b.gguf -ngl 99 --output-buffer-size 10"
+    }
+  },
+  "options": {
+    "max_concurrency": 1,
+    "timeout_seconds": 120.0,
+    "max_retries": 1,
+    "retry_backoff_factor": 2.0,
+    "retry_backoff_jitter": 0.5,
+    "rate_limit_per_second": null,
+    "trace_prefix": "ces_adb"
+  },
+  "summary": {
+    "total": 60,
+    "status_counts": {
+      "ok": 60
+    },
+    "latency_ms": {
+      "min": 17452.737590000197,
+      "max": 1163429.6435319998,
+      "avg": 586458.9320569667
+    },
+    "total_tokens": {
+      "min": 163,
+      "max": 1414,
+      "avg": 250.46666666666667
+    }
+  }
+}
