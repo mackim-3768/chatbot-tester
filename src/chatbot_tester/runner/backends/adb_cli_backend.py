@@ -94,7 +94,19 @@ class AdbCliBackend(ChatBackend):
         try:
             data = json.loads(stdout)
         except json.JSONDecodeError as exc:
-            raise BackendError("Invalid JSON from device", error_type="parse_error", retryable=False) from exc
+            # Attach raw stdout to error details for easier debugging when device does not return JSON
+            snippet_len = 2000
+            head = stdout[:snippet_len]
+            tail = stdout[-snippet_len:] if len(stdout) > snippet_len else None
+            details = {"stdout_head": head}
+            if tail is not None:
+                details["stdout_tail"] = tail
+            raise BackendError(
+                "Invalid JSON from device",
+                error_type="parse_error",
+                retryable=False,
+                details=details,
+            ) from exc
 
         text = data.get("text")
         if text is None:
