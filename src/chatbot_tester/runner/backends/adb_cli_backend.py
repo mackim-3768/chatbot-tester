@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 import shlex
 import subprocess
 from typing import Any, Dict, List
@@ -21,6 +22,11 @@ def _messages_to_dict(messages: List[Message]) -> List[Dict[str, Any]]:
             entry["metadata"] = msg.metadata
         payload.append(entry)
     return payload
+
+
+INFO_TSK_PATTERN = re.compile(
+    r"\[INFO_TSK\]\s*(\d+),\s*(\d+),\s*([\d.]+),\s*([\d.]+),\s*([\d.]+)"
+)
 
 
 @register_backend("adb-cli")
@@ -80,10 +86,20 @@ class AdbCliBackend(ChatBackend):
 
         if proc.returncode != 0:
             stderr = proc.stderr.decode("utf-8", errors="ignore")
+            message = stderr.strip()
+            error_type = "adb_exit"
+            retryable = True
+            lowered = message.lower()
+            if "device '" in lowered and "not found" in lowered:
+                error_type = "device_not_found"
+                retryable = False
+            elif "no devices/emulators found" in lowered:
+                error_type = "device_not_found"
+                retryable = False
             raise BackendError(
-                f"ADB binary exited with code {proc.returncode}: {stderr.strip()}",
-                error_type="adb_exit",
-                retryable=True,
+                f"ADB binary exited with code {proc.returncode}: {message}",
+                error_type=error_type,
+                retryable=retryable,
             )
         stdout = proc.stdout.decode("utf-8", errors="ignore").strip()
         if not stdout:
@@ -126,5 +142,85 @@ class AdbCliBackend(ChatBackend):
             raw=data,
             usage=usage,
             finish_reason=data.get("finish_reason"),
+            status_code=0,
+        )
+
+
+@register_backend("adb-cli-llama-freeform")
+class LlamaCliFreeformAdbBackend(AdbCliBackend):
+    """ADB backend variant for llama-cli that parses free-form stdout.
+
+    This backend does *not* require the device binary to output JSON. It tries to
+    extract a useful answer text from arbitrary stdout and optionally parse
+    [INFO_TSK] lines as token usage metadata.
+    """
+
+    def _parse_response(self, stdout: str) -> ChatResponse:
+        usage: TokenUsage | None = None
+        input_tokens = None
+        output_tokens = None
+
+        # Try to parse [INFO_TSK] lines for token usage metadata if present.
+        for line in stdout.splitlines():
+            match = INFO_TSK_PATTERN.search(line)
+            if match:
+                try:
+                    output_tokens = int(match.group(1))
+                    input_tokens = int(match.group(2))
+                except ValueError:
+                    input_tokens = None
+                    output_tokens = None
+                else:
+                    total_tokens = (
+                        input_tokens + output_tokens
+                        if input_tokens is not None and output_tokens is not None
+                        else None
+                    )
+                    usage = TokenUsage(
+                        input_tokens=input_tokens,
+                        output_tokens=output_tokens,
+                        total_tokens=total_tokens,
+                    )
+                break
+
+        # Heuristically extract human-readable answer text from stdout.
+        cleaned_lines: list[str] = []
+        for line in stdout.splitlines():
+            stripped = line.strip()
+            if not stripped:
+                continue
+            # Drop metrics / trailer lines
+            if stripped.startswith("[INFO_TSK]"):
+                continue
+            if "EOF by user" in stripped:
+                continue
+            # Drop obvious JSON echo / metadata lines
+            if any(
+                key in stripped
+                for key in ("\"sample_id\"", "\"messages\"", "\"model\"", "\"metadata\"", "\"parameters\"")
+            ):
+                continue
+            if stripped.startswith("{") or stripped.startswith("}"):
+                continue
+            # Many CLIs prefix lines with '>' when echoing; strip it off.
+            if stripped.startswith(">"):
+                stripped = stripped.lstrip(">").strip()
+                if not stripped:
+                    continue
+
+            cleaned_lines.append(stripped)
+
+        text = "\n".join(cleaned_lines).strip()
+        if not text:
+            # Fallback to raw stdout if we could not confidently isolate the answer.
+            text = stdout.strip()
+
+        raw = {"raw_stdout": stdout}
+
+        return ChatResponse(
+            text=text,
+            raw=raw,
+            usage=usage,
+            finish_reason=None,
             status_code=0,
         )
