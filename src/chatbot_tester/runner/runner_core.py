@@ -73,6 +73,9 @@ async def run_async_job(
     logger: Optional[logging.Logger] = None,
 ) -> List[RunResult]:
     logger = logger or logging.getLogger("chatbot_tester.runner")
+    total = len(samples)
+    completed = 0
+    progress_lock = asyncio.Lock()
     context = RunnerContext(
         options={"backend": backend_name, "run_config": run_config.to_dict()},
         logger=logger,
@@ -84,6 +87,7 @@ async def run_async_job(
     max_attempts = max(1, options.max_retries + 1)
 
     async def _run_single(sample: TestSample) -> RunResult:
+        nonlocal completed
         trace_id = _build_trace_id(options.trace_prefix, sample.id)
         attempt = 0
         last_error: Optional[RunError] = None
@@ -110,7 +114,7 @@ async def run_async_job(
                 latency_ms = (time.perf_counter() - perf_start) * 1000.0
                 completed_at = datetime.now(timezone.utc)
                 logger.debug("sample=%s status=ok attempts=%d", sample.id, attempt)
-                return RunResult(
+                result = RunResult(
                     sample_id=sample.id,
                     dataset_id=dataset.dataset_id,
                     backend=backend_name,
@@ -129,6 +133,16 @@ async def run_async_job(
                     attempts=attempt,
                     trace_id=trace_id,
                 )
+                async with progress_lock:
+                    completed += 1
+                    logger.info(
+                        "progress %d/%d sample=%s status=%s",
+                        completed,
+                        total,
+                        sample.id,
+                        RunResultStatus.OK.value,
+                    )
+                return result
             except asyncio.TimeoutError:
                 logger.warning("sample=%s attempt=%d timeout", sample.id, attempt)
                 last_error = RunError(
@@ -169,7 +183,7 @@ async def run_async_job(
                 continue
 
             status = _infer_status(last_error)
-            return RunResult(
+            result = RunResult(
                 sample_id=sample.id,
                 dataset_id=dataset.dataset_id,
                 backend=backend_name,
@@ -189,6 +203,16 @@ async def run_async_job(
                 trace_id=trace_id,
                 error=last_error,
             )
+            async with progress_lock:
+                completed += 1
+                logger.info(
+                    "progress %d/%d sample=%s status=%s",
+                    completed,
+                    total,
+                    sample.id,
+                    status.value,
+                )
+            return result
 
         # Should never reach here
         raise RuntimeError("Execution loop exited unexpectedly")
