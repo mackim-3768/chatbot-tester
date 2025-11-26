@@ -6,6 +6,7 @@ from .base import Metric
 from .exact_match import ExactMatchMetric
 from .keyword import KeywordCoverageMetric
 from .llm_judge import LLMJudgeMetric
+from .semantic_similarity import SemanticSimilarityMetric
 
 if TYPE_CHECKING:  # pragma: no cover
     from ..registry import MetricRegistry
@@ -33,6 +34,7 @@ def register_default_metrics(registry: "MetricRegistry") -> None:
     _safe_register("exact_match", lambda cfg: ExactMatchMetric(**cfg))
     _safe_register("keyword_coverage", lambda cfg: KeywordCoverageMetric(**cfg))
     _safe_register("llm_judge", lambda cfg: LLMJudgeMetric(**cfg))
+    _safe_register("semantic_similarity", lambda cfg: SemanticSimilarityMetric(**cfg))
 
 
 __all__ = [
@@ -40,5 +42,6 @@ __all__ = [
     "ExactMatchMetric",
     "KeywordCoverageMetric",
     "LLMJudgeMetric",
+    "SemanticSimilarityMetric",
     "register_default_metrics",
 ]

@@ -15,6 +15,20 @@ class MarkdownReporter(Reporter):
         report = result.report
         exp = report.experiment
 
+        metric_ranges: Dict[str, str] = {}
+        metrics_cfg = (
+            exp.evaluator_config.get("metrics", [])
+            if isinstance(exp.evaluator_config, dict)
+            else []
+        )
+        for m in metrics_cfg:
+            name = str(m.get("name") or "").strip()
+            mtype = str(m.get("type") or "").strip()
+            if not name:
+                continue
+            if mtype in {"exact_match", "keyword_coverage", "llm_judge", "semantic_similarity"}:
+                metric_ranges[name] = "0-1"
+
         lines: List[str] = []
         lines.append("# Experiment metadata")
         lines.append("")
@@ -29,7 +43,11 @@ class MarkdownReporter(Reporter):
         lines.append("| metric | mean | std | sample_count |")
         lines.append("| --- | ---: | ---: | ---: |")
         for s in report.summaries:
-            lines.append(f"| {s.metric} | {s.mean:.4f} | {s.std:.4f} | {s.sample_count} |")
+            metric_label = s.metric
+            range_label = metric_ranges.get(s.metric)
+            if range_label:
+                metric_label = f"{metric_label} ({range_label})"
+            lines.append(f"| {metric_label} | {s.mean:.4f} | {s.std:.4f} | {s.sample_count} |")
         if not report.summaries:
             lines.append("(no metrics computed)")
         lines.append("")
@@ -49,8 +67,12 @@ class MarkdownReporter(Reporter):
                 lines.append("| metric | bucket | mean | std | sample_count |")
                 lines.append("| --- | --- | ---: | ---: | ---: |")
                 for b in rows:
+                    metric_label = b.metric
+                    range_label = metric_ranges.get(b.metric)
+                    if range_label:
+                        metric_label = f"{metric_label} ({range_label})"
                     lines.append(
-                        f"| {b.metric} | {b.bucket} | {b.mean:.4f} | {b.std:.4f} | {b.sample_count} |"
+                        f"| {metric_label} | {b.bucket} | {b.mean:.4f} | {b.std:.4f} | {b.sample_count} |"
                     )
                 lines.append("")
 
