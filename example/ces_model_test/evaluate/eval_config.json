@@ -1,6 +1,6 @@
 {
   "run_config": {
-    "backend": "adb-cli",
+    "backend": "adb-cli-llama-freeform",
     "model": "llm_executable"
   },
   "metrics": [
@@ -9,6 +9,95 @@
       "name": "keyword_coverage_simple",
       "parameters": {
         "keywords": ["test"]
+      }
+    },
+
+    {
+      "type": "llm_judge",
+      "name": "topic_alignment",
+      "parameters": {
+        "prompt_id": "overall_eval_v1",
+        "prompt_version": "1",
+        "criteria": ["topic_alignment"],
+        "max_score": 5.0,
+        "score_key": "response.raw.llm_judge.overall.topic_score"
+      }
+    },
+    {
+      "type": "llm_judge",
+      "name": "language_match",
+      "parameters": {
+        "prompt_id": "overall_eval_v1",
+        "prompt_version": "1",
+        "criteria": ["language_match"],
+        "max_score": 1.0,
+        "score_key": "response.raw.llm_judge.overall.lang_match"
+      }
+    },
+    {
+      "type": "llm_judge",
+      "name": "context_naturalness",
+      "parameters": {
+        "prompt_id": "overall_eval_v1",
+        "prompt_version": "1",
+        "criteria": ["context_naturalness"],
+        "max_score": 5.0,
+        "score_key": "response.raw.llm_judge.overall.context_score"
+      }
+    },
+    {
+      "type": "llm_judge",
+      "name": "answer_accuracy",
+      "parameters": {
+        "prompt_id": "overall_eval_v1",
+        "prompt_version": "1",
+        "criteria": ["answer_accuracy"],
+        "max_score": 5.0,
+        "score_key": "response.raw.llm_judge.overall.accuracy_score"
+      }
+    },
+    {
+      "type": "llm_judge",
+      "name": "naturalness",
+      "parameters": {
+        "prompt_id": "overall_eval_v1",
+        "prompt_version": "1",
+        "criteria": ["naturalness"],
+        "max_score": 5.0,
+        "score_key": "response.raw.llm_judge.overall.naturalness"
+      }
+    },
+    {
+      "type": "llm_judge",
+      "name": "coherence",
+      "parameters": {
+        "prompt_id": "overall_eval_v1",
+        "prompt_version": "1",
+        "criteria": ["coherence"],
+        "max_score": 5.0,
+        "score_key": "response.raw.llm_judge.overall.coherence"
+      }
+    },
+    {
+      "type": "llm_judge",
+      "name": "engagingness",
+      "parameters": {
+        "prompt_id": "overall_eval_v1",
+        "prompt_version": "1",
+        "criteria": ["engagingness"],
+        "max_score": 5.0,
+        "score_key": "response.raw.llm_judge.overall.engagingness"
+      }
+    },
+    {
+      "type": "llm_judge",
+      "name": "groundedness",
+      "parameters": {
+        "prompt_id": "overall_eval_v1",
+        "prompt_version": "1",
+        "criteria": ["groundedness"],
+        "max_score": 5.0,
+        "score_key": "response.raw.llm_judge.overall.groundedness"
       }
     }
   ],
