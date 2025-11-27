@@ -41,8 +41,9 @@ def summarize_report(summary_path: Path, output_path: Path, model: str) -> None:
 
 def main() -> None:
     base_dir = Path(__file__).resolve().parents[1]
-    default_summary = base_dir / "reports" / "adb_cli" / "summary.json"
-    default_output = base_dir / "reports" / "adb_cli" / "qualitative_summary.md"
+    output_root = base_dir / "output"
+    default_summary = output_root / "reports" / "adb_cli" / "summary.json"
+    default_output = output_root / "reports" / "adb_cli" / "qualitative_summary.md"
 
     parser = argparse.ArgumentParser()
     parser.add_argument(

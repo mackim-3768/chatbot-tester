@@ -299,7 +299,8 @@ def _build_topic_samples() -> List[TestSample]:
 
 def main() -> None:
     root = Path(__file__).resolve().parents[3]
-    out_root = Path(__file__).resolve().parents[1] / "datasets" / f"{DATASET_ID}_{DATASET_VERSION}"
+    example_root = Path(__file__).resolve().parents[1]
+    out_root = example_root / "output" / "datasets" / f"{DATASET_ID}_{DATASET_VERSION}"
     ensure_dir(out_root)
 
     samples = _build_topic_samples()

@@ -21,10 +21,11 @@ from chatbot_tester.evaluator.report.markdown_reporter import MarkdownReporter
 
 
 EXAMPLE_ROOT = Path(__file__).resolve().parents[1]
-DATASET_DIR = EXAMPLE_ROOT / "datasets" / "ces_llm_v1"
-RUN_OUTPUT_DIR = EXAMPLE_ROOT / "runs" / "adb_cli"
+OUTPUT_ROOT = EXAMPLE_ROOT / "output"
+DATASET_DIR = OUTPUT_ROOT / "datasets" / "ces_llm_v1"
+RUN_OUTPUT_DIR = OUTPUT_ROOT / "runs" / "adb_cli"
 EVAL_CONFIG_PATH = EXAMPLE_ROOT / "evaluate" / "eval_config.json"
-REPORT_DIR = EXAMPLE_ROOT / "reports" / "adb_cli"
+REPORT_DIR = OUTPUT_ROOT / "reports" / "adb_cli"
 
 
 def _load_jsonl(path: Path) -> Iterable[Dict[str, Any]]:

@@ -1,0 +1,1767 @@
+{
+  "experiment": {
+    "dataset": {
+      "dataset_id": "ces_llm",
+      "version": "v1",
+      "name": "CES topic-based multilingual dataset",
+      "source": {
+        "type": "ces_topics",
+        "topics": [
+          "번역",
+          "문체 변환",
+          "요약"
+        ]
+      },
+      "created_at": "2025-11-26T12:01:22Z",
+      "generator_commit": "ace49ad2708ff4f3b9fe15524dcd56e030b398d0",
+      "filters": {},
+      "sampling": {
+        "strategy": "all",
+        "count": 60
+      },
+      "counts": {
+        "sample_count": 60
+      },
+      "languages": {
+        "ko": 15,
+        "zh": 15,
+        "ja": 15,
+        "en": 15
+      },
+      "tags": {
+        "번역": 20,
+        "lang:ko": 15,
+        "scenario:everyday_life": 36,
+        "scenario:business": 24,
+        "lang:zh": 15,
+        "lang:ja": 15,
+        "lang:en": 15,
+        "문체 변환": 20,
+        "요약": 20
+      },
+      "extra": {
+        "generator_version": "0.1.0"
+      }
+    },
+    "run_config": {
+      "backend": "adb-cli-llama-freeform",
+      "model": "llm_executable"
+    },
+    "evaluator_config": {
+      "run_config": {
+        "backend": "adb-cli-llama-freeform",
+        "model": "llm_executable"
+      },
+      "metrics": [
+        {
+          "type": "keyword_coverage",
+          "name": "keyword_coverage_simple",
+          "parameters": {
+            "keywords": [
+              "test"
+            ]
+          },
+          "sample_rate": 1.0
+        },
+        {
+          "type": "llm_judge",
+          "name": "topic_alignment",
+          "parameters": {
+            "prompt_id": "overall_eval_v1",
+            "prompt_version": "1",
+            "criteria": [
+              "topic_alignment"
+            ],
+            "max_score": 5.0,
+            "score_key": "response.raw.llm_judge.overall.topic_score"
+          },
+          "sample_rate": 1.0
+        },
+        {
+          "type": "llm_judge",
+          "name": "language_match",
+          "parameters": {
+            "prompt_id": "overall_eval_v1",
+            "prompt_version": "1",
+            "criteria": [
+              "language_match"
+            ],
+            "max_score": 1.0,
+            "score_key": "response.raw.llm_judge.overall.lang_match"
+          },
+          "sample_rate": 1.0
+        },
+        {
+          "type": "llm_judge",
+          "name": "context_naturalness",
+          "parameters": {
+            "prompt_id": "overall_eval_v1",
+            "prompt_version": "1",
+            "criteria": [
+              "context_naturalness"
+            ],
+            "max_score": 5.0,
+            "score_key": "response.raw.llm_judge.overall.context_score"
+          },
+          "sample_rate": 1.0
+        },
+        {
+          "type": "llm_judge",
+          "name": "answer_accuracy",
+          "parameters": {
+            "prompt_id": "overall_eval_v1",
+            "prompt_version": "1",
+            "criteria": [
+              "answer_accuracy"
+            ],
+            "max_score": 5.0,
+            "score_key": "response.raw.llm_judge.overall.accuracy_score"
+          },
+          "sample_rate": 1.0
+        },
+        {
+          "type": "llm_judge",
+          "name": "naturalness",
+          "parameters": {
+            "prompt_id": "overall_eval_v1",
+            "prompt_version": "1",
+            "criteria": [
+              "naturalness"
+            ],
+            "max_score": 5.0,
+            "score_key": "response.raw.llm_judge.overall.naturalness"
+          },
+          "sample_rate": 1.0
+        },
+        {
+          "type": "llm_judge",
+          "name": "coherence",
+          "parameters": {
+            "prompt_id": "overall_eval_v1",
+            "prompt_version": "1",
+            "criteria": [
+              "coherence"
+            ],
+            "max_score": 5.0,
+            "score_key": "response.raw.llm_judge.overall.coherence"
+          },
+          "sample_rate": 1.0
+        },
+        {
+          "type": "llm_judge",
+          "name": "engagingness",
+          "parameters": {
+            "prompt_id": "overall_eval_v1",
+            "prompt_version": "1",
+            "criteria": [
+              "engagingness"
+            ],
+            "max_score": 5.0,
+            "score_key": "response.raw.llm_judge.overall.engagingness"
+          },
+          "sample_rate": 1.0
+        },
+        {
+          "type": "llm_judge",
+          "name": "groundedness",
+          "parameters": {
+            "prompt_id": "overall_eval_v1",
+            "prompt_version": "1",
+            "criteria": [
+              "groundedness"
+            ],
+            "max_score": 5.0,
+            "score_key": "response.raw.llm_judge.overall.groundedness"
+          },
+          "sample_rate": 1.0
+        }
+      ],
+      "breakdown": {
+        "dimensions": [
+          "language",
+          "tag"
+        ]
+      },
+      "report": {
+        "formats": [
+          "json",
+          "markdown"
+        ]
+      },
+      "min_samples": 1
+    }
+  },
+  "overall_metrics": [
+    {
+      "metric": "keyword_coverage_simple",
+      "mean": 0.0,
+      "std": 0.0,
+      "sample_count": 60
+    },
+    {
+      "metric": "topic_alignment",
+      "mean": 0.48333333333333334,
+      "std": 0.4442846935118167,
+      "sample_count": 60
+    },
+    {
+      "metric": "language_match",
+      "mean": 0.8166666666666667,
+      "std": 0.38693955887479664,
+      "sample_count": 60
+    },
+    {
+      "metric": "context_naturalness",
+      "mean": 0.48333333333333334,
+      "std": 0.44165094311634334,
+      "sample_count": 60
+    },
+    {
+      "metric": "answer_accuracy",
+      "mean": 0.3,
+      "std": 0.4070217029430577,
+      "sample_count": 60
+    },
+    {
+      "metric": "naturalness",
+      "mean": 0.38833333333333336,
+      "std": 0.42312002499947404,
+      "sample_count": 60
+    },
+    {
+      "metric": "coherence",
+      "mean": 0.3933333333333333,
+      "std": 0.42381861948506017,
+      "sample_count": 60
+    },
+    {
+      "metric": "engagingness",
+      "mean": 0.31333333333333335,
+      "std": 0.37481847458321593,
+      "sample_count": 60
+    },
+    {
+      "metric": "groundedness",
+      "mean": 0.3333333333333333,
+      "std": 0.4121757985239901,
+      "sample_count": 60
+    }
+  ],
+  "breakdown": [
+    {
+      "metric": "keyword_coverage_simple",
+      "dimension": "tag",
+      "bucket": "번역",
+      "mean": 0.0,
+      "std": 0.0,
+      "sample_count": 20
+    },
+    {
+      "metric": "keyword_coverage_simple",
+      "dimension": "tag",
+      "bucket": "lang:ko",
+      "mean": 0.0,
+      "std": 0.0,
+      "sample_count": 15
+    },
+    {
+      "metric": "keyword_coverage_simple",
+      "dimension": "tag",
+      "bucket": "scenario:everyday_life",
+      "mean": 0.0,
+      "std": 0.0,
+      "sample_count": 36
+    },
+    {
+      "metric": "keyword_coverage_simple",
+      "dimension": "tag",
+      "bucket": "scenario:business",
+      "mean": 0.0,
+      "std": 0.0,
+      "sample_count": 24
+    },
+    {
+      "metric": "keyword_coverage_simple",
+      "dimension": "tag",
+      "bucket": "lang:zh",
+      "mean": 0.0,
+      "std": 0.0,
+      "sample_count": 15
+    },
+    {
+      "metric": "keyword_coverage_simple",
+      "dimension": "tag",
+      "bucket": "lang:ja",
+      "mean": 0.0,
+      "std": 0.0,
+      "sample_count": 15
+    },
+    {
+      "metric": "keyword_coverage_simple",
+      "dimension": "tag",
+      "bucket": "lang:en",
+      "mean": 0.0,
+      "std": 0.0,
+      "sample_count": 15
+    },
+    {
+      "metric": "keyword_coverage_simple",
+      "dimension": "tag",
+      "bucket": "문체 변환",
+      "mean": 0.0,
+      "std": 0.0,
+      "sample_count": 20
+    },
+    {
+      "metric": "keyword_coverage_simple",
+      "dimension": "tag",
+      "bucket": "요약",
+      "mean": 0.0,
+      "std": 0.0,
+      "sample_count": 20
+    },
+    {
+      "metric": "keyword_coverage_simple",
+      "dimension": "language",
+      "bucket": "ko",
+      "mean": 0.0,
+      "std": 0.0,
+      "sample_count": 15
+    },
+    {
+      "metric": "keyword_coverage_simple",
+      "dimension": "language",
+      "bucket": "zh",
+      "mean": 0.0,
+      "std": 0.0,
+      "sample_count": 15
+    },
+    {
+      "metric": "keyword_coverage_simple",
+      "dimension": "language",
+      "bucket": "ja",
+      "mean": 0.0,
+      "std": 0.0,
+      "sample_count": 15
+    },
+    {
+      "metric": "keyword_coverage_simple",
+      "dimension": "language",
+      "bucket": "en",
+      "mean": 0.0,
+      "std": 0.0,
+      "sample_count": 15
+    },
+    {
+      "metric": "topic_alignment",
+      "dimension": "tag",
+      "bucket": "번역",
+      "mean": 0.58,
+      "std": 0.4728636167014756,
+      "sample_count": 20
+    },
+    {
+      "metric": "topic_alignment",
+      "dimension": "tag",
+      "bucket": "lang:ko",
+      "mean": 0.72,
+      "std": 0.4182503237695499,
+      "sample_count": 15
+    },
+    {
+      "metric": "topic_alignment",
+      "dimension": "tag",
+      "bucket": "scenario:everyday_life",
+      "mean": 0.5222222222222223,
+      "std": 0.45467394368022496,
+      "sample_count": 36
+    },
+    {
+      "metric": "topic_alignment",
+      "dimension": "tag",
+      "bucket": "scenario:business",
+      "mean": 0.425,
+      "std": 0.42155466233139127,
+      "sample_count": 24
+    },
+    {
+      "metric": "topic_alignment",
+      "dimension": "tag",
+      "bucket": "lang:zh",
+      "mean": 0.54,
+      "std": 0.40298883359219767,
+      "sample_count": 15
+    },
+    {
+      "metric": "topic_alignment",
+      "dimension": "tag",
+      "bucket": "lang:ja",
+      "mean": 0.4666666666666667,
+      "std": 0.45411696975803734,
+      "sample_count": 15
+    },
+    {
+      "metric": "topic_alignment",
+      "dimension": "tag",
+      "bucket": "lang:en",
+      "mean": 0.20666666666666667,
+      "std": 0.3315954697452237,
+      "sample_count": 15
+    },
+    {
+      "metric": "topic_alignment",
+      "dimension": "tag",
+      "bucket": "문체 변환",
+      "mean": 0.315,
+      "std": 0.3940494892776794,
+      "sample_count": 20
+    },
+    {
+      "metric": "topic_alignment",
+      "dimension": "tag",
+      "bucket": "요약",
+      "mean": 0.555,
+      "std": 0.4128861828639946,
+      "sample_count": 20
+    },
+    {
+      "metric": "topic_alignment",
+      "dimension": "language",
+      "bucket": "ko",
+      "mean": 0.72,
+      "std": 0.4182503237695499,
+      "sample_count": 15
+    },
+    {
+      "metric": "topic_alignment",
+      "dimension": "language",
+      "bucket": "zh",
+      "mean": 0.54,
+      "std": 0.40298883359219767,
+      "sample_count": 15
+    },
+    {
+      "metric": "topic_alignment",
+      "dimension": "language",
+      "bucket": "ja",
+      "mean": 0.4666666666666667,
+      "std": 0.45411696975803734,
+      "sample_count": 15
+    },
+    {
+      "metric": "topic_alignment",
+      "dimension": "language",
+      "bucket": "en",
+      "mean": 0.20666666666666667,
+      "std": 0.3315954697452237,
+      "sample_count": 15
+    },
+    {
+      "metric": "language_match",
+      "dimension": "tag",
+      "bucket": "번역",
+      "mean": 0.5,
+      "std": 0.5,
+      "sample_count": 20
+    },
+    {
+      "metric": "language_match",
+      "dimension": "tag",
+      "bucket": "lang:ko",
+      "mean": 0.8666666666666667,
+      "std": 0.339934634239519,
+      "sample_count": 15
+    },
+    {
+      "metric": "language_match",
+      "dimension": "tag",
+      "bucket": "scenario:everyday_life",
+      "mean": 0.8611111111111112,
+      "std": 0.3458305443885759,
+      "sample_count": 36
+    },
+    {
+      "metric": "language_match",
+      "dimension": "tag",
+      "bucket": "scenario:business",
+      "mean": 0.75,
+      "std": 0.4330127018922193,
+      "sample_count": 24
+    },
+    {
+      "metric": "language_match",
+      "dimension": "tag",
+      "bucket": "lang:zh",
+      "mean": 0.7333333333333333,
+      "std": 0.4422166387140533,
+      "sample_count": 15
+    },
+    {
+      "metric": "language_match",
+      "dimension": "tag",
+      "bucket": "lang:ja",
+      "mean": 0.7333333333333333,
+      "std": 0.4422166387140533,
+      "sample_count": 15
+    },
+    {
+      "metric": "language_match",
+      "dimension": "tag",
+      "bucket": "lang:en",
+      "mean": 0.9333333333333333,
+      "std": 0.24944382578492943,
+      "sample_count": 15
+    },
+    {
+      "metric": "language_match",
+      "dimension": "tag",
+      "bucket": "문체 변환",
+      "mean": 0.95,
+      "std": 0.21794494717703367,
+      "sample_count": 20
+    },
+    {
+      "metric": "language_match",
+      "dimension": "tag",
+      "bucket": "요약",
+      "mean": 1.0,
+      "std": 0.0,
+      "sample_count": 20
+    },
+    {
+      "metric": "language_match",
+      "dimension": "language",
+      "bucket": "ko",
+      "mean": 0.8666666666666667,
+      "std": 0.339934634239519,
+      "sample_count": 15
+    },
+    {
+      "metric": "language_match",
+      "dimension": "language",
+      "bucket": "zh",
+      "mean": 0.7333333333333333,
+      "std": 0.4422166387140533,
+      "sample_count": 15
+    },
+    {
+      "metric": "language_match",
+      "dimension": "language",
+      "bucket": "ja",
+      "mean": 0.7333333333333333,
+      "std": 0.4422166387140533,
+      "sample_count": 15
+    },
+    {
+      "metric": "language_match",
+      "dimension": "language",
+      "bucket": "en",
+      "mean": 0.9333333333333333,
+      "std": 0.24944382578492943,
+      "sample_count": 15
+    },
+    {
+      "metric": "context_naturalness",
+      "dimension": "tag",
+      "bucket": "번역",
+      "mean": 0.59,
+      "std": 0.4710626285325551,
+      "sample_count": 20
+    },
+    {
+      "metric": "context_naturalness",
+      "dimension": "tag",
+      "bucket": "lang:ko",
+      "mean": 0.72,
+      "std": 0.4182503237695499,
+      "sample_count": 15
+    },
+    {
+      "metric": "context_naturalness",
+      "dimension": "tag",
+      "bucket": "scenario:everyday_life",
+      "mean": 0.5166666666666667,
+      "std": 0.4506168611531925,
+      "sample_count": 36
+    },
+    {
+      "metric": "context_naturalness",
+      "dimension": "tag",
+      "bucket": "scenario:business",
+      "mean": 0.43333333333333335,
+      "std": 0.4229525846816507,
+      "sample_count": 24
+    },
+    {
+      "metric": "context_naturalness",
+      "dimension": "tag",
+      "bucket": "lang:zh",
+      "mean": 0.5333333333333333,
+      "std": 0.3977715704047013,
+      "sample_count": 15
+    },
+    {
+      "metric": "context_naturalness",
+      "dimension": "tag",
+      "bucket": "lang:ja",
+      "mean": 0.48,
+      "std": 0.45489925624618616,
+      "sample_count": 15
+    },
+    {
+      "metric": "context_naturalness",
+      "dimension": "tag",
+      "bucket": "lang:en",
+      "mean": 0.2,
+      "std": 0.3183289703016886,
+      "sample_count": 15
+    },
+    {
+      "metric": "context_naturalness",
+      "dimension": "tag",
+      "bucket": "문체 변환",
+      "mean": 0.31,
+      "std": 0.38716921365211876,
+      "sample_count": 20
+    },
+    {
+      "metric": "context_naturalness",
+      "dimension": "tag",
+      "bucket": "요약",
+      "mean": 0.55,
+      "std": 0.4092676385936225,
+      "sample_count": 20
+    },
+    {
+      "metric": "context_naturalness",
+      "dimension": "language",
+      "bucket": "ko",
+      "mean": 0.72,
+      "std": 0.4182503237695499,
+      "sample_count": 15
+    },
+    {
+      "metric": "context_naturalness",
+      "dimension": "language",
+      "bucket": "zh",
+      "mean": 0.5333333333333333,
+      "std": 0.3977715704047013,
+      "sample_count": 15
+    },
+    {
+      "metric": "context_naturalness",
+      "dimension": "language",
+      "bucket": "ja",
+      "mean": 0.48,
+      "std": 0.45489925624618616,
+      "sample_count": 15
+    },
+    {
+      "metric": "context_naturalness",
+      "dimension": "language",
+      "bucket": "en",
+      "mean": 0.2,
+      "std": 0.3183289703016886,
+      "sample_count": 15
+    },
+    {
+      "metric": "answer_accuracy",
+      "dimension": "tag",
+      "bucket": "번역",
+      "mean": 0.31,
+      "std": 0.4537620521815371,
+      "sample_count": 20
+    },
+    {
+      "metric": "answer_accuracy",
+      "dimension": "tag",
+      "bucket": "lang:ko",
+      "mean": 0.29333333333333333,
+      "std": 0.43736585244951265,
+      "sample_count": 15
+    },
+    {
+      "metric": "answer_accuracy",
+      "dimension": "tag",
+      "bucket": "scenario:everyday_life",
+      "mean": 0.39166666666666666,
+      "std": 0.44992283288976964,
+      "sample_count": 36
+    },
+    {
+      "metric": "answer_accuracy",
+      "dimension": "tag",
+      "bucket": "scenario:business",
+      "mean": 0.1625,
+      "std": 0.28108791625871554,
+      "sample_count": 24
+    },
+    {
+      "metric": "answer_accuracy",
+      "dimension": "tag",
+      "bucket": "lang:zh",
+      "mean": 0.42,
+      "std": 0.39698866482558415,
+      "sample_count": 15
+    },
+    {
+      "metric": "answer_accuracy",
+      "dimension": "tag",
+      "bucket": "lang:ja",
+      "mean": 0.30666666666666664,
+      "std": 0.4249967320135794,
+      "sample_count": 15
+    },
+    {
+      "metric": "answer_accuracy",
+      "dimension": "tag",
+      "bucket": "lang:en",
+      "mean": 0.18,
+      "std": 0.3229034943549956,
+      "sample_count": 15
+    },
+    {
+      "metric": "answer_accuracy",
+      "dimension": "tag",
+      "bucket": "문체 변환",
+      "mean": 0.3,
+      "std": 0.39115214431215894,
+      "sample_count": 20
+    },
+    {
+      "metric": "answer_accuracy",
+      "dimension": "tag",
+      "bucket": "요약",
+      "mean": 0.29,
+      "std": 0.37134889255254283,
+      "sample_count": 20
+    },
+    {
+      "metric": "answer_accuracy",
+      "dimension": "language",
+      "bucket": "ko",
+      "mean": 0.29333333333333333,
+      "std": 0.43736585244951265,
+      "sample_count": 15
+    },
+    {
+      "metric": "answer_accuracy",
+      "dimension": "language",
+      "bucket": "zh",
+      "mean": 0.42,
+      "std": 0.39698866482558415,
+      "sample_count": 15
+    },
+    {
+      "metric": "answer_accuracy",
+      "dimension": "language",
+      "bucket": "ja",
+      "mean": 0.30666666666666664,
+      "std": 0.4249967320135794,
+      "sample_count": 15
+    },
+    {
+      "metric": "answer_accuracy",
+      "dimension": "language",
+      "bucket": "en",
+      "mean": 0.18,
+      "std": 0.3229034943549956,
+      "sample_count": 15
+    },
+    {
+      "metric": "naturalness",
+      "dimension": "tag",
+      "bucket": "번역",
+      "mean": 0.32,
+      "std": 0.45343136195018535,
+      "sample_count": 20
+    },
+    {
+      "metric": "naturalness",
+      "dimension": "tag",
+      "bucket": "lang:ko",
+      "mean": 0.47333333333333333,
+      "std": 0.46828291543562517,
+      "sample_count": 15
+    },
+    {
+      "metric": "naturalness",
+      "dimension": "tag",
+      "bucket": "scenario:everyday_life",
+      "mean": 0.4527777777777778,
+      "std": 0.4456494082367084,
+      "sample_count": 36
+    },
+    {
+      "metric": "naturalness",
+      "dimension": "tag",
+      "bucket": "scenario:business",
+      "mean": 0.2916666666666667,
+      "std": 0.3661928757119972,
+      "sample_count": 24
+    },
+    {
+      "metric": "naturalness",
+      "dimension": "tag",
+      "bucket": "lang:zh",
+      "mean": 0.4666666666666667,
+      "std": 0.40933550488023335,
+      "sample_count": 15
+    },
+    {
+      "metric": "naturalness",
+      "dimension": "tag",
+      "bucket": "lang:ja",
+      "mean": 0.36,
+      "std": 0.42079290234825334,
+      "sample_count": 15
+    },
+    {
+      "metric": "naturalness",
+      "dimension": "tag",
+      "bucket": "lang:en",
+      "mean": 0.25333333333333335,
+      "std": 0.3461534662865912,
+      "sample_count": 15
+    },
+    {
+      "metric": "naturalness",
+      "dimension": "tag",
+      "bucket": "문체 변환",
+      "mean": 0.335,
+      "std": 0.3771935842508459,
+      "sample_count": 20
+    },
+    {
+      "metric": "naturalness",
+      "dimension": "tag",
+      "bucket": "요약",
+      "mean": 0.51,
+      "std": 0.40853396431630995,
+      "sample_count": 20
+    },
+    {
+      "metric": "naturalness",
+      "dimension": "language",
+      "bucket": "ko",
+      "mean": 0.47333333333333333,
+      "std": 0.46828291543562517,
+      "sample_count": 15
+    },
+    {
+      "metric": "naturalness",
+      "dimension": "language",
+      "bucket": "zh",
+      "mean": 0.4666666666666667,
+      "std": 0.40933550488023335,
+      "sample_count": 15
+    },
+    {
+      "metric": "naturalness",
+      "dimension": "language",
+      "bucket": "ja",
+      "mean": 0.36,
+      "std": 0.42079290234825334,
+      "sample_count": 15
+    },
+    {
+      "metric": "naturalness",
+      "dimension": "language",
+      "bucket": "en",
+      "mean": 0.25333333333333335,
+      "std": 0.3461534662865912,
+      "sample_count": 15
+    },
+    {
+      "metric": "coherence",
+      "dimension": "tag",
+      "bucket": "번역",
+      "mean": 0.34,
+      "std": 0.45210618221829263,
+      "sample_count": 20
+    },
+    {
+      "metric": "coherence",
+      "dimension": "tag",
+      "bucket": "lang:ko",
+      "mean": 0.4666666666666667,
+      "std": 0.4657133119086128,
+      "sample_count": 15
+    },
+    {
+      "metric": "coherence",
+      "dimension": "tag",
+      "bucket": "scenario:everyday_life",
+      "mean": 0.45555555555555555,
+      "std": 0.44810988511279515,
+      "sample_count": 36
+    },
+    {
+      "metric": "coherence",
+      "dimension": "tag",
+      "bucket": "scenario:business",
+      "mean": 0.3,
+      "std": 0.3651483716701107,
+      "sample_count": 24
+    },
+    {
+      "metric": "coherence",
+      "dimension": "tag",
+      "bucket": "lang:zh",
+      "mean": 0.4866666666666667,
+      "std": 0.40474957964428104,
+      "sample_count": 15
+    },
+    {
+      "metric": "coherence",
+      "dimension": "tag",
+      "bucket": "lang:ja",
+      "mean": 0.37333333333333335,
+      "std": 0.4249967320135794,
+      "sample_count": 15
+    },
+    {
+      "metric": "coherence",
+      "dimension": "tag",
+      "bucket": "lang:en",
+      "mean": 0.24666666666666667,
+      "std": 0.34807406619217635,
+      "sample_count": 15
+    },
+    {
+      "metric": "coherence",
+      "dimension": "tag",
+      "bucket": "문체 변환",
+      "mean": 0.335,
+      "std": 0.38765319552404054,
+      "sample_count": 20
+    },
+    {
+      "metric": "coherence",
+      "dimension": "tag",
+      "bucket": "요약",
+      "mean": 0.505,
+      "std": 0.40678618462283106,
+      "sample_count": 20
+    },
+    {
+      "metric": "coherence",
+      "dimension": "language",
+      "bucket": "ko",
+      "mean": 0.4666666666666667,
+      "std": 0.4657133119086128,
+      "sample_count": 15
+    },
+    {
+      "metric": "coherence",
+      "dimension": "language",
+      "bucket": "zh",
+      "mean": 0.4866666666666667,
+      "std": 0.40474957964428104,
+      "sample_count": 15
+    },
+    {
+      "metric": "coherence",
+      "dimension": "language",
+      "bucket": "ja",
+      "mean": 0.37333333333333335,
+      "std": 0.4249967320135794,
+      "sample_count": 15
+    },
+    {
+      "metric": "coherence",
+      "dimension": "language",
+      "bucket": "en",
+      "mean": 0.24666666666666667,
+      "std": 0.34807406619217635,
+      "sample_count": 15
+    },
+    {
+      "metric": "engagingness",
+      "dimension": "tag",
+      "bucket": "번역",
+      "mean": 0.29000000000000004,
+      "std": 0.412189276910499,
+      "sample_count": 20
+    },
+    {
+      "metric": "engagingness",
+      "dimension": "tag",
+      "bucket": "lang:ko",
+      "mean": 0.3466666666666667,
+      "std": 0.42874493842169403,
+      "sample_count": 15
+    },
+    {
+      "metric": "engagingness",
+      "dimension": "tag",
+      "bucket": "scenario:everyday_life",
+      "mean": 0.4,
+      "std": 0.4109609335312651,
+      "sample_count": 36
+    },
+    {
+      "metric": "engagingness",
+      "dimension": "tag",
+      "bucket": "scenario:business",
+      "mean": 0.18333333333333335,
+      "std": 0.2640496586292477,
+      "sample_count": 24
+    },
+    {
+      "metric": "engagingness",
+      "dimension": "tag",
+      "bucket": "lang:zh",
+      "mean": 0.4,
+      "std": 0.35023801430836526,
+      "sample_count": 15
+    },
+    {
+      "metric": "engagingness",
+      "dimension": "tag",
+      "bucket": "lang:ja",
+      "mean": 0.3066666666666667,
+      "std": 0.38551552786135895,
+      "sample_count": 15
+    },
+    {
+      "metric": "engagingness",
+      "dimension": "tag",
+      "bucket": "lang:en",
+      "mean": 0.2,
+      "std": 0.2921186973360886,
+      "sample_count": 15
+    },
+    {
+      "metric": "engagingness",
+      "dimension": "tag",
+      "bucket": "문체 변환",
+      "mean": 0.31,
+      "std": 0.37134889255254283,
+      "sample_count": 20
+    },
+    {
+      "metric": "engagingness",
+      "dimension": "tag",
+      "bucket": "요약",
+      "mean": 0.34,
+      "std": 0.3352610922848042,
+      "sample_count": 20
+    },
+    {
+      "metric": "engagingness",
+      "dimension": "language",
+      "bucket": "ko",
+      "mean": 0.3466666666666667,
+      "std": 0.42874493842169403,
+      "sample_count": 15
+    },
+    {
+      "metric": "engagingness",
+      "dimension": "language",
+      "bucket": "zh",
+      "mean": 0.4,
+      "std": 0.35023801430836526,
+      "sample_count": 15
+    },
+    {
+      "metric": "engagingness",
+      "dimension": "language",
+      "bucket": "ja",
+      "mean": 0.3066666666666667,
+      "std": 0.38551552786135895,
+      "sample_count": 15
+    },
+    {
+      "metric": "engagingness",
+      "dimension": "language",
+      "bucket": "en",
+      "mean": 0.2,
+      "std": 0.2921186973360886,
+      "sample_count": 15
+    },
+    {
+      "metric": "groundedness",
+      "dimension": "tag",
+      "bucket": "번역",
+      "mean": 0.34,
+      "std": 0.45210618221829263,
+      "sample_count": 20
+    },
+    {
+      "metric": "groundedness",
+      "dimension": "tag",
+      "bucket": "lang:ko",
+      "mean": 0.32,
+      "std": 0.436959189551305,
+      "sample_count": 15
+    },
+    {
+      "metric": "groundedness",
+      "dimension": "tag",
+      "bucket": "scenario:everyday_life",
+      "mean": 0.40555555555555556,
+      "std": 0.4453116539411499,
+      "sample_count": 36
+    },
+    {
+      "metric": "groundedness",
+      "dimension": "tag",
+      "bucket": "scenario:business",
+      "mean": 0.225,
+      "std": 0.32818947779192026,
+      "sample_count": 24
+    },
+    {
+      "metric": "groundedness",
+      "dimension": "tag",
+      "bucket": "lang:zh",
+      "mean": 0.47333333333333333,
+      "std": 0.40409019895177967,
+      "sample_count": 15
+    },
+    {
+      "metric": "groundedness",
+      "dimension": "tag",
+      "bucket": "lang:ja",
+      "mean": 0.3466666666666667,
+      "std": 0.42874493842169403,
+      "sample_count": 15
+    },
+    {
+      "metric": "groundedness",
+      "dimension": "tag",
+      "bucket": "lang:en",
+      "mean": 0.19333333333333333,
+      "std": 0.3193048003954146,
+      "sample_count": 15
+    },
+    {
+      "metric": "groundedness",
+      "dimension": "tag",
+      "bucket": "문체 변환",
+      "mean": 0.315,
+      "std": 0.3940494892776794,
+      "sample_count": 20
+    },
+    {
+      "metric": "groundedness",
+      "dimension": "tag",
+      "bucket": "요약",
+      "mean": 0.34500000000000003,
+      "std": 0.38661996844446617,
+      "sample_count": 20
+    },
+    {
+      "metric": "groundedness",
+      "dimension": "language",
+      "bucket": "ko",
+      "mean": 0.32,
+      "std": 0.436959189551305,
+      "sample_count": 15
+    },
+    {
+      "metric": "groundedness",
+      "dimension": "language",
+      "bucket": "zh",
+      "mean": 0.47333333333333333,
+      "std": 0.40409019895177967,
+      "sample_count": 15
+    },
+    {
+      "metric": "groundedness",
+      "dimension": "language",
+      "bucket": "ja",
+      "mean": 0.3466666666666667,
+      "std": 0.42874493842169403,
+      "sample_count": 15
+    },
+    {
+      "metric": "groundedness",
+      "dimension": "language",
+      "bucket": "en",
+      "mean": 0.19333333333333333,
+      "std": 0.3193048003954146,
+      "sample_count": 15
+    }
+  ],
+  "error_cases": [],
+  "llm_judge_details": [
+    {
+      "metric": "topic_alignment",
+      "prompt_id": "overall_eval_v1",
+      "prompt_version": "1",
+      "language": null,
+      "criteria": [
+        "topic_alignment"
+      ],
+      "sample_count": 60,
+      "sample_ids": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30",
+        "31",
+        "32",
+        "33",
+        "34",
+        "35",
+        "36",
+        "37",
+        "38",
+        "39",
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45",
+        "46",
+        "47",
+        "48",
+        "49",
+        "50",
+        "51",
+        "52",
+        "53",
+        "54",
+        "55",
+        "56",
+        "57",
+        "58",
+        "59",
+        "60"
+      ]
+    },
+    {
+      "metric": "language_match",
+      "prompt_id": "overall_eval_v1",
+      "prompt_version": "1",
+      "language": null,
+      "criteria": [
+        "language_match"
+      ],
+      "sample_count": 60,
+      "sample_ids": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30",
+        "31",
+        "32",
+        "33",
+        "34",
+        "35",
+        "36",
+        "37",
+        "38",
+        "39",
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45",
+        "46",
+        "47",
+        "48",
+        "49",
+        "50",
+        "51",
+        "52",
+        "53",
+        "54",
+        "55",
+        "56",
+        "57",
+        "58",
+        "59",
+        "60"
+      ]
+    },
+    {
+      "metric": "context_naturalness",
+      "prompt_id": "overall_eval_v1",
+      "prompt_version": "1",
+      "language": null,
+      "criteria": [
+        "context_naturalness"
+      ],
+      "sample_count": 60,
+      "sample_ids": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30",
+        "31",
+        "32",
+        "33",
+        "34",
+        "35",
+        "36",
+        "37",
+        "38",
+        "39",
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45",
+        "46",
+        "47",
+        "48",
+        "49",
+        "50",
+        "51",
+        "52",
+        "53",
+        "54",
+        "55",
+        "56",
+        "57",
+        "58",
+        "59",
+        "60"
+      ]
+    },
+    {
+      "metric": "answer_accuracy",
+      "prompt_id": "overall_eval_v1",
+      "prompt_version": "1",
+      "language": null,
+      "criteria": [
+        "answer_accuracy"
+      ],
+      "sample_count": 60,
+      "sample_ids": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30",
+        "31",
+        "32",
+        "33",
+        "34",
+        "35",
+        "36",
+        "37",
+        "38",
+        "39",
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45",
+        "46",
+        "47",
+        "48",
+        "49",
+        "50",
+        "51",
+        "52",
+        "53",
+        "54",
+        "55",
+        "56",
+        "57",
+        "58",
+        "59",
+        "60"
+      ]
+    },
+    {
+      "metric": "naturalness",
+      "prompt_id": "overall_eval_v1",
+      "prompt_version": "1",
+      "language": null,
+      "criteria": [
+        "naturalness"
+      ],
+      "sample_count": 60,
+      "sample_ids": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30",
+        "31",
+        "32",
+        "33",
+        "34",
+        "35",
+        "36",
+        "37",
+        "38",
+        "39",
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45",
+        "46",
+        "47",
+        "48",
+        "49",
+        "50",
+        "51",
+        "52",
+        "53",
+        "54",
+        "55",
+        "56",
+        "57",
+        "58",
+        "59",
+        "60"
+      ]
+    },
+    {
+      "metric": "coherence",
+      "prompt_id": "overall_eval_v1",
+      "prompt_version": "1",
+      "language": null,
+      "criteria": [
+        "coherence"
+      ],
+      "sample_count": 60,
+      "sample_ids": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30",
+        "31",
+        "32",
+        "33",
+        "34",
+        "35",
+        "36",
+        "37",
+        "38",
+        "39",
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45",
+        "46",
+        "47",
+        "48",
+        "49",
+        "50",
+        "51",
+        "52",
+        "53",
+        "54",
+        "55",
+        "56",
+        "57",
+        "58",
+        "59",
+        "60"
+      ]
+    },
+    {
+      "metric": "engagingness",
+      "prompt_id": "overall_eval_v1",
+      "prompt_version": "1",
+      "language": null,
+      "criteria": [
+        "engagingness"
+      ],
+      "sample_count": 60,
+      "sample_ids": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30",
+        "31",
+        "32",
+        "33",
+        "34",
+        "35",
+        "36",
+        "37",
+        "38",
+        "39",
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45",
+        "46",
+        "47",
+        "48",
+        "49",
+        "50",
+        "51",
+        "52",
+        "53",
+        "54",
+        "55",
+        "56",
+        "57",
+        "58",
+        "59",
+        "60"
+      ]
+    },
+    {
+      "metric": "groundedness",
+      "prompt_id": "overall_eval_v1",
+      "prompt_version": "1",
+      "language": null,
+      "criteria": [
+        "groundedness"
+      ],
+      "sample_count": 60,
+      "sample_ids": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30",
+        "31",
+        "32",
+        "33",
+        "34",
+        "35",
+        "36",
+        "37",
+        "38",
+        "39",
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45",
+        "46",
+        "47",
+        "48",
+        "49",
+        "50",
+        "51",
+        "52",
+        "53",
+        "54",
+        "55",
+        "56",
+        "57",
+        "58",
+        "59",
+        "60"
+      ]
+    }
+  ]
+}

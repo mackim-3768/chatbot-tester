@@ -14,6 +14,9 @@ SYSTEM_PROMPT = """You are an expert evaluator for multilingual chatbot outputs.
 
 USER_TEMPLATE = """You are given task metadata, a user message, and a model answer.\n\n[Task metadata]\n- Topic: {topic}\n- Language: {language}\n- Base instruction: {base_instruction}\n\n[Conversation]\n- User message:\n{user_message}\n\n- Model answer:\n{model_answer}\n\nEvaluate the answer on these criteria and assign scores:\n1. topic_score (0-5): how well the answer matches the intended topic/task.\n2. lang_match (0 or 1): 1 if the output language matches the expected target language, else 0.\n3. context_score (0-5): contextual appropriateness and coherence with the user message.\n4. accuracy_score (0-5): how accurately the answer responds to the user's request.\n5. naturalness (0-5): fluency and naturalness of the output.\n6. coherence (0-5): internal logical consistency within the answer.\n7. engagingness (0-5): how engaging and pleasant the answer is, given the task.\n8. groundedness (0-5): whether the answer is grounded in the given input without clear hallucinations.\n\nScoring rules:\n- Use the full range 0-5 when appropriate, decimals allowed (e.g. 3.5).\n\nOutput format:\nReturn ONLY a JSON object with exactly these numeric fields:\n  topic_score, lang_match, context_score, accuracy_score,\n  naturalness, coherence, engagingness, groundedness.\nDo not include explanations or any text outside the JSON.\n"""
 
+BASE_DIR = Path(__file__).resolve().parents[1]
+DEFAULT_RUN_RESULTS = BASE_DIR / "output" / "runs" / "adb_cli" / "run_results.jsonl"
+
 
 def _infer_language(tags: List[str], meta: Dict[str, Any]) -> str:
     lang = str(meta.get("language") or "").strip()
@@ -121,12 +124,7 @@ def main() -> None:
     parser.add_argument(
         "--input",
         type=str,
-        default=str(
-            Path(__file__).resolve().parents[1]
-            / "runs"
-            / "adb_cli"
-            / "run_results.jsonl"
-        ),
+        default=str(DEFAULT_RUN_RESULTS),
         help="Path to run_results.jsonl to read.",
     )
     parser.add_argument(

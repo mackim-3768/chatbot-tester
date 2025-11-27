@@ -11,26 +11,45 @@ from chatbot_tester.runner.storage import write_run_metadata, write_run_results
 
 # 기본 경로 설정 (필요하면 파일 상단에서 수정)
 EXAMPLE_ROOT = Path(__file__).resolve().parents[1]
-DATASET_DIR = EXAMPLE_ROOT / "datasets" / "ces_llm_v1"
-RUN_OUTPUT_DIR = EXAMPLE_ROOT / "runs" / "adb_cli"
+OUTPUT_ROOT = EXAMPLE_ROOT / "output"
+DATASET_DIR = OUTPUT_ROOT / "datasets" / "ces_llm_v1"
+RUN_OUTPUT_DIR = OUTPUT_ROOT / "runs" / "adb_cli"
 
-BACKEND_NAME = "adb-cli-llama-1b-freeform"
+BACKEND_NAME = "adb-cli-llama-freeform"
 MODEL_NAME = "LLama-1B"  # 디바이스 상에서 사용 중인 모델 식별자
 
-# ADB backend 옵션: 실제 환경에 맞게 수정 필요
+# llama-1b
 BACKEND_OPTIONS: Dict[str, Any] = {
-    # adb 바이너리 경로가 다르면 수정 (예: "adb.exe")
     "adb_path": "adb",
-    # 대상 디바이스가 여러 대일 때 특정 디바이스를 지정하고 싶다면 설정
-    "device_id": "00000a750d8747d3",
-    # 디바이스 안에서 실행할 커맨드 (stdin으로 JSON, stdout으로 JSON 응답을 기대하지만, 현재는 순수 CLI 실행)
-    # adb_cli_backend 는 [adb, shell, binary] 형태로 커맨드를 구성하므로,
-    # binary 에 전체 셸 커맨드를 넣으면 실제로는 다음과 같은 형태가 된다:
-    #   adb shell "cd /data/local/tmp/llama_1124 && LD_LIBRARY_PATH=/data/local/tmp/llama_1124:$LD_LIBRARY_PATH ./llama-cli ..."
+    "device_id": "000008f62f8747d3",
     "binary": "export LD_LIBRARY_PATH=/data/local/tmp/CPU_GPU_LLAMA && /data/local/tmp/CPU_GPU_LLAMA/llama-cli",
-    # 추가 인자가 필요하면 문자열 또는 리스트로 지정 (현재는 사용하지 않음)
     "binary_args": "-m /data/local/tmp/CPU_GPU_LLAMA/llama-1b.gguf -ngl 99 --output-buffer-size 10",
 }
+
+# llama-3b
+# BACKEND_OPTIONS: Dict[str, Any] = {
+#     "adb_path": "adb",
+#     "device_id": "000008f62f8747d3",
+#     "binary": "export LD_LIBRARY_PATH=/data/local/tmp/CPU_GPU_LLAMA && /data/local/tmp/CPU_GPU_LLAMA/llama-cli",
+#     "binary_args": "-m /data/local/tmp/CPU_GPU_LLAMA/llama-1b.gguf -ngl 99 --output-buffer-size 10",
+# }
+
+# Mamba
+# BACKEND_OPTIONS: Dict[str, Any] = {
+#     "adb_path": "adb",
+#     "device_id": "000008f62f8747d3",
+#     "binary": "export LD_LIBRARY_PATH=/data/local/tmp/CPU_GPU_LLAMA && /data/local/tmp/CPU_GPU_LLAMA/llama-cli",
+#     "binary_args": "-m /data/local/tmp/CPU_GPU_LLAMA/llama-1b.gguf -ngl 99 --output-buffer-size 10",
+# }
+
+# Llama-8b
+# BACKEND_OPTIONS: Dict[str, Any] = {
+#     "adb_path": "adb",
+#     "device_id": "000008f62f8747d3",
+#     "binary": "export LD_LIBRARY_PATH=/data/local/tmp/CPU_GPU_LLAMA && /data/local/tmp/CPU_GPU_LLAMA/llama-cli",
+#     "binary_args": "-m /data/local/tmp/CPU_GPU_LLAMA/llama-1b.gguf -ngl 99 --output-buffer-size 10",
+# }
+
 
 # RunConfig.parameters: 러너에게 전달할 추가 파라미터(온도, 토큰 길이 등)
 RUN_PARAMETERS: Dict[str, Any] = {}
