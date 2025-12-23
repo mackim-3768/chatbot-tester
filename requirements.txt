@@ -1,4 +1,6 @@
 # Install chatbot-tester in editable mode plus external deps used by examples
 -e .
 openai>=1.35.0
+numpy
+jinja2
 PyYAML>=6.0

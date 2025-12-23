@@ -2,7 +2,9 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from .active_llm_judge import ActiveLLMJudgeMetric
 from .base import Metric
+from .embedding_similarity import EmbeddingSimilarityMetric
 from .exact_match import ExactMatchMetric
 from .keyword import KeywordCoverageMetric
 from .llm_judge import LLMJudgeMetric
@@ -35,6 +37,8 @@ def register_default_metrics(registry: "MetricRegistry") -> None:
     _safe_register("keyword_coverage", lambda cfg: KeywordCoverageMetric(**cfg))
     _safe_register("llm_judge", lambda cfg: LLMJudgeMetric(**cfg))
     _safe_register("semantic_similarity", lambda cfg: SemanticSimilarityMetric(**cfg))
+    _safe_register("active_llm_judge", lambda cfg: ActiveLLMJudgeMetric(**cfg))
+    _safe_register("embedding_similarity", lambda cfg: EmbeddingSimilarityMetric(**cfg))
 
 
 __all__ = [
@@ -43,5 +47,7 @@ __all__ = [
     "KeywordCoverageMetric",
     "LLMJudgeMetric",
     "SemanticSimilarityMetric",
+    "ActiveLLMJudgeMetric",
+    "EmbeddingSimilarityMetric",
     "register_default_metrics",
 ]

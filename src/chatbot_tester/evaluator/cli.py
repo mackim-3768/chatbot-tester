@@ -17,6 +17,7 @@ from .domain import (
 from .metrics import register_default_metrics
 from .orchestrator import EvaluationOrchestrator
 from .registry import metric_registry
+from .report.html_reporter import HtmlReporter
 from .report.json_reporter import JsonReporter
 from .report.markdown_reporter import MarkdownReporter
 
@@ -39,6 +40,7 @@ def _build_parser() -> argparse.ArgumentParser:
     p.add_argument("--output", required=True, help="Directory to write reports into")
     p.add_argument("--no-markdown", action="store_true", help="Skip Markdown report generation")
     p.add_argument("--no-json", action="store_true", help="Skip JSON summary/scores generation")
+    p.add_argument("--html", action="store_true", help="Generate HTML report")
     p.add_argument("--version", action="store_true", help="Show version and exit")
     return p
 
@@ -81,6 +83,8 @@ def main(argv: List[str] | None = None) -> None:
         created_paths.extend(JsonReporter().write(result, output_dir))
     if not args.no_markdown:
         created_paths.extend(MarkdownReporter().write(result, output_dir))
+    if args.html:
+        created_paths.extend(HtmlReporter().write(result, output_dir))
 
     for p in created_paths:
         print(p)
