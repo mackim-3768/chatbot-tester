@@ -32,6 +32,14 @@ jobs:
           python -m pip install build
         shell: bash
 
+      - name: Run Unit Tests
+        run: |
+          # Install test dependencies if not in requirements.txt (pytest-mock is needed)
+          python -m pip install pytest pytest-mock
+          # Run tests
+          PYTHONPATH=src pytest tests/
+        shell: bash
+
       - name: Run Quick Start E2E smoke test (Linux only)
         if: runner.os == 'Linux'
         env:

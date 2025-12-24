@@ -14,6 +14,8 @@ Requires-Dist: openai>=1.35.0
 
 # chatbot-tester
 
+DeepWiki 문서 : [https://deepwiki.com/mackim-3768/chatbot-tester](https://deepwiki.com/mackim-3768/chatbot-tester)
+
 공식 문서(Documentation): [https://mackim-3768.github.io/chatbot-tester/](https://mackim-3768.github.io/chatbot-tester/)
 
 챗봇을 체계적으로 **테스트·평가**하기 위한 프레임워크의 상위 빌드 리포지토리이다. 이 리포지토리는 실제 기능 구현보다는, 기능별 하위 리포지토리를 `src/` 아래로 가져와서 한 번에 빌드하고 Python 라이브러리 형태로 사용할 수 있게 만드는 역할을 한다.
