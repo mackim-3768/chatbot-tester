@@ -1,7 +1,7 @@
 
 from unittest.mock import MagicMock, patch
 from chatbot_tester.generator.transformers.augmenter import ParaphraseAugmenter
-from chatbot_tester.generator.types import Message, TestSample
+from chatbot_tester.common.models import Message, TestSample
 
 def test_paraphrase_augmenter():
     augmenter = ParaphraseAugmenter(api_key="dummy")
