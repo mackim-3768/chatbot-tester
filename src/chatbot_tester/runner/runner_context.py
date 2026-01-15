@@ -1,17 +1,13 @@
 from __future__ import annotations
-
 from dataclasses import dataclass, field
-from typing import Any, Dict, Optional
 import logging
-
+from typing import Any
+from chatbot_tester.common.context import Context
 
 @dataclass
-class RunnerContext:
+class RunnerContext(Context):
     """Holds execution-scoped options and logger."""
-
-    options: Dict[str, Any] = field(default_factory=dict)
     logger: logging.Logger = field(default_factory=lambda: logging.getLogger("chatbot_tester.runner"))
-    trace_prefix: Optional[str] = None
 
     def child(self, **options: Any) -> "RunnerContext":
         child_opts = {**self.options, **options}
