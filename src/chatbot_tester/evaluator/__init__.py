@@ -1,6 +1,19 @@
-__version__ = "0.0.1"
+from .config import EvaluatorConfig
+from .orchestrator import EvaluationOrchestrator
+from .plugin import PluginLoader
+from .registry import metric_registry
+from .metrics import register_default_metrics
 
-"""Placeholder package for Chatbot Evaluator.
+# Register built-in metrics
+register_default_metrics(metric_registry)
 
-실제 평가 로직은 추후 추가되며, 현재는 패키지 네임스페이스만 예약한다.
-"""
+# Load discovered plugins
+loader = PluginLoader(metric_registry)
+loader.load_from_entry_points()
+
+__all__ = [
+    "EvaluatorConfig",
+    "EvaluationOrchestrator",
+    "PluginLoader",
+    "metric_registry",
+]

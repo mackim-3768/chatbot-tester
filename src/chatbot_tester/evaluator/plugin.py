@@ -29,6 +29,33 @@ class PluginLoader:
             except Exception as e:
                 logger.warning(f"Failed to load plugin '{path}': {e}")
 
+    def load_from_entry_points(self, group: str = "chatbot_tester.metrics") -> None:
+        """Load plugins registered via entry points."""
+        if sys.version_info >= (3, 10):
+            from importlib.metadata import entry_points
+            eps = entry_points(group=group)
+        else:
+            from importlib.metadata import entry_points
+            eps = entry_points().get(group, [])
+
+        for ep in eps:
+            try:
+                module = ep.load()
+                # If the entry point points to a module, register metrics from it
+                # If it points to a function, call it? For now assume module or callable package
+                if hasattr(module, "register_metrics"):
+                     self._register_metrics_from_module(module)
+                elif callable(module): 
+                    # If it resolves to a function (e.g. register_metrics itself)
+                    logger.info(f"Registering metrics from entry point: {ep.name}")
+                    module(self._registry)
+                else: 
+                     # Maybe it's a module but without register_metrics?
+                     self._register_metrics_from_module(module)
+
+            except Exception as e:
+                logger.warning(f"Failed to load entry point '{ep.name}': {e}")
+
     def _load_from_file(self, path: Path) -> None:
         module_name = path.stem
         spec = importlib.util.spec_from_file_location(module_name, path)
