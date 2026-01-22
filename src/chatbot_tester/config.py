@@ -52,6 +52,9 @@ class RunnerConfig(BaseModel):
     trace_prefix: str = "run"
     output_dir: Optional[Path] = None
 
+    def to_metadata_dict(self) -> Dict[str, Any]:
+        return self.model_dump(mode="json")
+
 
 class TesterConfig(BaseModel):
     """Root configuration for Chatbot Tester."""
