@@ -98,4 +98,30 @@ python -m chatbot_tester.runner.cli \
 - `rate_limit`: 초당 요청/토큰 제한이 있는 API(OpenAI 등)에 필수
 - `trace_prefix`: 로그/모니터링 시스템과 연계할 때 유용
 
-Quick Start에서는 단순성을 위해 작은 동시성 + 짧은 run만 수행하지만, 실제 대규모 테스트에서는 위 옵션들이 매우 중요해집니다.
+- `trace_prefix`: 로그/모니터링 시스템과 연계할 때 유용
+100: 
+101: Quick Start에서는 단순성을 위해 작은 동시성 + 짧은 run만 수행하지만, 실제 대규모 테스트에서는 위 옵션들이 매우 중요해집니다.
+102:
+103: ## 6. 파이프라인 유틸리티 (PipelineContext)
+104:
+105: Runner CLI 외에 파이썬 스크립트로 직접 복잡한 파이프라인(Generation -> Finetuning -> Eval)을 구성할 때, MLflow 관리를 돕는 `PipelineContext`를 사용할 수 있습니다.
+106:
+107: ```python
+108: from chatbot_tester.utils import PipelineContext
+109:
+110: # 실험 이름과 아티팩트 저장소를 지정하여 컨텍스트 실행
+111: with PipelineContext("my_experiment", "output_dir") as ctx:
+112:     # 전역 파라미터 로깅
+113:     ctx.log_params({"model": "v1.0"})
+114:
+115:     # 각 단계를 중첩된 Run(Nested Run)으로 관리
+116:     with ctx.step("step1_generation") as step_dir:
+117:         # step_dir 경로에 데이터 생성
+118:         ...
+119:         # 아티팩트 및 메트릭 로깅
+120:         ctx.log_artifact("dataset.jsonl")
+121:         ctx.log_metrics({"count": 100})
+122: ```
+123:
+124: 이를 통해 구조화된 MLflow Run 트리를 손쉽게 생성할 수 있습니다.
+

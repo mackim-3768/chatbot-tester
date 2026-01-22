@@ -115,7 +115,13 @@ python -m chatbot_tester.evaluator.cli \
   - 설정된 keywords 리스트 중 응답에 포함된 비율을 평가 (0.0 ~ 1.0)
 - **llm_judge**
   - 외부 LLM이 미리 평가해 둔 점수(예: `run.raw["llm_judge"]["score"]`)를 읽어와 0~1로 정규화
+  - 외부 LLM이 미리 평가해 둔 점수(예: `run.raw["llm_judge"]["score"]`)를 읽어와 0~1로 정규화
   - 실제 LLM 호출은 하지 않고, Runner/외부 파이프라인이 생성한 결과를 소비하는 형태
+- **tool_call_match**
+  - 모델의 함수 호출(JSON)이 예상된 호출(JSON)과 일치하는지 평가
+  - `allow_order_mismatch`: 순서 무시 여부 (기본값: False)
+  - `exclude_args`: 비교에서 제외할 인자 목록 (예: timestamp 등)
+
 
 각 metric은 `EvalScore` 리스트를 반환하며, Evaluator는 이를 모아 summary/breakdown/LLM Judge 세부 정보를 구성합니다.
 
