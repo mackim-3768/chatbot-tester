@@ -10,7 +10,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, AsyncIterator, Iterator, List, Optional, Sequence
 
-from .backends.base import backend_registry
+from chatbot_tester.core.backends.base import backend_registry
 from .exceptions import BackendError
 from .models import (
     DatasetInfo,
@@ -21,7 +21,7 @@ from .models import (
     RunResultStatus,
     TestSample,
 )
-from .runner_context import RunnerContext
+from chatbot_tester.core.context import RunnerContext
 from ..config import RunnerConfig
 
 

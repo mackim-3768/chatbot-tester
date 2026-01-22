@@ -19,9 +19,9 @@ from ..writers import build_metadata, write_jsonl, write_metadata
 
 # New imports for backend integration
 import asyncio
-from ...runner.backends.base import backend_registry
-from ...runner.models import RunRequest, RunConfig, DatasetInfo, TestSample as RunnerSample, Message as RunnerMessage
-from ...runner.runner_context import RunnerContext
+from chatbot_tester.core.backends import backend_registry
+from chatbot_tester.core.models import RunRequest, RunConfig, DatasetInfo, TestSample as RunnerSample, Message as RunnerMessage
+from chatbot_tester.core.context import RunnerContext
 from ...config import StructureConfig
 
 

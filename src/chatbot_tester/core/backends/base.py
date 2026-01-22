@@ -3,7 +3,7 @@ from __future__ import annotations
 import abc
 from typing import Any
 
-from ..runner_context import RunnerContext
+from ..context import RunnerContext
 from ..models import ChatResponse, RunRequest
 
 

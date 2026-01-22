@@ -6,7 +6,8 @@ import logging
 from pathlib import Path
 from typing import Any, Dict
 
-from . import RunnerConfig, backend_registry, load_dataset, run_job
+from chatbot_tester.core.backends import backend_registry
+from . import RunnerConfig, load_dataset, run_job
 from .models import RunConfig
 from .storage import write_run_metadata, write_run_results
 
