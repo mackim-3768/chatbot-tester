@@ -20,6 +20,7 @@ src/chatbot_tester/evaluator/metrics/exact_match.py
 src/chatbot_tester/evaluator/metrics/keyword.py
 src/chatbot_tester/evaluator/metrics/llm_judge.py
 src/chatbot_tester/evaluator/metrics/semantic_similarity.py
+src/chatbot_tester/evaluator/metrics/tool_call.py
 src/chatbot_tester/evaluator/report/base.py
 src/chatbot_tester/evaluator/report/html_reporter.py
 src/chatbot_tester/evaluator/report/json_reporter.py
@@ -57,3 +58,5 @@ src/chatbot_tester/runner/backends/__init__.py
 src/chatbot_tester/runner/backends/adb_cli_backend.py
 src/chatbot_tester/runner/backends/base.py
 src/chatbot_tester/runner/backends/openai_backend.py
+src/chatbot_tester/utils/__init__.py
+src/chatbot_tester/utils/tracking.py
