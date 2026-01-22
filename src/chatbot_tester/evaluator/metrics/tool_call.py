@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from typing import Any, Dict, List, Optional, Tuple, Union
 
-from ..base import Metric
+from .base import Metric
 from ..domain import EvalScore, RunRecord, TestSampleRecord
 
 
