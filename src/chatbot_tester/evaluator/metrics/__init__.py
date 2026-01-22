@@ -9,6 +9,7 @@ from .exact_match import ExactMatchMetric
 from .keyword import KeywordCoverageMetric
 from .llm_judge import LLMJudgeMetric
 from .semantic_similarity import SemanticSimilarityMetric
+from .tool_call import ToolCallMatchMetric
 
 if TYPE_CHECKING:  # pragma: no cover
     from ..registry import MetricRegistry
@@ -39,6 +40,7 @@ def register_default_metrics(registry: "MetricRegistry") -> None:
     _safe_register("semantic_similarity", lambda cfg: SemanticSimilarityMetric(**cfg))
     _safe_register("active_llm_judge", lambda cfg: ActiveLLMJudgeMetric(**cfg))
     _safe_register("embedding_similarity", lambda cfg: EmbeddingSimilarityMetric(**cfg))
+    _safe_register("tool_call_match", lambda cfg: ToolCallMatchMetric(**cfg))
 
 
 __all__ = [
@@ -49,5 +51,6 @@ __all__ = [
     "SemanticSimilarityMetric",
     "ActiveLLMJudgeMetric",
     "EmbeddingSimilarityMetric",
+    "ToolCallMatchMetric",
     "register_default_metrics",
 ]
