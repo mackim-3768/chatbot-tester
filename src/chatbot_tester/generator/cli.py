@@ -2,8 +2,11 @@ from __future__ import annotations
 
 import argparse
 import json
+import logging
 from pathlib import Path
 from typing import Optional
+
+from chatbot_tester.core.logging import configure_logging
 
 from .pipeline import PipelineOptions, run_pipeline
 
@@ -42,6 +45,8 @@ def _build_parser() -> argparse.ArgumentParser:
 def main(argv: Optional[list[str]] = None) -> None:
     parser = _build_parser()
     args = parser.parse_args(argv)
+    
+    configure_logging(level=logging.INFO)
 
     # try to parse --source as JSON if looks like JSON; else keep string
     source_obj = args.source

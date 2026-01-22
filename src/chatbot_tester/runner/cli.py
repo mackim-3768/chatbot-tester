@@ -6,6 +6,8 @@ import logging
 from pathlib import Path
 from typing import Any, Dict
 
+from chatbot_tester.core.logging import configure_logging
+
 from chatbot_tester.core.backends import backend_registry
 from . import RunnerConfig, load_dataset, run_job
 from .models import RunConfig
@@ -70,7 +72,7 @@ def main(argv: list[str] | None = None) -> None:
         print(f"chatbot_tester.runner {__version__}")
         return
 
-    logging.basicConfig(level=getattr(logging, str(args.log_level).upper(), logging.INFO))
+    configure_logging(level=getattr(logging, str(args.log_level).upper(), logging.INFO))
     logger = logging.getLogger("chatbot_tester.runner")
 
     dataset_path = Path(args.dataset).resolve()

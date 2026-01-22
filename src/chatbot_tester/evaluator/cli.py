@@ -2,8 +2,11 @@ from __future__ import annotations
 
 import argparse
 import json
+import logging
 from pathlib import Path
 from typing import Any, Dict, Iterable, List
+
+from chatbot_tester.core.logging import configure_logging
 
 from .config import EvaluatorConfig, load_config
 from .domain import (
@@ -56,6 +59,8 @@ def main(argv: List[str] | None = None) -> None:
     if args.version:
         print(f"chatbot_tester.evaluator {__version__}")
         return
+
+    configure_logging(level=logging.INFO)
 
     dataset_path = Path(args.dataset)
     metadata_path = Path(args.metadata)

@@ -1,6 +1,9 @@
 import argparse
+import logging
 import sys
 from pathlib import Path
+
+from chatbot_tester.core.logging import configure_logging
 
 from chatbot_tester.config import TesterConfig, GeneratorConfig, RunnerConfig
 
@@ -26,6 +29,7 @@ def main():
     eval_parser = subparsers.add_parser("evaluate", help="Evaluate results")
 
     args = parser.parse_args()
+    configure_logging(level=logging.INFO)
     config_path = Path(args.config)
     
     try:
