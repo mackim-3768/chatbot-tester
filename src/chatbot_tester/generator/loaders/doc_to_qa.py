@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from openai import OpenAI
-from ..types import Message, TestSample
+from chatbot_tester.core.models import Message, TestSample
 from ..utils import gen_id_from_messages
 
 

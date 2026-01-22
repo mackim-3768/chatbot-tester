@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, Iterable, List, Optional
 
-from ..types import Message, TestSample
+from chatbot_tester.core.models import Message, TestSample
 from ..utils import gen_id_from_messages
 
 

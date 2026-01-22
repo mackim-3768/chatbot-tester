@@ -6,7 +6,7 @@ import random
 from typing import Any, List, Optional
 
 from openai import OpenAI
-from ..types import Message, TestSample
+from chatbot_tester.core.models import Message, TestSample
 from ..utils import gen_id_from_messages
 
 

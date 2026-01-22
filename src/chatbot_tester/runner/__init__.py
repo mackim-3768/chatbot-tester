@@ -5,13 +5,13 @@ for executing chatbot evaluation datasets against heterogeneous targets (API, AD
 etc.).
 """
 
-from .runner_core import RunnerOptions, run_async_job, run_job
+from .runner_core import RunnerConfig, run_async_job, run_job
 from .dataset import load_dataset
 from .backends.base import backend_registry, ChatBackend, register_backend
 from . import backends as _backends  # noqa: F401  # ensure built-in backends register
 
 __all__ = [
-    "RunnerOptions",
+    "RunnerConfig",
     "run_job",
     "run_async_job",
     "load_dataset",

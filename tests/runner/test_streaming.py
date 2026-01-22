@@ -9,7 +9,7 @@ from unittest.mock import MagicMock
 sys.modules["openai"] = MagicMock()
 
 from typing import List, AsyncIterator
-from chatbot_tester.runner.runner_core import run_async_stream_job, run_job, RunnerOptions
+from chatbot_tester.runner.runner_core import run_async_stream_job, run_job, RunnerConfig
 from chatbot_tester.runner.models import DatasetInfo, RunConfig, TestSample, RunResultStatus, RunResult, RunRequest, ChatResponse
 from chatbot_tester.runner.backends.base import ChatBackend, backend_registry
 from chatbot_tester.runner.runner_context import RunnerContext
@@ -24,8 +24,11 @@ class MockStreamingBackend(ChatBackend):
         await asyncio.sleep(self.delay)
         return ChatResponse(text=f"Response for {request.sample.id}")
 
+import pytest
+
 backend_registry.register("mock_streaming", MockStreamingBackend)
 
+@pytest.mark.asyncio
 async def test_run_async_stream_job_yields_results():
     dataset = DatasetInfo(dataset_id="test_ds", name="Test Dataset", version="1.0", source="test")
     samples = [
@@ -36,7 +39,7 @@ async def test_run_async_stream_job_yields_results():
         backend="mock_streaming",
         backend_options={"delay": 0.1}
     )
-    options = RunnerOptions(max_concurrency=2, timeout_seconds=2.0)
+    options = RunnerConfig(max_concurrency=2, timeout_seconds=2.0)
 
     results = []
     start_time = time.time()
@@ -60,7 +63,7 @@ def test_run_job_sync_wrapper():
         backend="mock_streaming",
         backend_options={"delay": 0.05}
     )
-    options = RunnerOptions(max_concurrency=3)
+    options = RunnerConfig(max_concurrency=3)
 
     results = run_job(dataset, samples, "mock_streaming", run_config, options)
     

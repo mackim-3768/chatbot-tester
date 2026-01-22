@@ -13,7 +13,7 @@ from typing import Any, Dict, List, Optional, Protocol, Tuple
 from openai import OpenAI
 
 from ..schema import sample_schema
-from ..types import Message, TestSample
+from chatbot_tester.core.models import Message, TestSample
 from ..utils import ensure_dir, gen_id_from_messages, now_iso
 from ..writers import build_metadata, write_jsonl, write_metadata
 
@@ -22,6 +22,7 @@ import asyncio
 from ...runner.backends.base import backend_registry
 from ...runner.models import RunRequest, RunConfig, DatasetInfo, TestSample as RunnerSample, Message as RunnerMessage
 from ...runner.runner_context import RunnerContext
+from ...config import StructureConfig
 
 
 # -----------------------------------------------------------------------------
@@ -29,21 +30,7 @@ from ...runner.runner_context import RunnerContext
 # -----------------------------------------------------------------------------
 
 
-@dataclass
-class StructureSpec:
-    """Specification of the synthetic sample structure.
-
-    v0: single-turn conversation with optional system and expected answer.
-    """
-
-    id: str
-    turns: int
-    include_system: bool
-    include_expected: bool
-    min_user_len: int
-    max_user_len: int
-    min_expected_len: int
-    max_expected_len: int
+# StructureSpec is now StructureConfig in ...config
 
 
 @dataclass
@@ -77,7 +64,7 @@ class CacheStrategy(str, Enum):
 # -----------------------------------------------------------------------------
 
 
-def get_default_structure_spec() -> StructureSpec:
+def get_default_structure_spec() -> StructureConfig:
     """Return the default structure spec for everyday conversations.
 
     - Single-turn user → assistant
@@ -86,7 +73,7 @@ def get_default_structure_spec() -> StructureSpec:
     - Reasonable character-length bounds
     """
 
-    return StructureSpec(
+    return StructureConfig(
         id="everyday_conversation_basic",
         turns=1,
         include_system=True,
@@ -155,7 +142,7 @@ def make_language_rule(language_code: str) -> SampleRule:
     return _rule
 
 
-def make_length_rule(spec: StructureSpec) -> SampleRule:
+def make_length_rule(spec: StructureConfig) -> SampleRule:
     rule_id = "length_bounds"
 
     def _rule(sample: TestSample) -> RuleResult:
@@ -180,7 +167,7 @@ def make_length_rule(spec: StructureSpec) -> SampleRule:
     return _rule
 
 
-def get_quality_profile(language_code: str, spec: StructureSpec) -> QualityProfile:
+def get_quality_profile(language_code: str, spec: StructureConfig) -> QualityProfile:
     """Return a simple quality profile for the given language.
 
     v0: only length + heuristic language checks. No sensitive-content rules yet.
@@ -220,7 +207,7 @@ def _build_spec_hash(
     language_code: str,
     sample_count: int,
     model: str,
-    structure_spec: StructureSpec,
+    structure_spec: StructureConfig,
     seed: Optional[int],
 ) -> str:
     payload = {
@@ -230,7 +217,7 @@ def _build_spec_hash(
         "language_code": language_code,
         "sample_count": sample_count,
         "model": model,
-        "structure_spec": asdict(structure_spec),
+        "structure_spec": structure_spec.model_dump(),
         "seed": seed,
     }
     s = json.dumps(payload, sort_keys=True, ensure_ascii=False)
@@ -294,7 +281,7 @@ def _build_system_prompt(language_code: str) -> str:
 def _build_user_prompt(
     topic_prompt: str,
     language_code: str,
-    structure_spec: StructureSpec,
+    structure_spec: StructureConfig,
     batch_size: int,
 ) -> str:
     return (
@@ -419,7 +406,7 @@ def _row_to_sample(
     *,
     system_prompt: str,
     language_code: str,
-    structure_spec: StructureSpec,
+    structure_spec: StructureConfig,
 ) -> Optional[TestSample]:
     user_text = str(row.get("user_utterance") or "").strip()
     answer_text = str(row.get("assistant_answer") or "").strip()
@@ -479,7 +466,7 @@ def _generate_samples_via_backend(
     language_code: str,
     sample_count: int,
     model: str,
-    structure_spec: StructureSpec,
+    structure_spec: StructureConfig,
     quality_profile: QualityProfile,
     seed: Optional[int],
     backend_name: str,
@@ -660,7 +647,7 @@ def generate_structured_synthetic_dataset(
         "method": "chat_completions_json",  # uses response_format={"type": "json_object"}
         "topic_prompt": topic_prompt,
         "language_code": language_code,
-        "structure_spec": asdict(structure_spec),
+        "structure_spec": structure_spec.model_dump(),
         "quality_profile": quality_profile.id,
     }
 

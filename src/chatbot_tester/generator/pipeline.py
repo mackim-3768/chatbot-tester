@@ -6,10 +6,9 @@ from typing import Any, Dict, List, Optional, Sequence
 
 from .loaders import load_csv, load_jsonl
 from .transformers import canonicalize_rows, filter_by_length, sample_list
-from .writers import write_jsonl, build_metadata, write_metadata
+from .writers import build_metadata
 from .schema import sample_schema
-from .types import TestSample
-from .utils import ensure_dir
+from chatbot_tester.core.models import TestSample
 
 
 @dataclass
@@ -72,11 +71,22 @@ def run_pipeline(opts: PipelineOptions) -> Path:
 
     records = _to_dicts(samples)
 
-    out_root = opts.output_dir / f"{opts.dataset_id}_{opts.version}"
-    ensure_dir(out_root)
+    # Use StorageBackend (defaulting to LocalFileSystemStorage)
+    from chatbot_tester.core.storage import LocalFileSystemStorage
+    
+    # The output_dir is treated as the base path for storage
+    storage = LocalFileSystemStorage(opts.output_dir)
+    
+    # Define keys (relative paths)
+    dataset_dir = f"{opts.dataset_id}_{opts.version}"
+    jsonl_key = f"{dataset_dir}/test.jsonl"
+    meta_key = f"{dataset_dir}/metadata.json"
+    schema_key = f"{dataset_dir}/schema.json"
 
-    write_jsonl(records, out_root / "test.jsonl")
+    # Save test samples
+    storage.save_jsonl(jsonl_key, records)
 
+    # Build and save metadata
     meta = build_metadata(
         dataset_id=opts.dataset_id,
         name=opts.name,
@@ -93,11 +103,9 @@ def run_pipeline(opts: PipelineOptions) -> Path:
         },
         repo_dir=Path(__file__).resolve().parents[2],
     )
-    write_metadata(meta, out_root / "metadata.json")
+    storage.save_json(meta_key, meta)
 
-    # schema
-    from json import dump
-    with (out_root / "schema.json").open("w", encoding="utf-8") as f:
-        dump(sample_schema(), f, ensure_ascii=False, indent=2)
+    # Save schema
+    storage.save_json(schema_key, sample_schema())
 
-    return out_root
+    return Path(storage.get_path(dataset_dir))

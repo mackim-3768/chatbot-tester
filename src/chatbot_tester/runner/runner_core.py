@@ -22,29 +22,10 @@ from .models import (
     TestSample,
 )
 from .runner_context import RunnerContext
+from ..config import RunnerConfig
 
 
-@dataclass(slots=True)
-class RunnerOptions:
-    max_concurrency: int = 2
-    timeout_seconds: float = 60.0
-    max_retries: int = 2
-    retry_backoff_factor: float = 2.0
-    retry_backoff_jitter: float = 0.5
-    rate_limit_per_second: Optional[float] = None
-    trace_prefix: str = "run"
-    output_dir: Optional[Path] = None
-
-    def to_metadata_dict(self) -> dict:
-        return {
-            "max_concurrency": self.max_concurrency,
-            "timeout_seconds": self.timeout_seconds,
-            "max_retries": self.max_retries,
-            "retry_backoff_factor": self.retry_backoff_factor,
-            "retry_backoff_jitter": self.retry_backoff_jitter,
-            "rate_limit_per_second": self.rate_limit_per_second,
-            "trace_prefix": self.trace_prefix,
-        }
+# RunnerConfig is replaced by RunnerConfig in ..config
 
 
 class _RateLimiter:
@@ -69,7 +50,7 @@ async def run_async_stream_job(
     samples: Sequence[TestSample],
     backend_name: str,
     run_config: RunConfig,
-    options: RunnerOptions,
+    options: RunnerConfig,
     logger: Optional[logging.Logger] = None,
 ) -> AsyncIterator[RunResult]:
     """
@@ -130,7 +111,7 @@ async def run_async_job(
     samples: Sequence[TestSample],
     backend_name: str,
     run_config: RunConfig,
-    options: RunnerOptions,
+    options: RunnerConfig,
     logger: Optional[logging.Logger] = None,
 ) -> List[RunResult]:
     """
@@ -154,7 +135,7 @@ def run_stream_job(
     samples: Sequence[TestSample],
     backend_name: str,
     run_config: RunConfig,
-    options: RunnerOptions,
+    options: RunnerConfig,
     logger: Optional[logging.Logger] = None,
 ) -> Iterator[RunResult]:
     """
@@ -187,7 +168,7 @@ def run_job(
     samples: Sequence[TestSample],
     backend_name: str,
     run_config: RunConfig,
-    options: RunnerOptions,
+    options: RunnerConfig,
     logger: Optional[logging.Logger] = None,
 ) -> List[RunResult]:
     """
@@ -209,7 +190,7 @@ async def _run_single_sample(
     backend: Any,
     backend_name: str,
     run_config: RunConfig,
-    options: RunnerOptions,
+    options: RunnerConfig,
     semaphore: asyncio.Semaphore,
     rate_limiter: _RateLimiter,
     logger: logging.Logger,
@@ -325,7 +306,7 @@ async def _run_single_sample(
     raise RuntimeError("Execution loop exited unexpectedly")
 
 
-def _calc_backoff(attempt: int, options: RunnerOptions) -> float:
+def _calc_backoff(attempt: int, options: RunnerConfig) -> float:
     base = options.retry_backoff_factor ** max(0, attempt - 1)
     jitter = random.random() * options.retry_backoff_jitter
     return base + jitter
@@ -346,4 +327,4 @@ def _build_trace_id(prefix: str, sample_id: str) -> str:
     return f"{safe_prefix}-{sample_id}-{uuid.uuid4().hex[:8]}"
 
 
-__all__ = ["RunnerOptions", "run_async_job", "run_job"]
+__all__ = ["RunnerConfig", "run_async_job", "run_job"]

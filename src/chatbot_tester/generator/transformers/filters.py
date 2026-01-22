@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Iterable, List, Optional
 
-from ..types import TestSample
+from chatbot_tester.core.models import TestSample
 
 
 def _user_text_length(sample: TestSample) -> int:
