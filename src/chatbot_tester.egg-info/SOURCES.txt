@@ -11,6 +11,7 @@ src/chatbot_tester/evaluator/cli.py
 src/chatbot_tester/evaluator/config.py
 src/chatbot_tester/evaluator/domain.py
 src/chatbot_tester/evaluator/orchestrator.py
+src/chatbot_tester/evaluator/plugin.py
 src/chatbot_tester/evaluator/registry.py
 src/chatbot_tester/evaluator/metrics/__init__.py
 src/chatbot_tester/evaluator/metrics/active_llm_judge.py
