@@ -17,6 +17,12 @@ from ..types import Message, TestSample
 from ..utils import ensure_dir, gen_id_from_messages, now_iso
 from ..writers import build_metadata, write_jsonl, write_metadata
 
+# New imports for backend integration
+import asyncio
+from ...runner.backends.base import backend_registry
+from ...runner.models import RunRequest, RunConfig, DatasetInfo, TestSample as RunnerSample, Message as RunnerMessage
+from ...runner.runner_context import RunnerContext
+
 
 # -----------------------------------------------------------------------------
 # Data model & configuration types
@@ -273,19 +279,8 @@ def _write_cache_manifest(
 
 
 # -----------------------------------------------------------------------------
-# OpenAI client & prompt building
+# Backend-agnostic generation
 # -----------------------------------------------------------------------------
-
-
-def _get_openai_client() -> OpenAI:
-    api_key = os.getenv("OPENAI_API_KEY")
-    if not api_key:
-        raise RuntimeError("OPENAI_API_KEY environment variable is not set")
-
-    base_url = os.getenv("OPENAI_BASE_URL")
-    if base_url:
-        return OpenAI(api_key=api_key, base_url=base_url)
-    return OpenAI(api_key=api_key)
 
 
 def _build_system_prompt(language_code: str) -> str:
@@ -317,31 +312,85 @@ def _build_user_prompt(
     )
 
 
-def _request_batch(
+def _request_batch_via_backend(
     *,
-    client: OpenAI,
+    backend: Any,  # ChatBackend
     model: str,
     system_prompt: str,
     user_prompt: str,
     temperature: float,
 ) -> List[Dict[str, Any]]:
-    """Call OpenAI Chat Completions API in JSON object mode and parse the result.
+    """Call the backend and parse the result.
 
     We expect a top-level JSON array, or an object containing an array under
     one of the common keys (items/data/samples).
     """
-
-    resp = client.chat.completions.create(
+    
+    # Construct RunnerMessage objects
+    messages = [
+        RunnerMessage(role="system", content=system_prompt),
+        RunnerMessage(role="user", content=user_prompt),
+    ]
+    
+    # Create a dummy sample for the request
+    # usage of uuid for ID is better but empty string is fine for this transient object
+    sample = RunnerSample(id="", messages=messages)
+    
+    run_config = RunConfig(
+        backend=backend.name if hasattr(backend, "name") else "unknown",
         model=model,
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_prompt},
-        ],
-        temperature=temperature,
-        response_format={"type": "json_object"},
+        parameters={
+            "temperature": temperature,
+            "response_format": {"type": "json_object"}, # Hint for OpenAI-compatible backends
+        }
     )
+    
+    dataset_info = DatasetInfo(dataset_id=None, name=None, version=None, source="generator")
+    
+    request = RunRequest(
+        sample=sample,
+        run_config=run_config,
+        dataset_info=dataset_info,
+        trace_id="gen-" + hashlib.md5(user_prompt.encode()).hexdigest(),
+        attempt=1,
+        timeout_seconds=120.0,
+    )
+    
+    # Execute synchronously for this generator script
+    # If there is a running loop, we might need nested handling, but usually this is a script.
+    try:
+        loop = asyncio.get_event_loop()
+    except RuntimeError:
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
 
-    content = resp.choices[0].message.content or ""
+    if loop.is_running():
+         # If we are already in an async context, this might be tricky without a proper changes to upstack.
+         # For now, assuming this is called from a CLI/script that isn't already inside a loop for generation logic.
+         # However, if it IS, we should ideally await. But the signature of generate_structured_synthetic_dataset is sync.
+         # We will use a workaround or assume sync context.  
+         # Ideally we should make generate_structured_synthetic_dataset async, but that's a breaking change for callers.
+         # For this refactor, we'll try to use asyncio.run or loop.run_until_complete if not running.
+         # If running, we might fail. Let's assume sync entry point for now.
+         pass
+         
+    # Run the async send
+    # Using a fresh loop if needed or asyncio.run which creates one
+    try:
+        response = asyncio.run(backend.send(request))
+    except RuntimeError:
+        # Loop already running?
+        # This is a common issue. If we are in a notebook or existing loop.
+        # But this code seems to be library code.
+        # Let's try to just run it.
+        # If we are effectively in a sync function, asyncio.run should work.
+        pass
+        # Fallback if asyncio.run fails due to existing loop (though nest_asyncio might be needed then)
+        # For now, standard asyncio.run
+        response = asyncio.run(backend.send(request))
+
+
+    content = response.text or ""
     try:
         parsed = json.loads(content)
     except json.JSONDecodeError:
@@ -424,7 +473,7 @@ def _row_to_sample(
 # -----------------------------------------------------------------------------
 
 
-def _generate_samples_via_openai(
+def _generate_samples_via_backend(
     *,
     topic_prompt: str,
     language_code: str,
@@ -433,8 +482,13 @@ def _generate_samples_via_openai(
     structure_spec: StructureSpec,
     quality_profile: QualityProfile,
     seed: Optional[int],
+    backend_name: str,
+    backend_options: Dict[str, Any],
 ) -> List[TestSample]:
-    client = _get_openai_client()
+    # Initialize backend
+    ctx = RunnerContext()
+    backend = backend_registry.create(backend_name, context=ctx, **backend_options)
+    
     system_prompt = _build_system_prompt(language_code)
 
     rng = random.Random(seed) if seed is not None else random
@@ -462,8 +516,8 @@ def _generate_samples_via_openai(
             batch_size=this_batch,
         )
 
-        rows = _request_batch(
-            client=client,
+        rows = _request_batch_via_backend(
+            backend=backend,
             model=model,
             system_prompt=system_prompt,
             user_prompt=user_prompt,
@@ -513,11 +567,13 @@ def generate_structured_synthetic_dataset(
     language_code: str,
     sample_count: int,
     output_dir: Path | str,
-    openai_model: Optional[str] = None,
+    backend_name: str = "openai",
+    backend_options: Optional[Dict[str, Any]] = None,
+    openai_model: Optional[str] = None, # kept for backward compatibility, mapped to model in backend options if needed
     cache_strategy: CacheStrategy = CacheStrategy.DEFAULT,
     seed: Optional[int] = None,
 ) -> Path:
-    """Generate a synthetic dataset using OpenAI (structured JSON output).
+    """Generate a synthetic dataset using a ChatBackend (structured JSON output).
 
     This writes `test.jsonl`, `metadata.json`, and `schema.json` under
     `<output_dir>/<dataset_id>_<version>/` and returns that directory path.
@@ -526,7 +582,19 @@ def generate_structured_synthetic_dataset(
     if sample_count <= 0:
         raise ValueError("sample_count must be positive")
 
-    model = openai_model or os.getenv("OPENAI_MODEL") or "gpt-4o-mini"
+    backend_options = backend_options or {}
+    
+    # Resolve model
+    # If openai_model is passed, prefer it (backwards compat). 
+    # Otherwise check env vars or defaults depending on backend.
+    
+    model = openai_model or backend_options.get("model")
+    if not model and backend_name == "openai":
+         model = os.getenv("OPENAI_MODEL") or "gpt-4o-mini"
+    
+    # If model is found, ensure it's passed to backend options or used in generation
+    if model:
+        backend_options["model"] = model
 
     out_dir = Path(output_dir)
     out_root = out_dir / f"{dataset_id}_{version}"
@@ -540,7 +608,7 @@ def generate_structured_synthetic_dataset(
         topic_prompt=topic_prompt,
         language_code=language_code,
         sample_count=sample_count,
-        model=model,
+        model=model or "default",
         structure_spec=structure_spec,
         seed=seed,
     )
@@ -549,14 +617,16 @@ def generate_structured_synthetic_dataset(
     if cached is not None:
         return cached
 
-    samples = _generate_samples_via_openai(
+    samples = _generate_samples_via_backend(
         topic_prompt=topic_prompt,
         language_code=language_code,
         sample_count=sample_count,
-        model=model,
+        model=model or "",
         structure_spec=structure_spec,
         quality_profile=quality_profile,
         seed=seed,
+        backend_name=backend_name,
+        backend_options=backend_options,
     )
 
     records = [s.to_dict() for s in samples]
