@@ -17,6 +17,7 @@ from .domain import (
 from .metrics import register_default_metrics
 from .orchestrator import EvaluationOrchestrator
 from .registry import metric_registry
+from .plugin import PluginLoader
 from .report.html_reporter import HtmlReporter
 from .report.json_reporter import JsonReporter
 from .report.markdown_reporter import MarkdownReporter
@@ -38,6 +39,7 @@ def _build_parser() -> argparse.ArgumentParser:
     p.add_argument("--runs", required=True, help="Path to RunResult records JSONL")
     p.add_argument("--config", required=True, help="Path to evaluator config (JSON/YAML)")
     p.add_argument("--output", required=True, help="Directory to write reports into")
+    p.add_argument("--plugin", action="append", default=[], help="Path to python file or module name containing custom metrics")
     p.add_argument("--no-markdown", action="store_true", help="Skip Markdown report generation")
     p.add_argument("--no-json", action="store_true", help="Skip JSON summary/scores generation")
     p.add_argument("--html", action="store_true", help="Generate HTML report")
@@ -64,6 +66,11 @@ def main(argv: List[str] | None = None) -> None:
     # Load config and register built-in metrics.
     config: EvaluatorConfig = load_config(path=config_path)
     register_default_metrics(metric_registry)
+
+    # Load plugins if any.
+    if args.plugin:
+        loader = PluginLoader(registry=metric_registry)
+        loader.load_plugins(args.plugin)
 
     # Load dataset and metadata.
     with metadata_path.open("r", encoding="utf-8") as f:
