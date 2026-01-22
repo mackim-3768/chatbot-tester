@@ -1,0 +1,26 @@
+{
+  "generator": {
+    "dataset_id": "demo_dataset",
+    "name": "Demo Dataset",
+    "version": "v1",
+    "topic_prompt": "Write about weather",
+    "language_code": "en",
+    "sample_count": 5,
+    "output_dir": "./output",
+    "backend": "openai",
+    "structure": {
+      "turns": 1
+    }
+  },
+  "runner": {
+    "max_concurrency": 4,
+    "timeout_seconds": 30.0
+  },
+  "evaluator": {
+    "metrics": [
+      {
+        "type": "length_check"
+      }
+    ]
+  }
+}
