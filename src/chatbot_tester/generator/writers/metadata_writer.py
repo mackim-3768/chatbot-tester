@@ -57,8 +57,3 @@ def build_metadata(
     }
 
 
-def write_metadata(meta: Dict[str, Any], path: str | Path, encoding: str = "utf-8") -> None:
-    p = Path(path)
-    p.parent.mkdir(parents=True, exist_ok=True)
-    with p.open("w", encoding=encoding) as f:
-        json.dump(meta, f, ensure_ascii=False, indent=2)

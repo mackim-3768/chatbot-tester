@@ -6,7 +6,7 @@ import logging
 from pathlib import Path
 from typing import Any, Dict
 
-from . import RunnerOptions, backend_registry, load_dataset, run_job
+from . import RunnerConfig, backend_registry, load_dataset, run_job
 from .models import RunConfig
 from .storage import write_run_metadata, write_run_results
 
@@ -88,7 +88,7 @@ def main(argv: list[str] | None = None) -> None:
         backend_options=backend_opts,
     )
 
-    options = RunnerOptions(
+    options = RunnerConfig(
         max_concurrency=int(args.max_concurrency or 1),
         timeout_seconds=float(args.timeout or 60.0),
         max_retries=int(args.max_retries or 0),
@@ -109,6 +109,10 @@ def main(argv: list[str] | None = None) -> None:
         len(samples),
     )
 
+    from chatbot_tester.core.storage import LocalFileSystemStorage
+    
+    # ... (skipping logs)
+
     results = run_job(
         dataset=dataset_info,
         samples=samples,
@@ -118,8 +122,9 @@ def main(argv: list[str] | None = None) -> None:
         logger=logger,
     )
 
-    results_path = write_run_results(results, output_dir)
-    metadata_path = write_run_metadata(dataset_info, run_config, options, results, output_dir)
+    storage = LocalFileSystemStorage(output_dir)
+    results_path = write_run_results(results, storage)
+    metadata_path = write_run_metadata(dataset_info, run_config, options, results, storage)
 
     logger.info("Run completed. results=%s metadata=%s", results_path, metadata_path)
 

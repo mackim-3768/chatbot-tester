@@ -18,6 +18,7 @@ classifiers = [
 dependencies = [
   "PyYAML>=6.0",
   "openai>=1.35.0",
+  "pydantic>=2.0",
 ]
 
 # 이 루트 프로젝트는 주로 개발/문서/예제용 메타 패키지 역할을 하며,

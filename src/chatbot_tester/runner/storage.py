@@ -3,35 +3,29 @@ from __future__ import annotations
 import json
 from collections import Counter
 from datetime import datetime, timezone
-from pathlib import Path
 from statistics import mean
 from typing import Iterable, List, Optional, Dict, Any, TYPE_CHECKING
 
 from .models import DatasetInfo, RunConfig, RunResult
 
 if TYPE_CHECKING:  # pragma: no cover
-    from .runner_core import RunnerOptions
+    from ..config import RunnerConfig
 
+# ... (StorageBackend import remains)
 
-def write_run_results(results: Iterable[RunResult], output_dir: Path) -> Path:
-    output_dir.mkdir(parents=True, exist_ok=True)
-    path = output_dir / "run_results.jsonl"
-    with path.open("w", encoding="utf-8") as f:
-        for result in results:
-            json.dump(result.to_record(), f, ensure_ascii=False)
-            f.write("\n")
+def write_run_results(results: Iterable[RunResult], storage: StorageBackend, key: str = "run_results.jsonl") -> str:
+    path = storage.save_jsonl(key, [r.to_record() for r in results])
     return path
 
 
 def write_run_metadata(
     dataset: DatasetInfo,
     run_config: RunConfig,
-    options: "RunnerOptions",
+    options: "RunnerConfig",
     results: List[RunResult],
-    output_dir: Path,
-) -> Path:
-    output_dir.mkdir(parents=True, exist_ok=True)
-    path = output_dir / "run_metadata.json"
+    storage: StorageBackend,
+    key: str = "run_metadata.json",
+) -> str:
     payload = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "dataset": dataset.to_dict(),
@@ -39,8 +33,7 @@ def write_run_metadata(
         "options": options.to_metadata_dict(),
         "summary": _build_summary(results),
     }
-    with path.open("w", encoding="utf-8") as f:
-        json.dump(payload, f, ensure_ascii=False, indent=2)
+    path = storage.save_json(key, payload, indent=2)
     return path
 
 
