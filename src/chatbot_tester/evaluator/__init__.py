@@ -11,9 +11,12 @@ register_default_metrics(metric_registry)
 loader = PluginLoader(metric_registry)
 loader.load_from_entry_points()
 
+__version__ = "0.2.0"
+
 __all__ = [
     "EvaluatorConfig",
     "EvaluationOrchestrator",
     "PluginLoader",
     "metric_registry",
+    "__version__",
 ]

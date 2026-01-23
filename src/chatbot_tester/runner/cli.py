@@ -9,13 +9,14 @@ from typing import Any, Dict
 from chatbot_tester.core.logging import configure_logging
 
 from chatbot_tester.core.backends import backend_registry
-from . import RunnerConfig, load_dataset, run_job
+from . import RunnerConfig, load_dataset, run_job, __version__
 from .models import RunConfig
 from .storage import write_run_metadata, write_run_results
 
 
 def _build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="chatbot-runner", description="Chatbot Test Runner")
+    p.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
 
     # dataset
     p.add_argument("--dataset", required=True, help="Dataset JSONL path or dataset directory")
@@ -42,7 +43,6 @@ def _build_parser() -> argparse.ArgumentParser:
 
     # misc
     p.add_argument("--log-level", default="INFO", help="Logging level (DEBUG, INFO, WARNING, ERROR)")
-    p.add_argument("--version", action="store_true", help="Show version and exit")
 
     return p
 

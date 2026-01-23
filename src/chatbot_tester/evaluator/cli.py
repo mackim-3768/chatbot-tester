@@ -24,6 +24,7 @@ from .plugin import PluginLoader
 from .report.html_reporter import HtmlReporter
 from .report.json_reporter import JsonReporter
 from .report.markdown_reporter import MarkdownReporter
+from . import __version__
 
 
 def _load_jsonl(path: Path) -> Iterable[Dict[str, Any]]:
@@ -37,6 +38,7 @@ def _load_jsonl(path: Path) -> Iterable[Dict[str, Any]]:
 
 def _build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="chatbot-eval", description="Chatbot Evaluator")
+    p.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
     p.add_argument("--dataset", required=True, help="Path to dataset JSONL (canonical TestSample records)")
     p.add_argument("--metadata", required=True, help="Path to dataset metadata.json")
     p.add_argument("--runs", required=True, help="Path to RunResult records JSONL")
@@ -46,19 +48,12 @@ def _build_parser() -> argparse.ArgumentParser:
     p.add_argument("--no-markdown", action="store_true", help="Skip Markdown report generation")
     p.add_argument("--no-json", action="store_true", help="Skip JSON summary/scores generation")
     p.add_argument("--html", action="store_true", help="Generate HTML report")
-    p.add_argument("--version", action="store_true", help="Show version and exit")
     return p
 
 
 def main(argv: List[str] | None = None) -> None:
-    from . import __version__
-
     parser = _build_parser()
     args = parser.parse_args(argv)
-
-    if args.version:
-        print(f"chatbot_tester.evaluator {__version__}")
-        return
 
     configure_logging(level=logging.INFO)
 

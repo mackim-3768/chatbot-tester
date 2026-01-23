@@ -9,6 +9,7 @@ from typing import Optional
 from chatbot_tester.core.logging import configure_logging
 
 from .pipeline import PipelineOptions, run_pipeline
+from . import __version__
 
 
 def _build_parser() -> argparse.ArgumentParser:
