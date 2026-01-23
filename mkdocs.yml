@@ -15,6 +15,7 @@ nav:
       - More Examples: usage/examples.md
       - Generator: usage/generator.md
       - Runner: usage/runner.md
+      - Evaluator: usage/evaluator.md
       - Extending Metrics: usage/extending-metrics.md
       - Extending Backends: usage/extending-backends.md
       - Report Schema: usage/report-schema.md
