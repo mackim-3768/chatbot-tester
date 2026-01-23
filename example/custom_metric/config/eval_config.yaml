@@ -1,0 +1,21 @@
+metrics:
+  - name: keyword_check
+    type: custom
+    # The 'path' can be a python file path or a module path.
+    # We will pass the absolute path in the run script or rely on PYTHONPATH.
+    # For this example, we assume the user passes the plugin path via CLI --plugin argument,
+    # and here we just refer to the registered name if we registered it manually, 
+    # OR if we use the plugin loader, we need to know how it registers the name.
+    # The PluginLoader loads the module. If the module has a 'register_metrics' function or similar, it runs it.
+    # Or if we use the convention where the CLI loads the plugin, and the config refers to the 'type' defined in the plugin.
+    
+    # Wait, the current system might expect a specific setup.
+    # Let's look at `chatbot_tester/evaluator/plugin.py` or similar if needed.
+    # Assuming standard plugin system: we need to register it.
+    # The CLI has `--plugin`. 
+    # In `keyword_metric.py`, we need to actually register it to the registry.
+    
+    # Let's update the python file to register itself when imported.
+    # But for now let's write the config assuming 'keyword_presence' type becomes available.
+    type: keyword_presence
+    keywords: ["hello", "world", "chatbot"]

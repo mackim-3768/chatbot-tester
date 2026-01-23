@@ -1,0 +1,2 @@
+{"id": "cm_001", "input": "Hello", "expected": "Hello world", "tags": ["greeting"], "lang": "en"}
+{"id": "cm_002", "input": "Tell me about chatbots", "expected": "A chatbot is an AI...", "tags": ["info"], "lang": "en"}

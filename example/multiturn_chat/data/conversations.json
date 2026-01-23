@@ -1,0 +1,24 @@
+[
+  {
+    "id": "mt_001",
+    "messages": [
+      {"role": "user", "content": "Hi, I need help with my order."},
+      {"role": "assistant", "content": "Sure, what is your order ID?"},
+      {"role": "user", "content": "It's ORDER-123."}
+    ],
+    "expected": "I see your order ORDER-123 is currently in transit.",
+    "tags": ["support", "tracking"],
+    "lang": "en"
+  },
+  {
+    "id": "mt_002",
+    "messages": [
+      {"role": "user", "content": "Who is the president of South Korea?"},
+      {"role": "assistant", "content": "The current president of South Korea is Yoon Suk Yeol."},
+      {"role": "user", "content": "When was he elected?"}
+    ],
+    "expected": "He was elected in March 2022.",
+    "tags": ["knowledge", "politics"],
+    "lang": "en"
+  }
+]
