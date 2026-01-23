@@ -40,6 +40,7 @@ class DatasetMetadata:
 
 @dataclass(slots=True)
 class TestSampleRecord:
+    __test__ = False
     id: str
     messages: List[Dict[str, Any]]
     expected: Optional[Any] = None

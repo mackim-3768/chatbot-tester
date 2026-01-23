@@ -58,6 +58,7 @@ class RunnerConfig(BaseModel):
 
 class TesterConfig(BaseModel):
     """Root configuration for Chatbot Tester."""
+    __test__ = False
     generator: Optional[GeneratorConfig] = None
     runner: Optional[RunnerConfig] = None
     evaluator: Optional[EvaluatorConfig] = None

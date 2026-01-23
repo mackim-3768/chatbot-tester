@@ -7,8 +7,11 @@ etc.).
 
 from .runner_core import RunnerConfig, run_async_job, run_job
 from .dataset import load_dataset
-from .backends.base import backend_registry, ChatBackend, register_backend
-from . import backends as _backends  # noqa: F401  # ensure built-in backends register
+from chatbot_tester.core.backends.base import backend_registry, ChatBackend, register_backend
+
+# ensure built-in backends register
+import chatbot_tester.core.backends.openai_backend
+import chatbot_tester.core.backends.adb_cli_backend
 
 __all__ = [
     "RunnerConfig",

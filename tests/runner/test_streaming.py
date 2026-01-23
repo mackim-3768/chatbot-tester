@@ -11,8 +11,8 @@ sys.modules["openai"] = MagicMock()
 from typing import List, AsyncIterator
 from chatbot_tester.runner.runner_core import run_async_stream_job, run_job, RunnerConfig
 from chatbot_tester.runner.models import DatasetInfo, RunConfig, TestSample, RunResultStatus, RunResult, RunRequest, ChatResponse
-from chatbot_tester.runner.backends.base import ChatBackend, backend_registry
-from chatbot_tester.runner.runner_context import RunnerContext
+from chatbot_tester.core.backends.base import ChatBackend, backend_registry
+from chatbot_tester.core.context import RunnerContext
 
 class MockStreamingBackend(ChatBackend):
     def __init__(self, context: RunnerContext, delay: float = 0.1):

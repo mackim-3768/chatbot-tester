@@ -11,6 +11,7 @@ Requires-Python: >=3.8
 Description-Content-Type: text/markdown
 Requires-Dist: PyYAML>=6.0
 Requires-Dist: openai>=1.35.0
+Requires-Dist: pydantic>=2.0
 
 # chatbot-tester
 

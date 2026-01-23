@@ -12,7 +12,6 @@ from chatbot_tester.core.models import (
 )
 
 def ensure_messages(value: Any) -> List[Message]:
-    from typing import Any, List, Iterable, Mapping
     return [Message.from_dict(v) for v in value]
 
 __all__ = [

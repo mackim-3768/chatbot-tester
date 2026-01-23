@@ -6,7 +6,7 @@
 - OpenAI Backend 구현 구조
 - timeout / retry / rate-limit / 로깅 베스트 프랙티스
 
-> 실제 구현 코드는 `src/chatbot_tester/runner/backends/` 와 `src/chatbot_tester/runner/backends/base.py` 를 함께 참고하세요.
+> 실제 구현 코드는 `src/chatbot_tester/core/backends/` 와 `src/chatbot_tester/core/backends/base.py` 를 함께 참고하세요.
 
 ---
 
