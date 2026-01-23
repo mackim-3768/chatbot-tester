@@ -11,12 +11,26 @@ Runner는 다음을 담당합니다.
 3. 동시성/timeout/retry/rate-limit 전략 하에 각 `TestSample` 에 대해 요청 전송
 4. 응답과 메타데이터를 `RunResult` 레코드로 모아서 JSONL 파일로 저장
 
-출력은 보통 다음과 같습니다.
+## 2. Multi-turn 대화 지원
 
-- `run_results.jsonl`: per-sample `RunResult` 레코드
-- `run_metadata.json`: 실행 환경(RunConfig, RunnerOptions 등) 메타데이터
+Runner는 단순 1-turn(User Question -> Answer) 뿐만 아니라, **Multi-turn 대화** 문맥을 유지하며 테스트할 수 있습니다.
 
-## 2. CLI 개요
+- `TestSample`의 `messages` 필드에 여러 턴의 대화(`user`, `assistant`, `user`, ...)가 포함되어 있으면,
+- Runner는 이를 순서대로 백엔드에 전달하여 전체 문맥을 반영한 응답을 요청합니다.
+
+예를 들어 데이터셋이 다음과 같이 구성된 경우:
+
+```json
+[
+  {"role": "user", "content": "Hello"},
+  {"role": "assistant", "content": "Hi there!"},
+  {"role": "user", "content": "What's the weather?"}
+]
+```
+
+Runner는 이 전체 리스트를 백엔드의 `messages` 인자로 전달합니다. 이를 통해 이전 대화 내용("Hello" -> "Hi there!")을 기억하는지 테스트할 수 있습니다.
+
+## 3. CLI 개요
 
 Runner는 `python -m chatbot_tester.runner.cli` 형태의 CLI 엔트리포인트를 제공합니다.
 
@@ -98,30 +112,28 @@ python -m chatbot_tester.runner.cli \
 - `rate_limit`: 초당 요청/토큰 제한이 있는 API(OpenAI 등)에 필수
 - `trace_prefix`: 로그/모니터링 시스템과 연계할 때 유용
 
-- `trace_prefix`: 로그/모니터링 시스템과 연계할 때 유용
-100: 
-101: Quick Start에서는 단순성을 위해 작은 동시성 + 짧은 run만 수행하지만, 실제 대규모 테스트에서는 위 옵션들이 매우 중요해집니다.
-102:
-103: ## 6. 파이프라인 유틸리티 (PipelineContext)
-104:
-105: Runner CLI 외에 파이썬 스크립트로 직접 복잡한 파이프라인(Generation -> Finetuning -> Eval)을 구성할 때, MLflow 관리를 돕는 `PipelineContext`를 사용할 수 있습니다.
-106:
-107: ```python
-108: from chatbot_tester.utils import PipelineContext
-109:
-110: # 실험 이름과 아티팩트 저장소를 지정하여 컨텍스트 실행
-111: with PipelineContext("my_experiment", "output_dir") as ctx:
-112:     # 전역 파라미터 로깅
-113:     ctx.log_params({"model": "v1.0"})
-114:
-115:     # 각 단계를 중첩된 Run(Nested Run)으로 관리
-116:     with ctx.step("step1_generation") as step_dir:
-117:         # step_dir 경로에 데이터 생성
-118:         ...
-119:         # 아티팩트 및 메트릭 로깅
-120:         ctx.log_artifact("dataset.jsonl")
-121:         ctx.log_metrics({"count": 100})
-122: ```
-123:
-124: 이를 통해 구조화된 MLflow Run 트리를 손쉽게 생성할 수 있습니다.
+Quick Start에서는 단순성을 위해 작은 동시성 + 짧은 run만 수행하지만, 실제 대규모 테스트에서는 위 옵션들이 매우 중요해집니다.
+
+## 6. 파이프라인 유틸리티 (PipelineContext)
+
+Runner CLI 외에 파이썬 스크립트로 직접 복잡한 파이프라인(Generation -> Finetuning -> Eval)을 구성할 때, MLflow 관리를 돕는 `PipelineContext`를 사용할 수 있습니다.
+
+```python
+from chatbot_tester.utils import PipelineContext
+
+# 실험 이름과 아티팩트 저장소를 지정하여 컨텍스트 실행
+with PipelineContext("my_experiment", "output_dir") as ctx:
+    # 전역 파라미터 로깅
+    ctx.log_params({"model": "v1.0"})
+
+    # 각 단계를 중첩된 Run(Nested Run)으로 관리
+    with ctx.step("step1_generation") as step_dir:
+        # step_dir 경로에 데이터 생성
+        ...
+        # 아티팩트 및 메트릭 로깅
+        ctx.log_artifact("dataset.jsonl")
+        ctx.log_metrics({"count": 100})
+```
+
+이를 통해 구조화된 MLflow Run 트리를 손쉽게 생성할 수 있습니다.
 

@@ -7,3 +7,6 @@ PyYAML>=6.0
 pytest
 pytest-mock
 pytest-asyncio
+mkdocs
+mkdocs-material
+mkdocstrings[python]

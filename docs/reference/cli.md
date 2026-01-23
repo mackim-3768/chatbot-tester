@@ -68,6 +68,7 @@ python -m chatbot_tester.evaluator.cli --help
   - `--runs`: `RunResult` JSONL 경로
 - 설정
   - `--config`: Evaluator 설정 파일(YAML/JSON)
+  - `--plugin`: 사용자 정의 Metric 플러그인 경로 (Python 파일 또는 모듈명, 반복 사용 가능)
 - 출력
   - `--output`: 리포트 출력 디렉터리
 - 포맷 제어

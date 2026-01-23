@@ -46,7 +46,36 @@ python -m chatbot_tester.generator.cli --help
   - `--sample-size`: 샘플 개수 (0이면 전체)
   - `--sample-random`: 샘플링 시 랜덤 여부
 
-## 3. Quick Start 예제: toy_support_qa
+## 3. JSONL 입력 포맷 (Multi-turn 지원)
+
+CSV 외에도 **JSONL(JSON Lines)** 포맷을 지원합니다. 특히 **Multi-turn 대화** 데이터셋을 생성할 때 유용합니다.
+
+JSONL 파일의 각 라인은 다음 필드를 포함할 수 있습니다:
+
+- `id`: 샘플 ID (생략 시 자동 생성)
+- `messages`: 대화 메시지 리스트 (`[{"role": "...", "content": "..."}, ...]`)
+- `expected`: 기대 답변
+- `tags`: 태그 리스트
+- `lang`: 언어 코드
+- `metadata`: 기타 메타데이터
+
+### Multi-turn 데이터 예시
+
+```json
+{"id": "mt_1", "messages": [{"role": "user", "content": "A"}, {"role": "assistant", "content": "B"}, {"role": "user", "content": "C"}], "expected": "D", "tags": ["chat"], "lang": "en"}
+{"id": "mt_2", "messages": [{"role": "user", "content": "X"}], "expected": "Y", "tags": ["single"], "lang": "en"}
+```
+
+Generator 실행 시 `--input-format jsonl`을 지정하면 됩니다.
+
+```bash
+python -m chatbot_tester.generator.cli \
+  --input my_conversations.jsonl \
+  --input-format jsonl \
+  ...
+```
+
+## 4. Quick Start 예제: toy_support_qa
 
 Quick Start에서는 작은 고객지원 QA 예제를 사용합니다.
 

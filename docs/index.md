@@ -16,6 +16,7 @@
 가장 먼저 **Quick Start E2E 예제**를 실행해 보는 것을 추천합니다.
 
 - [Quick Start: end-to-end 예제](usage/quickstart-e2e.md)
+- [더 많은 예제 (Multi-turn, Custom Metric)](usage/examples.md)
 
 로컬에서 Quick Start를 돌리면 다음을 한 번에 경험할 수 있습니다.
 

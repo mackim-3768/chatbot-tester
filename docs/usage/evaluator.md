@@ -122,10 +122,52 @@ python -m chatbot_tester.evaluator.cli \
   - `allow_order_mismatch`: 순서 무시 여부 (기본값: False)
   - `exclude_args`: 비교에서 제외할 인자 목록 (예: timestamp 등)
 
+## 6. Custom Metric (플러그인) 사용
 
-각 metric은 `EvalScore` 리스트를 반환하며, Evaluator는 이를 모아 summary/breakdown/LLM Judge 세부 정보를 구성합니다.
+기본 제공 Metric 외에, 사용자가 직접 파이썬 코드로 작성한 Metric을 사용할 수 있습니다.
 
-## 6. Report 읽는 법
+### 6.1 플러그인 작성
+
+`chatbot_tester.evaluator.metrics.Metric`을 상속받아 구현하고, `register_metrics` 함수를 통해 등록합니다.
+
+```python
+# my_plugin.py
+from chatbot_tester.evaluator.metrics import Metric, MetricResult
+
+class MyMetric(Metric):
+    def score(self, sample, run):
+        # ... 평가 로직 ...
+        return self.make_score(sample, value=1.0, detail={})
+
+def register_metrics(registry):
+    registry.register("my_metric", lambda cfg: MyMetric(**cfg))
+```
+
+### 6.2 플러그인 로드 및 실행
+
+Evaluator CLI 실행 시 `--plugin` 옵션으로 경로를 지정합니다.
+
+```bash
+python -m chatbot_tester.evaluator.cli \
+  ... \
+  --plugin path/to/my_plugin.py
+```
+
+### 6.3 설정 파일 반영
+
+설정 파일(`config.yaml`)에서 등록한 `type` 이름을 사용합니다.
+
+```yaml
+metrics:
+  - type: my_metric
+    name: custom_check
+    parameters:
+      threshold: 0.5
+```
+
+자세한 예제는 [More Examples (Custom Metrics)](examples.md#2-custom-metrics-custom_metric) 문서를 참고하세요.
+
+## 7. Report 읽는 법
 
 Evaluator가 생성하는 리포트에는 보통 다음 정보가 포함됩니다.
 

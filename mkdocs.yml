@@ -11,10 +11,10 @@ nav:
   - Home: index.md
   - Usage:
       - Overview: usage/overview.md
+      - Quick Start E2E: usage/quickstart-e2e.md
+      - More Examples: usage/examples.md
       - Generator: usage/generator.md
       - Runner: usage/runner.md
-      - Evaluator: usage/evaluator.md
-      - Quick Start E2E: usage/quickstart-e2e.md
       - Extending Metrics: usage/extending-metrics.md
       - Extending Backends: usage/extending-backends.md
       - Report Schema: usage/report-schema.md
