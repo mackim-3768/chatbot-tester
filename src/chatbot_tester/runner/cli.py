@@ -63,14 +63,8 @@ def _parse_kv_list(items: list[str]) -> Dict[str, Any]:
 
 
 def main(argv: list[str] | None = None) -> None:
-    from . import __version__
-
     parser = _build_parser()
     args = parser.parse_args(argv)
-
-    if args.version:
-        print(f"chatbot_tester.runner {__version__}")
-        return
 
     configure_logging(level=getattr(logging, str(args.log_level).upper(), logging.INFO))
     logger = logging.getLogger("chatbot_tester.runner")
