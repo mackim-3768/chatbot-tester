@@ -19,6 +19,7 @@ dependencies = [
   "PyYAML>=6.0",
   "openai>=1.35.0",
   "pydantic>=2.0",
+  "fastmcp>=0.1.0",
 ]
 
 # 이 루트 프로젝트는 주로 개발/문서/예제용 메타 패키지 역할을 하며,
@@ -26,6 +27,12 @@ dependencies = [
 
 [tool.setuptools]
 package-dir = {"" = "src"}
+
+[project.scripts]
+chatbot-tester-mcp = "chatbot_tester.mcp_server:main"
+chatbot-runner = "chatbot_tester.runner.cli:main"
+chatbot-eval = "chatbot_tester.evaluator.cli:main"
+chatbot-gen = "chatbot_tester.generator.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
