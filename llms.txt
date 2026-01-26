@@ -83,4 +83,28 @@ src/lm_eval_so/
 - **Class names**: `PascalCase` (e.g. `ChatBackend`)
 - **Variables/Functions**: `snake_case`
 
-When generating code using this library, strictly adhere to these conventions.
+## 6. Core Models Reference (for implementation)
+
+When implementing extensions, refer to these field definitions.
+
+### 6.1. TestSampleRecord
+Represents a single input sample for testing.
+- `id` (str): Unique sample ID.
+- `messages` (List[Dict]): The conversation history `[{'role': 'user', 'content': '...'}]`.
+- `expected` (Optional[Any]): The expected answer (ground truth).
+- `metadata` (Dict): arbitrary metadata (e.g. `{'language': 'en'}`).
+
+### 6.2. RunRecord
+Represents the result of running the model on a sample.
+- `sample_id` (str): ID of the test sample.
+- `response_text` (Optional[str]): The text response from the model.
+- `latency_ms` (Optional[float]): Latency in milliseconds.
+- `error` (Optional[Dict]): Error details if failed.
+
+### 6.3. EvalScore
+Represents a single metric score.
+- `sample_id` (str): ID of the sample.
+- `metric` (str): Name of the metric.
+- `value` (float): The numerical score.
+- `detail` (Dict): Support for extra reasoning/metadata.
+
