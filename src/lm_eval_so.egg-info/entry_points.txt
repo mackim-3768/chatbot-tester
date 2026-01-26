@@ -1,0 +1,5 @@
+[console_scripts]
+lm-eval-evaluator = lm_eval_so.evaluator.cli:main
+lm-eval-generator = lm_eval_so.generator.cli:main
+lm-eval-mcp = lm_eval_so.mcp_server:main
+lm-eval-runner = lm_eval_so.runner.cli:main

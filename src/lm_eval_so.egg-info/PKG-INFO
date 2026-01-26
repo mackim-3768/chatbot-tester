@@ -1,0 +1,132 @@
+Metadata-Version: 2.4
+Name: lm-eval-so
+Version: 0.2.0
+Summary: LM Evaluation and Synthetic Data Orchestrator
+Author: LM-Eval-SO
+Keywords: lm,evaluation,dataset,runner,evaluator,synthetic
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Topic :: Software Development :: Testing
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+Requires-Dist: PyYAML>=6.0
+Requires-Dist: openai>=1.35.0
+Requires-Dist: pydantic>=2.0
+Requires-Dist: fastmcp>=0.1.0
+Requires-Dist: numpy
+Requires-Dist: jinja2
+
+# lm-eval-so
+
+DeepWiki 문서 : [https://deepwiki.com/mackim-3768/lm-eval-so](https://deepwiki.com/mackim-3768/lm-eval-so)
+
+공식 문서(Documentation): [https://mackim-3768.github.io/lm-eval-so/](https://mackim-3768.github.io/lm-eval-so/)
+
+챗봇을 체계적으로 **테스트·평가**하기 위한 프레임워크의 상위 빌드 리포지토리이다. 이 리포지토리는 실제 기능 구현보다는, 기능별 하위 리포지토리를 `src/` 아래로 가져와서 한 번에 빌드하고 Python 라이브러리 형태로 사용할 수 있게 만드는 역할을 한다.
+
+## 전체 컨셉
+
+프레임워크는 크게 다음 세 가지 기능 영역으로 나눈다.
+
+1. **DataSet 생성 모듈**  
+   - 챗봇 테스트에 사용할 입력/출력 샘플, 시나리오, 평가용 데이터셋을 정의·생성하는 모듈  
+   - 다양한 포맷의 원천 데이터를 수집·정제해서, 공통 포맷의 테스트 DataSet 으로 변환하는 역할
+
+2. **대화 컨트롤러 (Chat Test Runner)**  
+   - 테스트용 DataSet을 기반으로 실제 챗봇에 질의하고, 응답을 수집하는 실행 컨트롤러  
+   - 서로 다른 챗봇(모델/API)에 대해 공통 인터페이스로 요청을 보내고, 결과를 일관된 포맷으로 저장  
+   - 추후 다양한 챗봇/엔드포인트를 플러그인처럼 추가하기 쉬운 구조를 지향
+
+3. **평가 모듈 (Evaluator)**  
+   - 수집된 챗봇 응답을 기반으로 품질을 정량·정성적으로 평가하는 모듈  
+   - 규칙 기반, 모델 기반, 휴리스틱 기반 등 다양한 평가 전략을 조합할 수 있도록 설계  
+   - 테스트 결과를 리포트/메트릭 형태로 제공
+
+이 세 가지 모듈은 각각 **별도의 Git 리포지토리**로 관리하고, 여기서는 해당 리포지토리들을 가져와 하나의 Python 패키지로 묶어 사용하는 것을 목표로 한다.
+
+## 이 리포지토리의 역할
+
+- **하위 리포지토리 집합 관리**  
+  - `src/` 디렉터리 아래에 기능별 리포지토리를 서브모듈/서브디렉터리 형태로 배치  
+  - 로컬/CI 환경에서 한 번에 pull/update 할 수 있도록 구성
+
+- **빌드 & 패키징**  
+  - 하위 모듈들을 통합 빌드하여 하나의 Python 라이브러리로 패키징  
+  - 외부 프로젝트에서 `lm-eval-so`를 의존성으로 추가해, DataSet 생성–대화 실행–평가를 한 번에 사용할 수 있게 하는 것이 목표
+
+- **공통 설정 및 개발 워크플로우 제공**  
+  - 공통 의존성, 빌드 스크립트, 기본 설정 등을 이 리포지토리에서 관리  
+  - 각 기능 리포지토리는 도메인 로직에 집중하고, 공통 인프라는 여기서 제공하는 구조를 지향
+
+## 설치 및 의존성 관리
+
+이 리포지토리는 **추적되는 로컬 가상환경(예: `venv/`)을 두지 않습니다.** 대신 다음 절차로 필요한 의존성을 설치하세요.
+
+1. (선택) `python -m venv .venv && source .venv/bin/activate`
+2. `python -m pip install -r requirements.txt`
+
+`requirements.txt`에는 `-e .` 항목이 포함되어 있어 루트 패키지를 editable 모드로 설치합니다. 따라서 `lm_eval_so.*` 모듈과 예제 스크립트를 모두 즉시 사용할 수 있습니다. 예제 중 OpenAI API를 호출하는 스크립트는 `openai` 패키지에 의존하므로 동일한 파일에서 버전을 고정해 일관되게 관리합니다.
+
+> 참고: 가상환경을 사용하더라도 `.venv/` 디렉터리는 `.gitignore`에 포함되어 있으므로 Git 상태를 어지럽히지 않습니다.
+
+## 아키텍처 상세 문서화 계획
+
+이 README는 **컨셉/역할 정의**에 집중하고, 모듈 간 구체적인 의존 관계, 디렉터리 구조, 빌드 파이프라인 등의 상세 아키텍처는 별도의 문서(`docs/` 또는 개별 `.md` 파일)에 정리할 예정이다.
+
+## Python 라이브러리로 사용하기
+
+이 패키지는 설치 후 Python 코드 내에서 직접 임포트하여 사용할 수 있습니다.
+
+```python
+try:
+    # Backend 레지스트리 접근
+    from lm_eval_so.core.backends import backend_registry
+    
+    # Runner CLI 기능 접근
+    from lm_eval_so.runner import cli
+    
+    # Generator 데이터 구조 접근
+    from lm_eval_so.generator.synthetic import openai_structure
+    
+    print("Successfully imported lm-eval-so modules")
+except ImportError as e:
+    print(f"Import failed: {e}")
+```
+
+## Quick Start: 5분 안에 첫 리포트 만들기
+
+아래 순서를 따르면, 작은 toy 데이터셋을 가지고 **Generator → Runner → Evaluator** 전체 플로우를 한 번에 실행해 첫 Evaluation Report(JSON/Markdown)를 만들어볼 수 있다.
+
+1. 의존성 설치
+   ```bash
+   python -m pip install -r requirements.txt
+   ```
+
+2. OpenAI API 키 설정 (예시)
+   ```bash
+   export OPENAI_API_KEY="sk-..."  # GitHub Actions 에서는 repo secrets 사용
+   ```
+
+3. Quick Start 스크립트 실행
+   ```bash
+   bash example/quickstart/run_quickstart.sh
+   ```
+
+4. 생성된 산출물 확인
+   - Dataset (canonical `TestSample` JSONL)
+     - `example/quickstart/dataset/toy_support_qa_v1/test.jsonl`
+     - `example/quickstart/dataset/toy_support_qa_v1/metadata.json`
+   - Runner 결과(`RunResult` 레코드)
+     - `example/quickstart/runs/openai_gpt4-mini/run_results.jsonl`
+   - Evaluator 리포트(`EvaluationReport`)
+     - `example/quickstart/reports/` 아래 JSON/Markdown 파일
+
+리포트에는 다음 정보가 포함된다.
+- Experiment metadata (dataset, backend/run_config, evaluator_config 요약)
+- Overall metrics summary (예: `exact_match`, `keyword_coverage`의 mean/std/sample_count)
+- Breakdown (tag / language / length 기준)
+- Error cases / LLM Judge 세부 정보(구성된 경우)
+
+이를 기반으로 보다 복잡한 데이터셋/백엔드/메트릭 구성을 확장해 나갈 수 있다.
