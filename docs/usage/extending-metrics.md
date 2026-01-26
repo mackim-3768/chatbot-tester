@@ -1,13 +1,13 @@
 # Metric 확장 가이드 (새 Metric 추가하기)
 
-이 문서는 `chatbot-tester`의 **Evaluator Metric 플러그인**을 확장하는 방법을 정리합니다.
+이 문서는 `lm-eval-so`의 **Evaluator Metric 플러그인**을 확장하는 방법을 정리합니다.
 
 - Metric 인터페이스 개념
 - 기본 Metric(`exact_match`, `keyword_coverage`, `llm_judge`) 구조
 - 새 Metric 구현 + registry 등록 방법
 - G-Eval / LLM-Judge 계열 Metric 설계 시 주의점
 
-> 이 문서는 개념/패턴 위주 가이드이며, 실제 구현체 코드는 `src/chatbot_tester/evaluator/metrics/` 와 `src/chatbot_tester/evaluator/registry.py` 등을 참고하세요.
+> 이 문서는 개념/패턴 위주 가이드이며, 실제 구현체 코드는 `src/lm_eval_so/evaluator/metrics/` 와 `src/lm_eval_so/evaluator/registry.py` 등을 참고하세요.
 
 ---
 

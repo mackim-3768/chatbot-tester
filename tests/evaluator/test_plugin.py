@@ -2,8 +2,8 @@ from pathlib import Path
 from unittest.mock import MagicMock
 
 import pytest
-from chatbot_tester.evaluator.plugin import PluginLoader
-from chatbot_tester.evaluator.registry import MetricRegistry
+from lm_eval_so.evaluator.plugin import PluginLoader
+from lm_eval_so.evaluator.registry import MetricRegistry
 
 
 @pytest.fixture
@@ -15,8 +15,8 @@ def test_load_from_path(registry, tmp_path):
     # Create a dummy python file with a metric registration
     plugin_file = tmp_path / "custom_metric.py"
     plugin_file.write_text("""
-from chatbot_tester.evaluator.metrics.base import Metric
-from chatbot_tester.evaluator.domain import EvalScore
+from lm_eval_so.evaluator.metrics.base import Metric
+from lm_eval_so.evaluator.domain import EvalScore
 
 class MyMetric(Metric):
     def score(self, sample, run) -> EvalScore:

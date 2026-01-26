@@ -1,8 +1,8 @@
-# chatbot-tester
+# lm-eval-so
 
-DeepWiki 문서 : [https://deepwiki.com/mackim-3768/chatbot-tester](https://deepwiki.com/mackim-3768/chatbot-tester)
+DeepWiki 문서 : [https://deepwiki.com/mackim-3768/lm-eval-so](https://deepwiki.com/mackim-3768/lm-eval-so)
 
-공식 문서(Documentation): [https://mackim-3768.github.io/chatbot-tester/](https://mackim-3768.github.io/chatbot-tester/)
+공식 문서(Documentation): [https://mackim-3768.github.io/lm-eval-so/](https://mackim-3768.github.io/lm-eval-so/)
 
 챗봇을 체계적으로 **테스트·평가**하기 위한 프레임워크의 상위 빌드 리포지토리이다. 이 리포지토리는 실제 기능 구현보다는, 기능별 하위 리포지토리를 `src/` 아래로 가져와서 한 번에 빌드하고 Python 라이브러리 형태로 사용할 수 있게 만드는 역할을 한다.
 
@@ -34,7 +34,7 @@ DeepWiki 문서 : [https://deepwiki.com/mackim-3768/chatbot-tester](https://deep
 
 - **빌드 & 패키징**  
   - 하위 모듈들을 통합 빌드하여 하나의 Python 라이브러리로 패키징  
-  - 외부 프로젝트에서 `chatbot-tester`를 의존성으로 추가해, DataSet 생성–대화 실행–평가를 한 번에 사용할 수 있게 하는 것이 목표
+  - 외부 프로젝트에서 `lm-eval-so`를 의존성으로 추가해, DataSet 생성–대화 실행–평가를 한 번에 사용할 수 있게 하는 것이 목표
 
 - **공통 설정 및 개발 워크플로우 제공**  
   - 공통 의존성, 빌드 스크립트, 기본 설정 등을 이 리포지토리에서 관리  
@@ -47,7 +47,7 @@ DeepWiki 문서 : [https://deepwiki.com/mackim-3768/chatbot-tester](https://deep
 1. (선택) `python -m venv .venv && source .venv/bin/activate`
 2. `python -m pip install -r requirements.txt`
 
-`requirements.txt`에는 `-e .` 항목이 포함되어 있어 루트 패키지를 editable 모드로 설치합니다. 따라서 `chatbot_tester.*` 모듈과 예제 스크립트를 모두 즉시 사용할 수 있습니다. 예제 중 OpenAI API를 호출하는 스크립트는 `openai` 패키지에 의존하므로 동일한 파일에서 버전을 고정해 일관되게 관리합니다.
+`requirements.txt`에는 `-e .` 항목이 포함되어 있어 루트 패키지를 editable 모드로 설치합니다. 따라서 `lm_eval_so.*` 모듈과 예제 스크립트를 모두 즉시 사용할 수 있습니다. 예제 중 OpenAI API를 호출하는 스크립트는 `openai` 패키지에 의존하므로 동일한 파일에서 버전을 고정해 일관되게 관리합니다.
 
 > 참고: 가상환경을 사용하더라도 `.venv/` 디렉터리는 `.gitignore`에 포함되어 있으므로 Git 상태를 어지럽히지 않습니다.
 
@@ -62,15 +62,15 @@ DeepWiki 문서 : [https://deepwiki.com/mackim-3768/chatbot-tester](https://deep
 ```python
 try:
     # Backend 레지스트리 접근
-    from chatbot_tester.core.backends import backend_registry
+    from lm_eval_so.core.backends import backend_registry
     
     # Runner CLI 기능 접근
-    from chatbot_tester.runner import cli
+    from lm_eval_so.runner import cli
     
     # Generator 데이터 구조 접근
-    from chatbot_tester.generator.synthetic import openai_structure
+    from lm_eval_so.generator.synthetic import openai_structure
     
-    print("Successfully imported chatbot-tester modules")
+    print("Successfully imported lm-eval-so modules")
 except ImportError as e:
     print(f"Import failed: {e}")
 ```

@@ -1,7 +1,7 @@
 # OpenAI Generator Example
 
 이 예시는 OpenAI API를 사용해 소량의 지원(고객센터) QA 데이터를 생성하고, 
-`chatbot-tester.generator` 패키지의 스키마에 맞는 정규화된 DataSet으로 저장하는 방법을 보여준다.
+`lm-eval-so.generator` 패키지의 스키마에 맞는 정규화된 DataSet으로 저장하는 방법을 보여준다.
 
 ## 구성
 
@@ -23,7 +23,7 @@ example/generate/openai/
 
 2. generator 패키지 설치 (루트에서 실행)
    ```bash
-   pip install -e src/chatbot_tester/generator
+   pip install -e src/lm_eval_so/generator
    ```
 
 3. OpenAI Python 패키지 설치
@@ -46,7 +46,7 @@ example/generate/openai/
 
 ## 실행 방법
 
-루트 디렉터리(`chatbot-tester`)에서 다음을 실행:
+루트 디렉터리(`lm-eval-so`)에서 다음을 실행:
 
 ```bash
 python example/generate/openai/generate_dataset.py

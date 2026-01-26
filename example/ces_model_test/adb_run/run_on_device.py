@@ -4,9 +4,9 @@ from pathlib import Path
 from typing import Any, Dict, List
 import logging
 
-from chatbot_tester.runner import RunnerOptions, backend_registry, load_dataset, run_job
-from chatbot_tester.runner.models import RunConfig
-from chatbot_tester.runner.storage import write_run_metadata, write_run_results
+from lm_eval_so.runner import RunnerOptions, backend_registry, load_dataset, run_job
+from lm_eval_so.runner.models import RunConfig
+from lm_eval_so.runner.storage import write_run_metadata, write_run_results
 
 
 # 기본 경로 설정 (필요하면 파일 상단에서 수정)
@@ -88,7 +88,7 @@ def main() -> None:
 
     RUN_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    logger = logging.getLogger("chatbot_tester.runner")
+    logger = logging.getLogger("lm_eval_so.runner")
     if not logger.handlers:
         logging.basicConfig(level=logging.INFO, format="[%(levelname)s] %(message)s")
     logger.setLevel(logging.INFO)

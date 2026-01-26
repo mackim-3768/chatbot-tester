@@ -8,10 +8,10 @@ from typing import Any, Dict, List
 
 from openai import OpenAI
 
-from chatbot_tester.generator.types import Message, TestSample
-from chatbot_tester.generator.writers import write_jsonl, build_metadata, write_metadata
-from chatbot_tester.generator.schema import sample_schema
-from chatbot_tester.generator.utils import ensure_dir
+from lm_eval_so.generator.types import Message, TestSample
+from lm_eval_so.generator.writers import write_jsonl, build_metadata, write_metadata
+from lm_eval_so.generator.schema import sample_schema
+from lm_eval_so.generator.utils import ensure_dir
 
 
 PROMPTS: List[Dict[str, Any]] = [

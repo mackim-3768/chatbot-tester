@@ -1,4 +1,4 @@
-name: Build chatbot-tester
+name: Build LM-Eval-SO
 
 on:
   push:
@@ -59,5 +59,5 @@ jobs:
       - name: Upload dist artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: chatbot-tester-${{ matrix.os }}-py311
+          name: lm-eval-so-${{ matrix.os }}-py311
           path: dist/*

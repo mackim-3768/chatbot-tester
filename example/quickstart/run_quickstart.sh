@@ -19,7 +19,7 @@ REPORTS_DIR="${ROOT_DIR}/example/quickstart/reports"
 mkdir -p "${DATASET_ROOT}" "${RUNS_DIR}" "${REPORTS_DIR}"
 
 echo "[quickstart] 1/3: Generating canonical dataset..."
-python -m chatbot_tester.generator.cli \
+python -m lm_eval_so.generator.cli \
   --input "${ROOT_DIR}/example/quickstart/data/toy_support_qa.csv" \
   --input-format csv \
   --output-dir "${DATASET_ROOT}" \
@@ -37,7 +37,7 @@ python -m chatbot_tester.generator.cli \
 DATASET_DIR="${DATASET_ROOT}/toy_support_qa_v1"
 
 echo "[quickstart] 2/3: Running Runner against OpenAI backend..."
-python -m chatbot_tester.runner.cli \
+python -m lm_eval_so.runner.cli \
   --dataset "${DATASET_DIR}" \
   --backend openai \
   --model "${QUICKSTART_MODEL}" \
@@ -45,7 +45,7 @@ python -m chatbot_tester.runner.cli \
   --output-dir "${RUNS_DIR}"
 
 echo "[quickstart] 3/3: Evaluating run results..."
-python -m chatbot_tester.evaluator.cli \
+python -m lm_eval_so.evaluator.cli \
   --dataset "${DATASET_DIR}/test.jsonl" \
   --metadata "${DATASET_DIR}/metadata.json" \
   --runs "${RUNS_DIR}/run_results.jsonl" \

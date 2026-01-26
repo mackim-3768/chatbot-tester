@@ -10,7 +10,7 @@ metrics:
     # Or if we use the convention where the CLI loads the plugin, and the config refers to the 'type' defined in the plugin.
     
     # Wait, the current system might expect a specific setup.
-    # Let's look at `chatbot_tester/evaluator/plugin.py` or similar if needed.
+    # Let's look at `lm_eval_so/evaluator/plugin.py` or similar if needed.
     # Assuming standard plugin system: we need to register it.
     # The CLI has `--plugin`. 
     # In `keyword_metric.py`, we need to actually register it to the registry.

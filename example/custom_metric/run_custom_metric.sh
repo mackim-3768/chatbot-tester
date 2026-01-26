@@ -18,7 +18,7 @@ PLUGIN_PATH="${ROOT_DIR}/example/custom_metric/plugins/keyword_metric.py"
 mkdir -p "${DATASET_ROOT}" "${RUNS_DIR}" "${REPORTS_DIR}"
 
 echo "[custom_metric] 1/3: Generating canonical dataset..."
-python -m chatbot_tester.generator.cli \
+python -m lm_eval_so.generator.cli \
   --input "${DATA_DIR}/toy_dataset.jsonl" \
   --input-format jsonl \
   --output-dir "${DATASET_ROOT}" \
@@ -32,14 +32,14 @@ python -m chatbot_tester.generator.cli \
 DATASET_DIR="${DATASET_ROOT}/custom_metric_demo_v1"
 
 echo "[custom_metric] 2/3: Running Runner..."
-python -m chatbot_tester.runner.cli \
+python -m lm_eval_so.runner.cli \
   --dataset "${DATASET_DIR}" \
   --backend openai \
   --model gpt-4o-mini \
   --output-dir "${RUNS_DIR}"
 
 echo "[custom_metric] 3/3: Evaluating with Custom Metric Plugin..."
-python -m chatbot_tester.evaluator.cli \
+python -m lm_eval_so.evaluator.cli \
   --dataset "${DATASET_DIR}/test.jsonl" \
   --metadata "${DATASET_DIR}/metadata.json" \
   --runs "${RUNS_DIR}/run_results.jsonl" \

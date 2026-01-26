@@ -3,17 +3,19 @@ requires = ["setuptools>=64", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "chatbot-tester"
+name = "lm-eval-so"
 version = "0.2.0"
-description = "Chatbot testing framework: dataset generator, runner, evaluator"
+description = "LM Evaluation and Synthetic Data Orchestrator"
 readme = "README.md"
 requires-python = ">=3.8"
-authors = [{ name = "chatbot-tester" }]
-keywords = ["chatbot", "testing", "evaluation", "dataset", "runner", "evaluator"]
+authors = [{ name = "LM-Eval-SO" }]
+keywords = ["lm", "evaluation", "dataset", "runner", "evaluator", "synthetic"]
 classifiers = [
   "Programming Language :: Python :: 3",
   "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
+  "Topic :: Software Development :: Testing",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
 dependencies = [
   "PyYAML>=6.0",
@@ -23,16 +25,16 @@ dependencies = [
 ]
 
 # 이 루트 프로젝트는 주로 개발/문서/예제용 메타 패키지 역할을 하며,
-# 실제 파이썬 패키지는 각 서브 디렉터리(src/chatbot_tester/generator, runner, evaluator)에 정의된다.
+# 실제 파이썬 패키지는 각 서브 디렉터리(src/lm_eval_so/generator, runner, evaluator)에 정의된다.
 
 [tool.setuptools]
 package-dir = {"" = "src"}
 
 [project.scripts]
-chatbot-tester-mcp = "chatbot_tester.mcp_server:main"
-chatbot-runner = "chatbot_tester.runner.cli:main"
-chatbot-eval = "chatbot_tester.evaluator.cli:main"
-chatbot-gen = "chatbot_tester.generator.cli:main"
+lm-eval-mcp = "lm_eval_so.mcp_server:main"
+lm-eval-runner = "lm_eval_so.runner.cli:main"
+lm-eval-evaluator = "lm_eval_so.evaluator.cli:main"
+lm-eval-generator = "lm_eval_so.generator.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

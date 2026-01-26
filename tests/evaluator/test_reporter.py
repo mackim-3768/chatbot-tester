@@ -3,8 +3,8 @@ import shutil
 from pathlib import Path
 from unittest.mock import MagicMock
 
-from chatbot_tester.evaluator.domain import EvaluationReport, EvaluationResult, ExperimentMetadata, MetricSummary
-from chatbot_tester.evaluator.report.html_reporter import HtmlReporter
+from lm_eval_so.evaluator.domain import EvaluationReport, EvaluationResult, ExperimentMetadata, MetricSummary
+from lm_eval_so.evaluator.report.html_reporter import HtmlReporter
 
 def test_html_reporter_generation(tmp_path):
     report = EvaluationReport(

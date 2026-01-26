@@ -6,7 +6,7 @@
 - OpenAI Backend 구현 구조
 - timeout / retry / rate-limit / 로깅 베스트 프랙티스
 
-> 실제 구현 코드는 `src/chatbot_tester/core/backends/` 와 `src/chatbot_tester/core/backends/base.py` 를 함께 참고하세요.
+> 실제 구현 코드는 `src/lm_eval_so/core/backends/` 와 `src/lm_eval_so/core/backends/base.py` 를 함께 참고하세요.
 
 ---
 
@@ -150,7 +150,7 @@ class DummyBackend(ChatBackend):
 이렇게 하면 Runner CLI에서:
 
 ```bash
-python -m chatbot_tester.runner.cli \
+python -m lm_eval_so.runner.cli \
   --dataset path/to/dataset \
   --backend dummy \
   --output-dir runs/dummy
@@ -212,7 +212,7 @@ Backend/Runner 설계 시 반드시 남겨야 할 정보:
 
 권장 패턴:
 
-- Runner의 logger (`chatbot_tester.runner`) 를 사용해 structured logging 지향
+- Runner의 logger (`lm_eval_so.runner`) 를 사용해 structured logging 지향
 - `trace_prefix`/`trace_id` 를 이용해 한 execution 흐름을 추적 가능하게 만들기
 
 ---

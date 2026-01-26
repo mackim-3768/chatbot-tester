@@ -7,7 +7,7 @@ OUTPUT_DIR="$EXAMPLE_DIR/outputs"
 DATA_FILE="$EXAMPLE_DIR/data/sample.csv"
 
 if ! command -v gen-dataset >/dev/null 2>&1; then
-  echo "gen-dataset command not found. Install generator package first: pip install -e src/chatbot_tester/generator" >&2
+  echo "gen-dataset command not found. Install generator package first: pip install -e src/lm_eval_so/generator" >&2
   exit 1
 fi
 

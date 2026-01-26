@@ -1,6 +1,6 @@
 ---
 trigger: glob
-globs: **/core/**, **/chatbot_tester_core/**
+globs: **/core/**, **/lm_eval_so_core/**
 ---
 
 이 룰은 Core Domain Model을 일관성 있게 유지하기 위한 규칙입니다.

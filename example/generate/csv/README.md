@@ -1,6 +1,6 @@
 # CSV Generator Example
 
-이 예시는 `chatbot-tester.generate` 패키지를 사용해 CSV 데이터를 정규화된 테스트 데이터셋으로 만드는 방법을 보여준다.
+이 예시는 `lm-eval-so.generate` 패키지를 사용해 CSV 데이터를 정규화된 테스트 데이터셋으로 만드는 방법을 보여준다.
 
 ## 구성
 
@@ -25,7 +25,7 @@ example/generate/csv/
 
 1. (루트에서) generator 패키지를 설치하거나 editable 설치:
    ```bash
-   pip install -e src/chatbot_tester/generator
+   pip install -e src/lm_eval_so/generator
    ```
 
 2. 예제 실행:

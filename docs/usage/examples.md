@@ -1,6 +1,6 @@
 # 추가 예제 (Examples)
 
-`chatbot-tester` 리포지토리의 `example/` 디렉터리에는 Quick Start 외에도 다양한 사용 사례를 보여주는 예제들이 포함되어 있습니다.
+`lm-eval-so` 리포지토리의 `example/` 디렉터리에는 Quick Start 외에도 다양한 사용 사례를 보여주는 예제들이 포함되어 있습니다.
 
 이 문서는 각 예제의 목적과 실행 방법을 설명합니다.
 
@@ -70,7 +70,7 @@ bash example/custom_metric/run_custom_metric.sh
 `example/custom_metric/plugins/keyword_metric.py`:
 
 ```python
-from chatbot_tester.evaluator.metrics import Metric, MetricResult
+from lm_eval_so.evaluator.metrics import Metric, MetricResult
 
 class KeywordPresenceMetric(Metric):
     def __init__(self, keywords: list[str]):

@@ -14,10 +14,10 @@ Evaluator는 다음을 담당합니다.
 
 ## 2. CLI 개요
 
-Evaluator는 `python -m chatbot_tester.evaluator.cli` 형태의 CLI 엔트리포인트를 제공합니다.
+Evaluator는 `python -m lm_eval_so.evaluator.cli` 형태의 CLI 엔트리포인트를 제공합니다.
 
 ```bash
-python -m chatbot_tester.evaluator.cli --help
+python -m lm_eval_so.evaluator.cli --help
 ```
 
 주요 인자:
@@ -90,7 +90,7 @@ min_samples: 1
 Quick Start에서 Evaluator는 다음과 같이 실행됩니다.
 
 ```bash
-python -m chatbot_tester.evaluator.cli \
+python -m lm_eval_so.evaluator.cli \
   --dataset example/quickstart/dataset/toy_support_qa_v1/test.jsonl \
   --metadata example/quickstart/dataset/toy_support_qa_v1/metadata.json \
   --runs example/quickstart/runs/openai_gpt-4o-mini/run_results.jsonl \
@@ -128,11 +128,11 @@ python -m chatbot_tester.evaluator.cli \
 
 ### 6.1 플러그인 작성
 
-`chatbot_tester.evaluator.metrics.Metric`을 상속받아 구현하고, `register_metrics` 함수를 통해 등록합니다.
+`lm_eval_so.evaluator.metrics.Metric`을 상속받아 구현하고, `register_metrics` 함수를 통해 등록합니다.
 
 ```python
 # my_plugin.py
-from chatbot_tester.evaluator.metrics import Metric, MetricResult
+from lm_eval_so.evaluator.metrics import Metric, MetricResult
 
 class MyMetric(Metric):
     def score(self, sample, run):
@@ -148,7 +148,7 @@ def register_metrics(registry):
 Evaluator CLI 실행 시 `--plugin` 옵션으로 경로를 지정합니다.
 
 ```bash
-python -m chatbot_tester.evaluator.cli \
+python -m lm_eval_so.evaluator.cli \
   ... \
   --plugin path/to/my_plugin.py
 ```

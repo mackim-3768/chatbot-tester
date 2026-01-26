@@ -1,12 +1,12 @@
-# CES Model Auto Test (chatbot-tester 예제)
+# CES Model Auto Test (lm-eval-so 예제)
 
-기존 [CES_Model_Auto_Tester](https://github.com/tom-shin/CES_Model_Auto_Tester) 흐름을 `chatbot-tester` 프레임워크로 재구성한 예제입니다.
+기존 [CES_Model_Auto_Tester](https://github.com/tom-shin/CES_Model_Auto_Tester) 흐름을 `lm-eval-so` 프레임워크로 재구성한 예제입니다.
 
 - **Generate**: CES 시나리오 JSON → canonical dataset(JSONL + metadata)
 - **ADB Run**: ADB 디바이스의 CLI 모델(`llm_executable`)에 질문을 던지고 응답 수집
 - **Evaluate**: Runner 결과 JSONL을 기반으로 Metric 실행 및 리포트 생성
 
-최상위 엔트리포인트는 [main.py](chatbot-tester/example/ces_model_test/main.py)이며, 세 단계를 순차 실행합니다.
+최상위 엔트리포인트는 [main.py](lm-eval-so/example/ces_model_test/main.py)이며, 세 단계를 순차 실행합니다.
 
 ```text
 example/ces_model_test/
@@ -45,7 +45,7 @@ example/ces_model_test/
    }
    ```
 
-   - 필요 시 [adb_run/run_on_device.py](chatbot-tester/example/ces_model_test/adb_run/run_on_device.py) 안의 `BACKEND_OPTIONS["binary"]`,
+   - 필요 시 [adb_run/run_on_device.py](lm-eval-so/example/ces_model_test/adb_run/run_on_device.py) 안의 `BACKEND_OPTIONS["binary"]`,
      `MODEL_NAME` 를 실제 환경에 맞게 수정하십시오.
 
 3. **Python 패키지 설치**
@@ -62,11 +62,11 @@ example/ces_model_test/
 
 입력 시나리오 파일은 기존 프로젝트의 JSON 을 재사용합니다.
 
-- 경로: [CES_Model_Auto_Tester/Scenario/ces_llm_questions_all_categories_100.json](chatbot-tester/CES_Model_Auto_Tester/Scenario/ces_llm_questions_all_categories_100.json)
+- 경로: [CES_Model_Auto_Tester/Scenario/ces_llm_questions_all_categories_100.json](lm-eval-so/CES_Model_Auto_Tester/Scenario/ces_llm_questions_all_categories_100.json)
 - 구조: `{ "Category": [ { "English": "...", "Chinese": "..." }, ... ] }`
 
-[generate/generate_dataset.py](chatbot-tester/example/ces_model_test/generate/generate_dataset.py) 는 위 시나리오를 읽어
-[chatbot_tester.generator.TestSample](chatbot-tester/src/chatbot_tester/runner/models.py:42:0-72:22) 리스트로 변환하고 다음을 생성합니다.
+[generate/generate_dataset.py](lm-eval-so/example/ces_model_test/generate/generate_dataset.py) 는 위 시나리오를 읽어
+[lm_eval_so.generator.TestSample](lm-eval-so/src/lm_eval_so/runner/models.py:42:0-72:22) 리스트로 변환하고 다음을 생성합니다.
 
 - `example/ces_model_test/datasets/ces_llm_v1/test.jsonl`
 - `example/ces_model_test/datasets/ces_llm_v1/metadata.json`
@@ -83,10 +83,10 @@ python example/ces_model_test/generate/generate_dataset.py
 
 ### 2.2 ADB Run: 디바이스에서 모델 실행
 
-[adb_run/run_on_device.py](chatbot-tester/example/ces_model_test/adb_run/run_on_device.py) 는 다음을 수행합니다.
+[adb_run/run_on_device.py](lm-eval-so/example/ces_model_test/adb_run/run_on_device.py) 는 다음을 수행합니다.
 
 1. `datasets/ces_llm_v1/test.jsonl` + `metadata.json` 로드
-2. `chatbot_tester.runner` 의 `adb-cli` 백엔드로 각 샘플을 디바이스에 전달
+2. `lm_eval_so.runner` 의 `adb-cli` 백엔드로 각 샘플을 디바이스에 전달
 3. 결과를 JSONL/메타데이터로 저장
 
 기본 설정 (파일 내 상수):
@@ -108,14 +108,14 @@ python example/ces_model_test/adb_run/run_on_device.py
 
 ### 2.3 Evaluate: Metric 실행 및 리포트 생성
 
-[evaluate/evaluate_results.py](chatbot-tester/example/ces_model_test/evaluate/evaluate_results.py) 는 Evaluator 모듈을 사용해 다음을 수행합니다.
+[evaluate/evaluate_results.py](lm-eval-so/example/ces_model_test/evaluate/evaluate_results.py) 는 Evaluator 모듈을 사용해 다음을 수행합니다.
 
 1. `datasets/ces_llm_v1/test.jsonl`, `metadata.json` 로드
 2. `runs/adb_cli/run_results.jsonl` 로드
-3. [evaluate/eval_config.json](chatbot-tester/example/ces_model_test/evaluate/eval_config.json) 의 설정을 기반으로 Metric 실행
+3. [evaluate/eval_config.json](lm-eval-so/example/ces_model_test/evaluate/eval_config.json) 의 설정을 기반으로 Metric 실행
 4. JSON / Markdown 리포트 생성
 
-기본 [eval_config.json](chatbot-tester/example/ces_model_test/evaluate/eval_config.json) 예시:
+기본 [eval_config.json](lm-eval-so/example/ces_model_test/evaluate/eval_config.json) 예시:
 
 ```json
 {

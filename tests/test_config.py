@@ -4,7 +4,7 @@ from pathlib import Path
 import pytest
 import yaml
 
-from chatbot_tester.config import TesterConfig, GeneratorConfig, RunnerConfig, StructureConfig
+from lm_eval_so.config import TesterConfig, GeneratorConfig, RunnerConfig, StructureConfig
 
 def test_load_empty_config(tmp_path):
     config_file = tmp_path / "empty_config.yaml"

@@ -1,5 +1,5 @@
 from typing import Any, Dict, List
-from chatbot_tester.evaluator.metrics import Metric, MetricResult
+from lm_eval_so.evaluator.metrics import Metric, MetricResult
 
 class KeywordPresenceMetric(Metric):
     """

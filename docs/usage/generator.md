@@ -19,10 +19,10 @@ Generator는 크게 다음 단계를 거칩니다.
 
 ## 2. CLI 개요
 
-Generator는 `python -m chatbot_tester.generator.cli` 형태의 CLI 엔트리포인트를 제공합니다.
+Generator는 `python -m lm_eval_so.generator.cli` 형태의 CLI 엔트리포인트를 제공합니다.
 
 ```bash
-python -m chatbot_tester.generator.cli --help
+python -m lm_eval_so.generator.cli --help
 ```
 
 주요 인자:
@@ -69,7 +69,7 @@ JSONL 파일의 각 라인은 다음 필드를 포함할 수 있습니다:
 Generator 실행 시 `--input-format jsonl`을 지정하면 됩니다.
 
 ```bash
-python -m chatbot_tester.generator.cli \
+python -m lm_eval_so.generator.cli \
   --input my_conversations.jsonl \
   --input-format jsonl \
   ...
@@ -86,7 +86,7 @@ Quick Start에서는 작은 고객지원 QA 예제를 사용합니다.
 직접 실행 예시:
 
 ```bash
-python -m chatbot_tester.generator.cli \
+python -m lm_eval_so.generator.cli \
   --input example/quickstart/data/toy_support_qa.csv \
   --input-format csv \
   --output-dir example/quickstart/dataset \

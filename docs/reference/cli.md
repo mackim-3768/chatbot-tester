@@ -1,6 +1,6 @@
 # CLI 레퍼런스
 
-이 문서는 `chatbot-tester`에서 제공하는 주요 CLI 엔트리포인트를 정리합니다.
+이 문서는 `lm-eval-so`에서 제공하는 주요 CLI 엔트리포인트를 정리합니다.
 
 각 CLI는 `python -m 모듈명` 형태로 호출하는 것을 기준으로 합니다.
 
@@ -9,7 +9,7 @@
 엔트리포인트:
 
 ```bash
-python -m chatbot_tester.generator.cli --help
+python -m lm_eval_so.generator.cli --help
 ```
 
 주요 옵션 요약:
@@ -32,7 +32,7 @@ python -m chatbot_tester.generator.cli --help
 엔트리포인트:
 
 ```bash
-python -m chatbot_tester.runner.cli --help
+python -m lm_eval_so.runner.cli --help
 ```
 
 주요 옵션 요약:
@@ -57,7 +57,7 @@ python -m chatbot_tester.runner.cli --help
 엔트리포인트:
 
 ```bash
-python -m chatbot_tester.evaluator.cli --help
+python -m lm_eval_so.evaluator.cli --help
 ```
 
 주요 옵션 요약:
@@ -79,4 +79,4 @@ python -m chatbot_tester.evaluator.cli --help
 
 ## 4. 기타
 
-향후 `chatbot_tester.*` 패키지에 추가 CLI가 들어가면, 이 문서에 함께 정리해 둘 수 있습니다.
+향후 `lm_eval_so.*` 패키지에 추가 CLI가 들어가면, 이 문서에 함께 정리해 둘 수 있습니다.

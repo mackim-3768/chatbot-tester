@@ -5,7 +5,7 @@
 - per-sample 점수: `EvalScore` 리스트 (`scores.jsonl`)
 - 집계 리포트: `EvaluationReport` (`summary.json`, `report.md` 등)
 
-아래 설명은 `src/chatbot_tester/evaluator/domain.py` 의 도메인 모델을 기준으로 합니다.
+아래 설명은 `src/lm_eval_so/evaluator/domain.py` 의 도메인 모델을 기준으로 합니다.
 
 ---
 

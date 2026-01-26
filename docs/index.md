@@ -1,6 +1,6 @@
-# chatbot-tester 문서
+# lm-eval-so 문서
 
-`chatbot-tester`는 챗봇을 체계적으로 **테스트·평가**하기 위한 상위 프레임워크입니다.
+`lm-eval-so`는 챗봇을 체계적으로 **테스트·평가**하기 위한 상위 프레임워크입니다.
 
 - **Generator**
   - 원천 데이터(CSV/JSONL 등)를 canonical `TestSample` 데이터셋으로 변환
@@ -40,4 +40,4 @@
 
 ## 소스 코드
 
-- GitHub: <https://github.com/mackim-3768/chatbot-tester>
+- GitHub: <https://github.com/mackim-3768/lm-eval-so>

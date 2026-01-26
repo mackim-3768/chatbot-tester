@@ -1,7 +1,7 @@
 
 from unittest.mock import MagicMock, patch
-from chatbot_tester.generator.transformers.augmenter import ParaphraseAugmenter
-from chatbot_tester.generator.types import Message, TestSample
+from lm_eval_so.generator.transformers.augmenter import ParaphraseAugmenter
+from lm_eval_so.generator.types import Message, TestSample
 
 def test_paraphrase_augmenter():
     augmenter = ParaphraseAugmenter(api_key="dummy")
@@ -12,7 +12,7 @@ def test_paraphrase_augmenter():
         tags=[]
     )
 
-    with patch("chatbot_tester.generator.transformers.augmenter.OpenAI") as MockOpenAI:
+    with patch("lm_eval_so.generator.transformers.augmenter.OpenAI") as MockOpenAI:
         mock_resp = MagicMock()
         mock_resp.choices[0].message.content = '{"variations": ["Hi there", "Greetings"]}'
         MockOpenAI.return_value.chat.completions.create.return_value = mock_resp

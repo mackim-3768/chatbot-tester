@@ -1,7 +1,7 @@
 try:
-    from chatbot_tester.core.backends import backend_registry
-    from chatbot_tester.runner import cli
-    from chatbot_tester.generator.synthetic import openai_structure
+    from lm_eval_so.core.backends import backend_registry
+    from lm_eval_so.runner import cli
+    from lm_eval_so.generator.synthetic import openai_structure
     print("Imports successful")
 except ImportError as e:
     print(f"ImportError: {e}")

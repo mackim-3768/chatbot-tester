@@ -1,6 +1,6 @@
 # Weekly Framework Planning – 2025-Wxx
 
-> Repository: chatbot-tester  
+> Repository: lm-eval-so  
 > Type: Library / SDK (Generator · Runner · Evaluator)  
 > Focus: Architecture, API design, extensibility, reproducibility
 

@@ -3,8 +3,8 @@ import json
 from unittest.mock import MagicMock, patch
 
 import pytest
-from chatbot_tester.evaluator.domain import RunRecord, TestSampleRecord
-from chatbot_tester.evaluator.metrics import ActiveLLMJudgeMetric, EmbeddingSimilarityMetric
+from lm_eval_so.evaluator.domain import RunRecord, TestSampleRecord
+from lm_eval_so.evaluator.metrics import ActiveLLMJudgeMetric, EmbeddingSimilarityMetric
 
 @pytest.fixture
 def sample_record():
@@ -33,7 +33,7 @@ def run_record():
 def test_active_llm_judge(sample_record, run_record):
     metric = ActiveLLMJudgeMetric(name="judge", parameters={"api_key": "dummy"})
 
-    with patch("chatbot_tester.evaluator.metrics.active_llm_judge.OpenAI") as MockOpenAI:
+    with patch("lm_eval_so.evaluator.metrics.active_llm_judge.OpenAI") as MockOpenAI:
         mock_resp = MagicMock()
         mock_resp.choices[0].message.content = '{"score": 5, "reason": "Perfect"}'
         MockOpenAI.return_value.chat.completions.create.return_value = mock_resp
@@ -45,7 +45,7 @@ def test_active_llm_judge(sample_record, run_record):
 def test_embedding_similarity(sample_record, run_record):
     metric = EmbeddingSimilarityMetric(name="emb", parameters={"api_key": "dummy"})
 
-    with patch("chatbot_tester.evaluator.metrics.embedding_similarity.OpenAI") as MockOpenAI:
+    with patch("lm_eval_so.evaluator.metrics.embedding_similarity.OpenAI") as MockOpenAI:
         mock_emb = MagicMock()
         mock_emb.data[0].embedding = [1.0, 0.0, 0.0]
         MockOpenAI.return_value.embeddings.create.return_value = mock_emb

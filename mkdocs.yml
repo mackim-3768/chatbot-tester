@@ -1,8 +1,8 @@
-site_name: chatbot-tester
-site_description: "Chatbot test & evaluation framework (Generator → Runner → Evaluator)"
-site_url: "https://mackim-3768.github.io/chatbot-tester/"
-repo_url: "https://github.com/mackim-3768/chatbot-tester"
-repo_name: "mackim-3768/chatbot-tester"
+site_name: LM-Eval-SO
+site_description: "LM evaluation framework (Generator → Runner → Evaluator)"
+site_url: "https://mackim-3768.github.io/LM-Eval-SO/"
+repo_url: "https://github.com/mackim-3768/LM-Eval-SO"
+repo_name: "mackim-3768/LM-Eval-SO"
 
 theme:
   name: "material"

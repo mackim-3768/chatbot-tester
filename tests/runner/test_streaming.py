@@ -9,10 +9,10 @@ from unittest.mock import MagicMock
 sys.modules["openai"] = MagicMock()
 
 from typing import List, AsyncIterator
-from chatbot_tester.runner.runner_core import run_async_stream_job, run_job, RunnerConfig
-from chatbot_tester.runner.models import DatasetInfo, RunConfig, TestSample, RunResultStatus, RunResult, RunRequest, ChatResponse
-from chatbot_tester.core.backends.base import ChatBackend, backend_registry
-from chatbot_tester.core.context import RunnerContext
+from lm_eval_so.runner.runner_core import run_async_stream_job, run_job, RunnerConfig
+from lm_eval_so.runner.models import DatasetInfo, RunConfig, TestSample, RunResultStatus, RunResult, RunRequest, ChatResponse
+from lm_eval_so.core.backends.base import ChatBackend, backend_registry
+from lm_eval_so.core.context import RunnerContext
 
 class MockStreamingBackend(ChatBackend):
     def __init__(self, context: RunnerContext, delay: float = 0.1):

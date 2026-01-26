@@ -3,7 +3,7 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
-from chatbot_tester.generator.synthetic import CacheStrategy, generate_structured_synthetic_dataset
+from lm_eval_so.generator.synthetic import CacheStrategy, generate_structured_synthetic_dataset
 
 
 DEFAULT_TOPIC_PROMPT = (

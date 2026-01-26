@@ -1,6 +1,6 @@
 # Chatbot Tester Examples
 
-This directory contains examples demonstrating how to use `chatbot-tester` for various use cases.
+This directory contains examples demonstrating how to use `lm-eval-so` for various use cases.
 
 ## Available Examples
 

@@ -3,7 +3,7 @@ import tempfile
 from pathlib import Path
 
 import pytest
-from chatbot_tester.core.storage import LocalFileSystemStorage, StorageBackend
+from lm_eval_so.core.storage import LocalFileSystemStorage, StorageBackend
 
 class TestLocalFileSystemStorage:
     @pytest.fixture

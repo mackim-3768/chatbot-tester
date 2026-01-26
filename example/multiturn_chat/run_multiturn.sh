@@ -26,7 +26,7 @@ echo "[multiturn] 1/3: Generating canonical dataset (JSON source)..."
 # First convert JSON list to JSONL for the generator input
 python3 -c "import json; data=json.load(open('${DATA_DIR}/conversations.json')); [print(json.dumps(d)) for d in data]" > "${DATA_DIR}/conversations.jsonl"
 
-python -m chatbot_tester.generator.cli \
+python -m lm_eval_so.generator.cli \
   --input "${DATA_DIR}/conversations.jsonl" \
   --input-format jsonl \
   --output-dir "${DATASET_ROOT}" \
@@ -40,7 +40,7 @@ python -m chatbot_tester.generator.cli \
 DATASET_DIR="${DATASET_ROOT}/multiturn_demo_v1"
 
 echo "[multiturn] 2/3: Running Runner (OpenAI)..."
-python -m chatbot_tester.runner.cli \
+python -m lm_eval_so.runner.cli \
   --dataset "${DATASET_DIR}" \
   --backend openai \
   --model gpt-4o-mini \
@@ -56,7 +56,7 @@ metrics:
     max_tokens: 1000
 EOF
 
-python -m chatbot_tester.evaluator.cli \
+python -m lm_eval_so.evaluator.cli \
   --dataset "${DATASET_DIR}/test.jsonl" \
   --metadata "${DATASET_DIR}/metadata.json" \
   --runs "${RUNS_DIR}/run_results.jsonl" \

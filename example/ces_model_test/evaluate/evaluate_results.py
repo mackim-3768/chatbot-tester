@@ -4,8 +4,8 @@ import json
 from pathlib import Path
 from typing import Any, Dict, Iterable, List
 
-from chatbot_tester.evaluator.config import EvaluatorConfig, load_config
-from chatbot_tester.evaluator.domain import (
+from lm_eval_so.evaluator.config import EvaluatorConfig, load_config
+from lm_eval_so.evaluator.domain import (
     DatasetMetadata,
     RunRecord,
     TestSampleRecord,
@@ -13,11 +13,11 @@ from chatbot_tester.evaluator.domain import (
     run_record_from_dict,
     test_sample_from_dict,
 )
-from chatbot_tester.evaluator.metrics import register_default_metrics
-from chatbot_tester.evaluator.orchestrator import EvaluationOrchestrator
-from chatbot_tester.evaluator.registry import metric_registry
-from chatbot_tester.evaluator.report.json_reporter import JsonReporter
-from chatbot_tester.evaluator.report.markdown_reporter import MarkdownReporter
+from lm_eval_so.evaluator.metrics import register_default_metrics
+from lm_eval_so.evaluator.orchestrator import EvaluationOrchestrator
+from lm_eval_so.evaluator.registry import metric_registry
+from lm_eval_so.evaluator.report.json_reporter import JsonReporter
+from lm_eval_so.evaluator.report.markdown_reporter import MarkdownReporter
 
 
 EXAMPLE_ROOT = Path(__file__).resolve().parents[1]

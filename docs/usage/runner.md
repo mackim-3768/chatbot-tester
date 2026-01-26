@@ -32,10 +32,10 @@ Runner는 이 전체 리스트를 백엔드의 `messages` 인자로 전달합니
 
 ## 3. CLI 개요
 
-Runner는 `python -m chatbot_tester.runner.cli` 형태의 CLI 엔트리포인트를 제공합니다.
+Runner는 `python -m lm_eval_so.runner.cli` 형태의 CLI 엔트리포인트를 제공합니다.
 
 ```bash
-python -m chatbot_tester.runner.cli --help
+python -m lm_eval_so.runner.cli --help
 ```
 
 주요 인자:
@@ -71,7 +71,7 @@ Quick Start 예제에서는 OpenAI backend를 사용합니다.
 실행 예시:
 
 ```bash
-python -m chatbot_tester.runner.cli \
+python -m lm_eval_so.runner.cli \
   --dataset example/quickstart/dataset/toy_support_qa_v1 \
   --backend openai \
   --model gpt-4o-mini \
@@ -91,7 +91,7 @@ python -m chatbot_tester.runner.cli \
 
 ## 4. RunResult에 포함되는 정보
 
-세부 필드는 코드(`chatbot_tester.runner.models.RunResult`)를 참고하면 되지만, 개념적으로는 다음과 같습니다.
+세부 필드는 코드(`lm_eval_so.runner.models.RunResult`)를 참고하면 되지만, 개념적으로는 다음과 같습니다.
 
 - 어떤 샘플/데이터셋에 대한 실행인지 (`sample_id`, `dataset_id`)
 - 어떤 backend/RunConfig로 실행했는지 (`backend`, `run_config`)
@@ -119,7 +119,7 @@ Quick Start에서는 단순성을 위해 작은 동시성 + 짧은 run만 수행
 Runner CLI 외에 파이썬 스크립트로 직접 복잡한 파이프라인(Generation -> Finetuning -> Eval)을 구성할 때, MLflow 관리를 돕는 `PipelineContext`를 사용할 수 있습니다.
 
 ```python
-from chatbot_tester.utils import PipelineContext
+from lm_eval_so.utils import PipelineContext
 
 # 실험 이름과 아티팩트 저장소를 지정하여 컨텍스트 실행
 with PipelineContext("my_experiment", "output_dir") as ctx:

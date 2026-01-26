@@ -1,6 +1,6 @@
 # Framework Overview
 
-이 문서는 `chatbot-tester` 프레임워크의 큰 그림을 설명합니다.
+이 문서는 `lm-eval-so` 프레임워크의 큰 그림을 설명합니다.
 
 - Core 도메인 모델
 - Generator → Runner → Evaluator 데이터 플로우
