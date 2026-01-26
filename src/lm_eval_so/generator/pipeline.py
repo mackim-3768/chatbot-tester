@@ -13,6 +13,12 @@ from lm_eval_so.core.models import TestSample
 
 @dataclass
 class PipelineOptions:
+    """Configuration options for the dataset generation pipeline.
+
+    Description:
+        Holds all parameters required to run the generator pipeline, including input/output paths,
+        column mappings, filter criteria, and sampling options.
+    """
     input_path: Path
     input_format: Optional[str]  # "csv" | "jsonl" | None(auto)
     output_dir: Path
@@ -33,7 +39,8 @@ class PipelineOptions:
     sample_random: bool
 
 
-def _load_rows(opts: PipelineOptions):
+def _load_rows(opts: PipelineOptions) -> List[Dict[str, Any]]:
+    """Load raw rows from the input file."""
     fmt = (opts.input_format or opts.input_path.suffix.lstrip(".").lower())
     if fmt == "csv":
         return list(load_csv(opts.input_path))
@@ -43,6 +50,7 @@ def _load_rows(opts: PipelineOptions):
 
 
 def _canonicalize(rows: Sequence[Dict[str, Any]], opts: PipelineOptions) -> List[TestSample]:
+    """Convert raw rows into canonical TestSample objects using mapping options."""
     return canonicalize_rows(
         rows,
         id_col=opts.id_col,
@@ -55,11 +63,27 @@ def _canonicalize(rows: Sequence[Dict[str, Any]], opts: PipelineOptions) -> List
     )
 
 
-def _to_dicts(samples: Sequence[TestSample]):
+def _to_dicts(samples: Sequence[TestSample]) -> List[Dict[str, Any]]:
+    """Convert TestSample objects to dictionary format for storage."""
     return [s.to_dict() for s in samples]
 
 
 def run_pipeline(opts: PipelineOptions) -> Path:
+    """Execute the full dataset generation pipeline.
+
+    Description:
+        1. Loads data from input file (CSV/JSONL).
+        2. Canonicalizes data into `TestSample` format.
+        3. Applies filters (length, etc.).
+        4. Samples data if requested.
+        5. Writes output files (test.jsonl, metadata.json, schema.json) to output_dir.
+
+    Args:
+        opts: Configuration options for the pipeline.
+
+    Returns:
+        Path: The directory where the dataset was saved.
+    """
     rows = _load_rows(opts)
     samples = _canonicalize(rows, opts)
 

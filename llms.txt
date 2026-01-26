@@ -1,0 +1,86 @@
+# LM-Eval-SO: LLM Evaluation & Synthetic Orchestrator (AI Guide)
+
+This document is designed for AI Agents to understand the architecture, purpose, and extensibility of the `LM-Eval-SO` library.
+
+## 1. Project Philosophy
+
+`LM-Eval-SO` is a modular framework for systematically testing and evaluating Chatbots and LLMs.
+It adheres to the "Separation of Concerns" principle, dividing the workload into three distinct stages:
+
+1.  **Generator**: Creates canonical datasets (`TestSample` schema) from raw data (CSV, JSONL, Docs).
+2.  **Runner**: Executes the dataset against a target Model/API (`Backend`) and produces `RunResult` records.
+3.  **Evaluator**: Analyzes `RunResult` records using `Metric` algorithms and produces an `EvaluationReport`.
+
+## 2. Install vs Import
+
+- **Distribution Name**: `lm-eval-so`
+    - Install via: `pip install lm-eval-so`
+- **Import Name**: `lm_eval_so`
+    - Import via: `import lm_eval_so`
+
+> [!IMPORTANT]
+> Always use `import lm_eval_so` in your code. NEVER use `import LM-Eval-SO` or `import chatbot_tester`.
+
+## 3. Core Architecture & Extensibility
+
+The library is designed to be easily extended by subclassing abstract base classes.
+
+### 3.1. Backends (`ChatBackend`)
+
+To connect a new model provider (e.g., a custom Inference API, an on-device model):
+
+1.  **Inherit**: `lm_eval_so.core.backends.base.ChatBackend`
+2.  **Override**: `async def send(self, request: RunRequest) -> ChatResponse`
+3.  **Register**: Use `@register_backend("my_backend_name")`
+
+**Example:**
+
+```python
+from lm_eval_so.core.backends.base import ChatBackend, register_backend
+from lm_eval_so.core.models import RunRequest, ChatResponse
+
+@register_backend("my_llm")
+class MyLLMBackend(ChatBackend):
+    async def send(self, request: RunRequest) -> ChatResponse:
+        prompt = request.messages[-1].content
+        # simulate API call
+        return ChatResponse(content=f"Echo: {prompt}")
+```
+
+### 3.2. Metrics (`Metric`)
+
+TO define a new evaluation criteria:
+
+1.  **Inherit**: `lm_eval_so.evaluator.metrics.base.Metric`
+2.  **Override**: `def score(self, sample: TestSampleRecord, run: RunRecord) -> EvalScore`
+3.  **Optional**: Override `build_llm_judge_details` for complex reasoning output.
+
+**Example:**
+
+```python
+from lm_eval_so.evaluator.metrics.base import Metric
+from lm_eval_so.domain import EvalScore, TestSampleRecord, RunRecord
+
+class ResponseLengthMetric(Metric):
+    def score(self, sample: TestSampleRecord, run: RunRecord) -> EvalScore:
+        length = len(run.response_content)
+        return self.make_score(sample, value=length)
+```
+
+## 4. Directory Structure
+
+```text
+src/lm_eval_so/
+├── core/           # Shared models, logging, storage, backends
+├── generator/      # Dataset generation pipeline
+├── runner/         # Execution engine (async runner)
+└── evaluator/      # Metrics and reporting logic
+```
+
+## 5. Naming Conventions
+
+- **Module names**: `snake_case` (e.g. `openai_backend.py`)
+- **Class names**: `PascalCase` (e.g. `ChatBackend`)
+- **Variables/Functions**: `snake_case`
+
+When generating code using this library, strictly adhere to these conventions.
