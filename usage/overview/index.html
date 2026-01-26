@@ -1,0 +1,1121 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="LM evaluation framework (Generator → Runner → Evaluator)">
+      
+      
+      
+        <link rel="canonical" href="https://mackim-3768.github.io/LM-Eval-SO/usage/overview/">
+      
+      
+        <link rel="prev" href="../..">
+      
+      
+        <link rel="next" href="../quickstart-e2e/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Overview - LM-Eval-SO</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#framework-overview" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="LM-Eval-SO" class="md-header__button md-logo" aria-label="LM-Eval-SO" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            LM-Eval-SO
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Overview
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/mackim-3768/LM-Eval-SO" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    mackim-3768/LM-Eval-SO
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="LM-Eval-SO" class="md-nav__button md-logo" aria-label="LM-Eval-SO" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    LM-Eval-SO
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/mackim-3768/LM-Eval-SO" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    mackim-3768/LM-Eval-SO
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Usage
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Usage
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-core" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Core 도메인 모델
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-generator-runner-evaluator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Generator → Runner → Evaluator 데이터 플로우
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Generator → Runner → Evaluator 데이터 플로우">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-generator-dataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Generator (Dataset 생성)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-runner" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Runner (테스트 실행)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-evaluator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Evaluator (평가)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-report" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Report 구조 개요
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quickstart-e2e/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quick Start E2E
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    More Examples
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../generator/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Generator
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../runner/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Runner
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../evaluator/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Evaluator
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../extending-metrics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extending Metrics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../extending-backends/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extending Backends
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../report-schema/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Report Schema
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Test Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-core" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Core 도메인 모델
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-generator-runner-evaluator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Generator → Runner → Evaluator 데이터 플로우
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Generator → Runner → Evaluator 데이터 플로우">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-generator-dataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Generator (Dataset 생성)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-runner" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Runner (테스트 실행)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-evaluator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Evaluator (평가)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-report" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Report 구조 개요
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="framework-overview">Framework Overview<a class="headerlink" href="#framework-overview" title="Permanent link">&para;</a></h1>
+<p>이 문서는 <code>lm-eval-so</code> 프레임워크의 큰 그림을 설명합니다.</p>
+<ul>
+<li>Core 도메인 모델</li>
+<li>Generator → Runner → Evaluator 데이터 플로우</li>
+<li>Report 구조(Experiment/metrics/breakdown 등)의 개요</li>
+</ul>
+<h2 id="1-core">1. Core 도메인 모델<a class="headerlink" href="#1-core" title="Permanent link">&para;</a></h2>
+<p>프레임워크 전역에서 공유하는 공통 모델은 대략 다음과 같습니다.</p>
+<ul>
+<li><strong>TestSample</strong></li>
+<li><code>id</code>: 샘플 ID</li>
+<li><code>messages</code>: 대화 맥락 (<code>role</code>, <code>content</code> 로 구성된 메시지 리스트)</li>
+<li><code>expected</code>: 기대 출력(있을 수도, 없을 수도 있음)</li>
+<li><code>tags</code>: 태그 리스트 (task, domain, language 등)</li>
+<li>
+<p><code>metadata</code>: 길이, 토픽, 난이도 등의 부가 정보</p>
+</li>
+<li>
+<p><strong>TestCase</strong> (선택적 개념)</p>
+</li>
+<li>
+<p>여러 <code>TestSample</code> 을 하나의 시나리오로 묶을 때 사용</p>
+</li>
+<li>
+<p><strong>RunConfig</strong></p>
+</li>
+<li>어떤 백엔드/모델을 어떤 설정으로 돌릴지에 대한 구성</li>
+<li>
+<p>예: <code>backend="openai"</code>, <code>model="gpt-4o-mini"</code>, <code>parameters={"temperature": 0.0}</code></p>
+</li>
+<li>
+<p><strong>RunResult</strong></p>
+</li>
+<li>단일 <code>TestSample</code> 에 대해 실제 챗봇/모델을 호출한 결과</li>
+<li>
+<p>포함 정보 예시:</p>
+<ul>
+<li><code>sample_id</code>, <code>dataset_id</code>, <code>backend</code>, <code>run_config</code></li>
+<li>요청 메시지(<code>request_messages</code>), 응답 텍스트/토큰 사용량</li>
+<li><code>status</code> (ok / timeout / error / retry 등)</li>
+<li><code>latency_ms</code>, <code>trace_id</code>, <code>error</code> 정보</li>
+</ul>
+</li>
+<li>
+<p><strong>EvalScore</strong></p>
+</li>
+<li>한 metric에 대한 단일 샘플의 점수</li>
+<li><code>metric_name</code>, <code>value</code>, <code>detail</code>(예: expected/answer 페어, 키워드 매칭 수, LLM Judge 세부 정보 등)</li>
+</ul>
+<p>이 공통 모델을 기준으로 Generator/Runner/Evaluator가 느슨하게 결합됩니다.</p>
+<h2 id="2-generator-runner-evaluator">2. Generator → Runner → Evaluator 데이터 플로우<a class="headerlink" href="#2-generator-runner-evaluator" title="Permanent link">&para;</a></h2>
+<h3 id="21-generator-dataset">2.1 Generator (Dataset 생성)<a class="headerlink" href="#21-generator-dataset" title="Permanent link">&para;</a></h3>
+<p>목표: 다양한 포맷의 원천 데이터를 canonical <code>TestSample</code> 리스트로 정규화하고, 버전이 붙은 Dataset으로 관리합니다.</p>
+<p>전형적인 플로우:</p>
+<ol>
+<li><strong>원천 데이터 로딩</strong></li>
+<li>CSV / JSONL / DB 등에서 row 단위로 불러오기</li>
+<li><strong>정규화 (Canonicalization)</strong></li>
+<li>각 row를 <code>TestSample</code> 구조로 매핑</li>
+<li>예: <code>system</code>, <code>user</code>, <code>expected</code>, <code>tags</code>, <code>lang</code> 컬럼 → <code>messages</code>/<code>expected</code>/<code>tags</code>/<code>metadata</code></li>
+<li><strong>필터링 / 샘플링</strong></li>
+<li>길이, 언어, 태그 기준 필터</li>
+<li>랜덤 샘플링 또는 전략적 샘플링</li>
+<li><strong>출력</strong></li>
+<li><code>test.jsonl</code>: <code>TestSample.to_dict()</code> 리스트</li>
+<li><code>metadata.json</code>: <code>dataset_id</code>, <code>name</code>, <code>version</code>, <code>created_at</code>, <code>sample_count</code>, tag/language 분포 등</li>
+<li><code>schema.json</code>: <code>TestSample</code> JSON Schema</li>
+</ol>
+<p>Quick Start 예제에서는:</p>
+<ul>
+<li><code>example/quickstart/data/toy_support_qa.csv</code> → <code>toy_support_qa_v1/test.jsonl</code> + <code>metadata.json</code></li>
+</ul>
+<h3 id="22-runner">2.2 Runner (테스트 실행)<a class="headerlink" href="#22-runner" title="Permanent link">&para;</a></h3>
+<p>목표: <strong>(Dataset × Backend × RunConfig)</strong> 조합에 대해 실제 챗봇/모델을 호출하고, <code>RunResult</code> 레코드 집합을 생성합니다.</p>
+<p>전형적인 플로우:</p>
+<ol>
+<li>Dataset 로드 (<code>test.jsonl</code> + <code>metadata.json</code>)</li>
+<li>Backend 선택 (예: <code>openai</code>)</li>
+<li>RunConfig 구성 (<code>model</code>, <code>temperature</code>, 기타 파라미터)</li>
+<li>동시성 / rate limit / retry 전략에 따라 각 <code>TestSample</code> 에 대해 요청 전송</li>
+<li>결과를 <code>run_results.jsonl</code> 및 <code>run_metadata.json</code> 형태로 저장</li>
+</ol>
+<p>Quick Start 예제에서는:</p>
+<ul>
+<li>Backend: <code>openai</code></li>
+<li>Model: <code>gpt-4o-mini</code> (기본값, <code>QUICKSTART_MODEL</code> env로 변경 가능)</li>
+<li>출력: <code>example/quickstart/runs/openai_&lt;model&gt;/run_results.jsonl</code></li>
+</ul>
+<h3 id="23-evaluator">2.3 Evaluator (평가)<a class="headerlink" href="#23-evaluator" title="Permanent link">&para;</a></h3>
+<p>목표: Dataset + RunResult를 조합해 다양한 metric을 계산하고, <strong>per-sample score + aggregate report</strong> 를 생성합니다.</p>
+<p>전형적인 플로우:</p>
+<ol>
+<li>Evaluator 설정 로드 (<code>eval_toy.yaml</code> 등)</li>
+<li><code>run_config</code> (메타 정보용)</li>
+<li><code>metrics</code> (예: <code>exact_match</code>, <code>keyword_coverage</code>, <code>llm_judge</code>)</li>
+<li><code>breakdown</code> (tag / language / length 기준 집계 설정)</li>
+<li><code>report</code> 포맷 (JSON / Markdown 등)</li>
+<li>Dataset(<code>TestSample</code>), RunResult를 sample_id 기준으로 조인</li>
+<li>각 metric에 대해 모든 (sample, run) 페어에 점수 계산 → <code>EvalScore</code> 리스트 생성</li>
+<li>metric별 통계 계산 (mean, std, sample_count)</li>
+<li>tag/length/language 별 breakdown 생성</li>
+<li>LLM Judge 관련 세부 정보 수집 (prompt_id/version, criteria 등)</li>
+<li>최종 <code>EvaluationResult</code>/<code>EvaluationReport</code> 를 JSON/Markdown 파일로 저장</li>
+</ol>
+<p>Quick Start 예제에서 생성되는 대표 출력:</p>
+<ul>
+<li><code>summary.json</code> — metric별 요약 테이블 (mean/std/sample_count)</li>
+<li><code>scores.jsonl</code> — per-sample <code>EvalScore</code> 레코드</li>
+<li><code>report.md</code> — 사람이 읽기 좋은 Markdown 리포트</li>
+</ul>
+<h2 id="3-report">3. Report 구조 개요<a class="headerlink" href="#3-report" title="Permanent link">&para;</a></h2>
+<p>리포트는 보통 다음과 같은 구조를 가집니다.</p>
+<ul>
+<li><strong>Experiment metadata</strong></li>
+<li>어떤 Dataset / Backend / RunConfig / EvaluatorConfig로 실험했는지 요약</li>
+<li><strong>Overall metrics summary</strong></li>
+<li>metric별 <code>mean</code>, <code>std</code>, <code>sample_count</code> 테이블</li>
+<li><strong>Breakdown</strong></li>
+<li>tag / language / length 기준으로 metric 분포를 나눈 테이블/그래프</li>
+<li><strong>Error cases / Low-score samples</strong></li>
+<li>status가 ok가 아닌 RunResult, 또는 점수가 낮은 샘플 목록</li>
+<li><strong>LLM Judge 세부 정보 (선택)</strong></li>
+<li><code>prompt_id</code>, <code>prompt_version</code>, <code>criteria</code>, 평가에 사용된 sample 집합 ID 등</li>
+</ul>
+<p>이 구조를 지키면, 여러 실험/모델을 비교하는 리포트를 작성할 때도 일관성을 유지할 수 있습니다.</p>
+<hr />
+<p>다음으로는 각 모듈별 사용법 문서를 참고하세요.</p>
+<ul>
+<li><a href="../generator/">Generator 사용법</a></li>
+<li><a href="../runner/">Runner 사용법</a></li>
+<li><a href="../evaluator/">Evaluator 사용법</a></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

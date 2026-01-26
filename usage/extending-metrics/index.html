@@ -1,0 +1,1467 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="LM evaluation framework (Generator → Runner → Evaluator)">
+      
+      
+      
+        <link rel="canonical" href="https://mackim-3768.github.io/LM-Eval-SO/usage/extending-metrics/">
+      
+      
+        <link rel="prev" href="../evaluator/">
+      
+      
+        <link rel="next" href="../extending-backends/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Extending Metrics - LM-Eval-SO</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#metric-metric" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="LM-Eval-SO" class="md-header__button md-logo" aria-label="LM-Eval-SO" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            LM-Eval-SO
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Extending Metrics
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/mackim-3768/LM-Eval-SO" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    mackim-3768/LM-Eval-SO
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="LM-Eval-SO" class="md-nav__button md-logo" aria-label="LM-Eval-SO" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    LM-Eval-SO
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/mackim-3768/LM-Eval-SO" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    mackim-3768/LM-Eval-SO
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Usage
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Usage
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quickstart-e2e/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quick Start E2E
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    More Examples
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../generator/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Generator
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../runner/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Runner
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../evaluator/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Evaluator
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extending Metrics
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extending Metrics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-metric" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Metric 인터페이스 개념
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-metric" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 기본 Metric 예시 살펴보기
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. 기본 Metric 예시 살펴보기">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-exactmatchmetric-exact_match" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 ExactMatchMetric (exact_match)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-keywordcoveragemetric-keyword_coverage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 KeywordCoverageMetric (keyword_coverage)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-llmjudgemetric-llm_judge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 LLMJudgeMetric (llm_judge)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-metric" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 새 Metric 구현 절차
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 새 Metric 구현 절차">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-metric" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Metric 클래스 구현
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-metric-registry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Metric Registry에 등록
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-evaluator-config" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 Evaluator 설정(config)에서 사용하기
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-g-eval-llm-judge-metric" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. G-Eval / LLM-Judge Metric 설계 시 주의점
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. G-Eval / LLM-Judge Metric 설계 시 주의점">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-runner-vs-evaluator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Runner vs Evaluator 역할 분리
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-prompt_id-version-criteria" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 prompt_id / version / criteria 관리
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-score_key-max_score" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 score_key / max_score 설계
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-sample_rate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 비용/샘플링 전략 (sample_rate)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 요약
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../extending-backends/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extending Backends
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../report-schema/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Report Schema
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Test Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-metric" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Metric 인터페이스 개념
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-metric" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 기본 Metric 예시 살펴보기
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. 기본 Metric 예시 살펴보기">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-exactmatchmetric-exact_match" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 ExactMatchMetric (exact_match)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-keywordcoveragemetric-keyword_coverage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 KeywordCoverageMetric (keyword_coverage)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-llmjudgemetric-llm_judge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 LLMJudgeMetric (llm_judge)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-metric" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 새 Metric 구현 절차
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 새 Metric 구현 절차">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-metric" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Metric 클래스 구현
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-metric-registry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Metric Registry에 등록
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-evaluator-config" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 Evaluator 설정(config)에서 사용하기
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-g-eval-llm-judge-metric" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. G-Eval / LLM-Judge Metric 설계 시 주의점
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. G-Eval / LLM-Judge Metric 설계 시 주의점">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-runner-vs-evaluator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Runner vs Evaluator 역할 분리
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-prompt_id-version-criteria" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 prompt_id / version / criteria 관리
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-score_key-max_score" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 score_key / max_score 설계
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-sample_rate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 비용/샘플링 전략 (sample_rate)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 요약
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="metric-metric">Metric 확장 가이드 (새 Metric 추가하기)<a class="headerlink" href="#metric-metric" title="Permanent link">&para;</a></h1>
+<p>이 문서는 <code>lm-eval-so</code>의 <strong>Evaluator Metric 플러그인</strong>을 확장하는 방법을 정리합니다.</p>
+<ul>
+<li>Metric 인터페이스 개념</li>
+<li>기본 Metric(<code>exact_match</code>, <code>keyword_coverage</code>, <code>llm_judge</code>) 구조</li>
+<li>새 Metric 구현 + registry 등록 방법</li>
+<li>G-Eval / LLM-Judge 계열 Metric 설계 시 주의점</li>
+</ul>
+<blockquote>
+<p>이 문서는 개념/패턴 위주 가이드이며, 실제 구현체 코드는 <code>src/lm_eval_so/evaluator/metrics/</code> 와 <code>src/lm_eval_so/evaluator/registry.py</code> 등을 참고하세요.</p>
+</blockquote>
+<hr />
+<h2 id="1-metric">1. Metric 인터페이스 개념<a class="headerlink" href="#1-metric" title="Permanent link">&para;</a></h2>
+<p>Evaluator는 <strong>Metric 플러그인</strong>을 통해 점수를 계산합니다.</p>
+<p>개념적으로 Metric은 다음 인터페이스를 가집니다.</p>
+<ul>
+<li>입력:</li>
+<li><code>TestSampleRecord</code> (dataset에서 온 한 샘플)</li>
+<li><code>RunRecord</code> (Runner가 생성한 한 번의 실행 결과)</li>
+<li>출력:</li>
+<li><code>EvalScore</code> (metric 이름, 값, 세부 정보가 들어 있는 레코드)</li>
+</ul>
+<p>Pseudo-code로 보면:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Metric</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">parameters</span><span class="p">:</span> <span class="nb">dict</span>
+    <span class="n">requires_reference</span><span class="p">:</span> <span class="nb">bool</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sample</span><span class="p">:</span> <span class="n">TestSampleRecord</span><span class="p">,</span> <span class="n">run</span><span class="p">:</span> <span class="n">RunRecord</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EvalScore</span><span class="p">:</span>
+        <span class="o">...</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">build_llm_judge_details</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scores</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">EvalScore</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">LLMJudgeDetail</span><span class="p">]:</span>
+        <span class="o">...</span>  <span class="c1"># 대부분의 Metric에서는 빈 리스트를 반환</span>
+</code></pre></div>
+
+<p>실제 구현에서는 공통 베이스 클래스(<code>Metric</code>)가 있어, 다음과 같은 도움 메서드를 제공합니다.</p>
+<ul>
+<li><code>self.make_score(sample, value: float, detail: dict | None)</code></li>
+<li>metric 이름/값/세부정보를 포함하는 <code>EvalScore</code>를 생성</li>
+</ul>
+<p><code>requires_reference: bool</code>은 <strong>참조 정답(expected)이 필요 여부</strong>를 나타냅니다.</p>
+<ul>
+<li>예: exact_match → <code>requires_reference = True</code></li>
+<li>예: keyword_coverage → <code>requires_reference = False</code></li>
+</ul>
+<hr />
+<h2 id="2-metric">2. 기본 Metric 예시 살펴보기<a class="headerlink" href="#2-metric" title="Permanent link">&para;</a></h2>
+<h3 id="21-exactmatchmetric-exact_match">2.1 ExactMatchMetric (<code>exact_match</code>)<a class="headerlink" href="#21-exactmatchmetric-exact_match" title="Permanent link">&para;</a></h3>
+<p>역할:</p>
+<ul>
+<li><code>sample.expected</code>와 모델 응답(<code>run.response_text</code>)이</li>
+<li>공백 정규화, 대소문자 옵션에 따라 <strong>완전히 동일한지</strong> 평가</li>
+</ul>
+<p>핵심 포인트:</p>
+<ul>
+<li>파라미터</li>
+<li><code>normalize_whitespace: bool</code> (기본 True)</li>
+<li><code>case_sensitive: bool</code> (기본 False)</li>
+<li>로직</li>
+<li>expected 또는 answer가 없으면 <code>skipped</code> 플래그를 detail에 기록</li>
+<li>두 텍스트를 normalize 후 완전 일치하면 <code>value=1.0</code>, 아니면 <code>0.0</code></li>
+<li>detail 예시</li>
+<li><code>{ "expected": "...", "answer": "...", "match": true/false }</code></li>
+</ul>
+<h3 id="22-keywordcoveragemetric-keyword_coverage">2.2 KeywordCoverageMetric (<code>keyword_coverage</code>)<a class="headerlink" href="#22-keywordcoveragemetric-keyword_coverage" title="Permanent link">&para;</a></h3>
+<p>역할:</p>
+<ul>
+<li>미리 설정한 키워드 리스트가 응답 텍스트에 얼마나 포함됐는지 <strong>coverage(포함 비율)</strong> 평가</li>
+</ul>
+<p>핵심 포인트:</p>
+<ul>
+<li>파라미터</li>
+<li><code>keywords: list[str]</code> (필수)</li>
+<li><code>case_sensitive: bool</code> (기본 False)</li>
+<li>로직</li>
+<li>응답 텍스트를 적절히 lower-case 처리</li>
+<li>각 키워드가 포함되면 <code>matched += 1</code></li>
+<li><code>value = matched / total_keywords</code></li>
+<li>detail 예시</li>
+<li><code>{ "matched": 2, "total_keywords": 3 }</code></li>
+</ul>
+<h3 id="23-llmjudgemetric-llm_judge">2.3 LLMJudgeMetric (<code>llm_judge</code>)<a class="headerlink" href="#23-llmjudgemetric-llm_judge" title="Permanent link">&para;</a></h3>
+<p>역할:</p>
+<ul>
+<li><strong>실제 LLM 호출은 하지 않고</strong>, 이미 Runner/외부 파이프라인이 <code>RunRecord.raw</code> 안에 기록해 둔 LLM Judge 점수를 소비</li>
+<li>예: <code>run.raw["llm_judge"]["score"]</code> 에 저장된 1~5점 점수를 읽어서 0~1 사이로 정규화</li>
+</ul>
+<p>핵심 포인트:</p>
+<ul>
+<li>파라미터</li>
+<li><code>prompt_id: str</code></li>
+<li><code>prompt_version: str</code></li>
+<li><code>criteria: list[str]</code> (예: ["correctness", "fluency"])</li>
+<li><code>max_score: float</code> (기본 5.0)</li>
+<li><code>score_key: str</code> (기본 <code>"llm_judge.score"</code>)</li>
+<li>로직</li>
+<li><code>score_key</code> 경로를 따라 <code>run.raw</code>에서 값 조회</li>
+<li>없으면 <code>skipped</code> 처리</li>
+<li>숫자로 캐스팅 후 <code>value = numeric / max_score</code></li>
+<li><code>build_llm_judge_details(...)</code> 구현</li>
+<li>한 번의 metric 실행 전체에 대한 LLM-Judge 요약 레코드(<code>LLMJudgeDetail</code>) 생성</li>
+<li>prompt_id/version, language, criteria, sample_count, sample_ids 등을 포함</li>
+</ul>
+<hr />
+<h2 id="3-metric">3. 새 Metric 구현 절차<a class="headerlink" href="#3-metric" title="Permanent link">&para;</a></h2>
+<p>새 Metric을 추가하려면 <strong>3단계</strong>입니다.</p>
+<ol>
+<li>Metric 클래스 구현 (<code>metrics/</code> 아래 새 파일 또는 기존 파일 내 클래스 추가)</li>
+<li>Metric registry에 등록 (<code>register_default_metrics</code> 또는 별도 registry 호출)</li>
+<li>Evaluator 설정 파일(config)에서 metric type/name/parameters 설정</li>
+</ol>
+<h3 id="31-metric">3.1 Metric 클래스 구현<a class="headerlink" href="#31-metric" title="Permanent link">&para;</a></h3>
+<p>예를 들어, <strong>응답 길이 기반 Metric</strong>(너무 짧거나 긴 응답 penalize)을 만든다고 가정해 봅시다.</p>
+<p>개념적 구조:</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Metric</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..domain</span><span class="w"> </span><span class="kn">import</span> <span class="n">EvalScore</span><span class="p">,</span> <span class="n">RunRecord</span><span class="p">,</span> <span class="n">TestSampleRecord</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">LengthPenaltyMetric</span><span class="p">(</span><span class="n">Metric</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;응답 길이가 너무 짧거나 길 경우 패널티를 주는 예제 metric.&quot;&quot;&quot;</span>
+
+    <span class="n">requires_reference</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">)</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_min_len</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;min_len&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_max_len</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;max_len&quot;</span><span class="p">,</span> <span class="mi">512</span><span class="p">))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sample</span><span class="p">:</span> <span class="n">TestSampleRecord</span><span class="p">,</span> <span class="n">run</span><span class="p">:</span> <span class="n">RunRecord</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EvalScore</span><span class="p">:</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">response_text</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">length</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="n">detail</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;length&quot;</span><span class="p">:</span> <span class="n">length</span><span class="p">,</span> <span class="s2">&quot;reason&quot;</span><span class="p">:</span> <span class="s2">&quot;empty_response&quot;</span><span class="p">}</span>
+        <span class="k">elif</span> <span class="n">length</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_min_len</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="mf">0.3</span>  <span class="c1"># 너무 짧으면 패널티</span>
+            <span class="n">detail</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;length&quot;</span><span class="p">:</span> <span class="n">length</span><span class="p">,</span> <span class="s2">&quot;reason&quot;</span><span class="p">:</span> <span class="s2">&quot;too_short&quot;</span><span class="p">}</span>
+        <span class="k">elif</span> <span class="n">length</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_len</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="mf">0.5</span>  <span class="c1"># 너무 길어도 패널티</span>
+            <span class="n">detail</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;length&quot;</span><span class="p">:</span> <span class="n">length</span><span class="p">,</span> <span class="s2">&quot;reason&quot;</span><span class="p">:</span> <span class="s2">&quot;too_long&quot;</span><span class="p">}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="mf">1.0</span>
+            <span class="n">detail</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;length&quot;</span><span class="p">:</span> <span class="n">length</span><span class="p">,</span> <span class="s2">&quot;reason&quot;</span><span class="p">:</span> <span class="s2">&quot;ok&quot;</span><span class="p">}</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_score</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">detail</span><span class="p">)</span>
+</code></pre></div>
+
+<p>위 예시는 <strong>개념적인 패턴</strong>만 보여주며, 실제 값(0.3/0.5 등)은 프로젝트 요구에 맞게 설계해야 합니다.</p>
+<h3 id="32-metric-registry">3.2 Metric Registry에 등록<a class="headerlink" href="#32-metric-registry" title="Permanent link">&para;</a></h3>
+<p>Evaluator는 내부적으로 <strong>MetricRegistry</strong>를 사용해 <code>type</code> 이름으로 Metric을 생성합니다.</p>
+<p>기본 등록 함수는 대략 다음과 같은 형태입니다.</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">.exact_match</span><span class="w"> </span><span class="kn">import</span> <span class="n">ExactMatchMetric</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.keyword</span><span class="w"> </span><span class="kn">import</span> <span class="n">KeywordCoverageMetric</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.llm_judge</span><span class="w"> </span><span class="kn">import</span> <span class="n">LLMJudgeMetric</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">register_default_metrics</span><span class="p">(</span><span class="n">registry</span><span class="p">:</span> <span class="n">MetricRegistry</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_safe_register</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">factory</span><span class="p">):</span>
+        <span class="o">...</span>
+
+    <span class="n">_safe_register</span><span class="p">(</span><span class="s2">&quot;exact_match&quot;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">cfg</span><span class="p">:</span> <span class="n">ExactMatchMetric</span><span class="p">(</span><span class="o">**</span><span class="n">cfg</span><span class="p">))</span>
+    <span class="n">_safe_register</span><span class="p">(</span><span class="s2">&quot;keyword_coverage&quot;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">cfg</span><span class="p">:</span> <span class="n">KeywordCoverageMetric</span><span class="p">(</span><span class="o">**</span><span class="n">cfg</span><span class="p">))</span>
+    <span class="n">_safe_register</span><span class="p">(</span><span class="s2">&quot;llm_judge&quot;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">cfg</span><span class="p">:</span> <span class="n">LLMJudgeMetric</span><span class="p">(</span><span class="o">**</span><span class="n">cfg</span><span class="p">))</span>
+</code></pre></div>
+
+<p>새 Metric을 등록하려면, 여기에 한 줄을 추가하면 됩니다.</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">.length_penalty</span><span class="w"> </span><span class="kn">import</span> <span class="n">LengthPenaltyMetric</span>
+
+    <span class="n">_safe_register</span><span class="p">(</span><span class="s2">&quot;length_penalty&quot;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">cfg</span><span class="p">:</span> <span class="n">LengthPenaltyMetric</span><span class="p">(</span><span class="o">**</span><span class="n">cfg</span><span class="p">))</span>
+</code></pre></div>
+
+<ul>
+<li><code>"length_penalty"</code> 문자열이 <strong>Evaluator 설정 파일의 <code>type</code> 필드</strong>에서 사용되는 이름이 됩니다.</li>
+</ul>
+<h3 id="33-evaluator-config">3.3 Evaluator 설정(config)에서 사용하기<a class="headerlink" href="#33-evaluator-config" title="Permanent link">&para;</a></h3>
+<p>등록을 마친 뒤에는 Evaluator 설정 파일(YAML/JSON)에서 새 Metric을 참조할 수 있습니다.</p>
+<div class="codehilite"><pre><span></span><code><span class="nt">metrics</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">length_penalty</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">length_penalty</span>
+<span class="w">    </span><span class="nt">parameters</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">min_len</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+<span class="w">      </span><span class="nt">max_len</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">256</span>
+</code></pre></div>
+
+<ul>
+<li><code>type</code>: registry에 등록한 이름</li>
+<li><code>name</code>: 리포트에 표시될 metric 이름 (생략하면 type으로 대체되는 형태를 사용하는 것이 일반적)</li>
+<li><code>parameters</code>: Metric 생성자에 전달할 파라미터</li>
+</ul>
+<p>이렇게 설정하면 Evaluator는 다른 metric들과 동일한 방식으로 <code>LengthPenaltyMetric</code>을 실행하게 됩니다.</p>
+<hr />
+<h2 id="4-g-eval-llm-judge-metric">4. G-Eval / LLM-Judge Metric 설계 시 주의점<a class="headerlink" href="#4-g-eval-llm-judge-metric" title="Permanent link">&para;</a></h2>
+<p>LLM 기반 평가(G-Eval, LLM-as-a-Judge)는 <strong>비용/일관성/버전 관리</strong>가 중요합니다. 설계 시 다음을 권장합니다.</p>
+<h3 id="41-runner-vs-evaluator">4.1 Runner vs Evaluator 역할 분리<a class="headerlink" href="#41-runner-vs-evaluator" title="Permanent link">&para;</a></h3>
+<p>현 설계에서는:</p>
+<ul>
+<li>Runner/외부 파이프라인</li>
+<li>실제 LLM Judge API를 호출하고, 원본 평가 결과를 <code>RunRecord.raw</code> 등에 저장</li>
+<li>Evaluator의 <code>llm_judge</code> Metric</li>
+<li>이미 계산된 점수를 읽어와 정규화/집계만 수행</li>
+</ul>
+<p>이렇게 역할을 분리하면 다음 장점이 있습니다.</p>
+<ul>
+<li>Evaluator 실행 시 <strong>추가 API 비용이 들지 않음</strong></li>
+<li>같은 RunResult에 대해 여러 번 재평가/리포트를 만들 수 있음</li>
+<li>LLM Judge 프롬프트/모델이 바뀌더라도 Runner 파이프라인만 교체하면 됨</li>
+</ul>
+<h3 id="42-prompt_id-version-criteria">4.2 prompt_id / version / criteria 관리<a class="headerlink" href="#42-prompt_id-version-criteria" title="Permanent link">&para;</a></h3>
+<p>LLM Judge Metric 파라미터에는 최소 다음 항목을 명시적으로 넣는 것을 권장합니다.</p>
+<ul>
+<li><code>prompt_id</code>: 평가 프롬프트/템플릿을 식별하는 ID</li>
+<li><code>prompt_version</code>: 프롬프트 버전 (예: <code>v1</code>, <code>2025-03-01</code>)</li>
+<li><code>criteria</code>: LLM Judge가 평가할 기준 리스트 (예: <code>correctness</code>, <code>faithfulness</code>, <code>style_match</code> 등)</li>
+</ul>
+<p>이를 <code>EvalScore.detail</code> 또는 <code>LLMJudgeDetail</code> 에 기록해 두면:</p>
+<ul>
+<li>나중에 "어떤 기준/프롬프트로 점수를 냈는지"를 추적 가능</li>
+<li>프롬프트가 개선/변경되었을 때 실험 버전을 명확히 구분 가능</li>
+</ul>
+<h3 id="43-score_key-max_score">4.3 score_key / max_score 설계<a class="headerlink" href="#43-score_key-max_score" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>score_key</code>: Runner가 <code>run.raw</code>에 넣어주는 점수 위치를 문자열 경로로 정의</li>
+<li>예: <code>"llm_judge.score"</code>, <code>"judge.overall"</code></li>
+<li><code>max_score</code>: LLM이 주는 원점수의 최대값</li>
+<li>예: 1~5 점수라면 <code>max_score=5.0</code></li>
+</ul>
+<p>Metric 구현에서는:</p>
+<ul>
+<li><code>raw_value = _get_nested(run.raw, score_key)</code> 로 값을 읽어오고</li>
+<li><code>value = raw_value / max_score</code> 로 0~1 범위로 정규화</li>
+</ul>
+<p>이렇게 하면 다른 metric들과 동일한 스케일에서 비교/집계하기 편리합니다.</p>
+<h3 id="44-sample_rate">4.4 비용/샘플링 전략 (sample_rate)<a class="headerlink" href="#44-sample_rate" title="Permanent link">&para;</a></h3>
+<p>LLM Judge는 비용이 크기 때문에, Evaluator config에서 <strong>샘플링 비율</strong>을 두는 것도 좋습니다.</p>
+<p>예를 들어 MetricConfig에 <code>sample_rate: 0.2</code> 라는 필드를 두고,
+전체 샘플 중 20%만 LLM Judge를 적용하는 전략을 쓸 수 있습니다.</p>
+<p>설계 팁:</p>
+<ul>
+<li>대규모 테스트에서는 <code>sample_rate &lt; 1.0</code> 을 기본값으로 두기</li>
+<li>어떤 샘플 subset에 LLM Judge를 적용했는지(예: tag/length 기준 stratified sampling) 메타데이터에 기록</li>
+</ul>
+<hr />
+<h2 id="5">5. 요약<a class="headerlink" href="#5" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Metric은 <code>sample + run → EvalScore</code>를 계산하는 플러그인 단위입니다.</li>
+<li>새 Metric을 추가하려면:</li>
+<li><code>Metric</code> 베이스 클래스를 상속해 <code>score()</code> 구현</li>
+<li>Metric registry에 type 이름으로 등록</li>
+<li>Evaluator 설정 파일의 <code>metrics</code> 리스트에 type/name/parameters 추가</li>
+<li>G-Eval / LLM-Judge 계열 Metric은 Runner와 Evaluator 역할을 분리하고,</li>
+<li><code>prompt_id</code> / <code>prompt_version</code> / <code>criteria</code> / <code>score_key</code> / <code>max_score</code> / <code>sample_rate</code>
+  를 명시적으로 관리하는 것이 중요합니다.</li>
+</ul>
+<p>이 패턴을 따르면, 새로운 task-specific metric(번역 품질/요약 정보보존/스타일 일치도 등)을
+일관된 방식으로 추가하고, 보고서 구조도 유지할 수 있습니다.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
