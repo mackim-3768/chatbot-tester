@@ -55,6 +55,26 @@ DeepWiki 문서 : [https://deepwiki.com/mackim-3768/chatbot-tester](https://deep
 
 이 README는 **컨셉/역할 정의**에 집중하고, 모듈 간 구체적인 의존 관계, 디렉터리 구조, 빌드 파이프라인 등의 상세 아키텍처는 별도의 문서(`docs/` 또는 개별 `.md` 파일)에 정리할 예정이다.
 
+## Python 라이브러리로 사용하기
+
+이 패키지는 설치 후 Python 코드 내에서 직접 임포트하여 사용할 수 있습니다.
+
+```python
+try:
+    # Backend 레지스트리 접근
+    from chatbot_tester.core.backends import backend_registry
+    
+    # Runner CLI 기능 접근
+    from chatbot_tester.runner import cli
+    
+    # Generator 데이터 구조 접근
+    from chatbot_tester.generator.synthetic import openai_structure
+    
+    print("Successfully imported chatbot-tester modules")
+except ImportError as e:
+    print(f"Import failed: {e}")
+```
+
 ## Quick Start: 5분 안에 첫 리포트 만들기
 
 아래 순서를 따르면, 작은 toy 데이터셋을 가지고 **Generator → Runner → Evaluator** 전체 플로우를 한 번에 실행해 첫 Evaluation Report(JSON/Markdown)를 만들어볼 수 있다.
